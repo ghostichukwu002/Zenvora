@@ -188,7 +188,7 @@ function productView(product) {
         'div',
         { class: 'product-detail__media' },
         productImageUrl(product)
-          ? el('img', { src: productImageUrl(product), alt: product.name, fetchpriority: 'high', decoding: 'async', onerror: (event) => { event.currentTarget.remove(); } })
+          ? el('img', { src: productImageUrl(product), alt: product.name, fetchpriority: 'high', decoding: 'async', onerror: (event) => { event.currentTarget.replaceWith(icon(categoryGlyph(product.category.id))); } })
           : icon(categoryGlyph(product.category.id)),
       ),
       el(
