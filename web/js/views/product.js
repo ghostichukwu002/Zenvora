@@ -1,5 +1,5 @@
 import * as api from '../api.js';
-import { addToCart, categoryGlyph } from '../components.js';
+import { addToCart, categoryGlyph, productImageUrl } from '../components.js';
 import { el, icon, linkButton } from '../dom.js';
 import { AVAILABILITY_LABEL, formatNaira } from '../format.js';
 import { getArea } from '../state.js';
@@ -186,8 +186,10 @@ function productView(product) {
       { class: 'product-detail' },
       el(
         'div',
-        { class: 'product-detail__media', 'aria-hidden': 'true' },
-        icon(categoryGlyph(product.category.id)),
+        { class: 'product-detail__media' },
+        productImageUrl(product)
+          ? el('img', { src: productImageUrl(product), alt: product.name, fetchpriority: 'high', decoding: 'async', onerror: (event) => { event.currentTarget.remove(); } })
+          : icon(categoryGlyph(product.category.id)),
       ),
       el(
         'div',
