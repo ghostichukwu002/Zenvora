@@ -101,7 +101,7 @@ export function productCard(product, { reveal = true } = {}) {
     'div',
     { class: 'product-card__media' },
     imageUrl
-      ? el('img', { src: imageUrl, alt: product.name, loading: 'lazy', decoding: 'async', onerror: (event) => { event.currentTarget.remove(); } })
+      ? el('img', { src: imageUrl, alt: product.name, loading: 'lazy', decoding: 'async', onerror: (event) => { event.currentTarget.replaceWith(icon(categoryGlyph(product.category.id), 'icon')); } })
       : icon(categoryGlyph(product.category.id), 'icon'),
     onOffer ? el('span', { class: 'product-card__badge', text: 'Offer' }) : null,
   );
