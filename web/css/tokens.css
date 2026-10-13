@@ -5,23 +5,23 @@
    - Text colours were checked against cream and white backgrounds (AA, 4.5:1+). */
 
 :root {
-  /* Brand */
-  --emerald-600: #059669; /* brand primary: icons, highlights, large accents */
-  --emerald-700: #047857; /* button fill, active states, links */
-  --emerald-800: #065f46; /* hover and pressed states */
-  --forest-900: #12372a; /* deep forest: high-contrast sections, footer */
-  --forest-800: #1b4a39;
-  --mint-100: #d1fae5; /* accent surfaces, selected chips */
-  --mint-50: #ecfdf5;
+  /* Brand — ZENVORA signature violet palette */
+  --emerald-600: #8b5cf6; /* vivid violet accent */
+  --emerald-700: #6d28d9; /* accessible primary buttons, links and active states */
+  --emerald-800: #5b21b6; /* hover and pressed states */
+  --forest-900: #241044; /* deep aubergine for premium contrast */
+  --forest-800: #38205e;
+  --mint-100: #ede9fe; /* lavender accent surfaces */
+  --mint-50: #f5f3ff;
 
   /* Neutrals */
-  --cream-50: #fffdf5; /* page background */
+  --cream-50: #fbfaff; /* cool porcelain page background */
   --white: #ffffff;
-  --ink-900: #17231d; /* primary text */
-  --ink-600: #69766e; /* secondary text */
-  --ink-500: #5c6a62; /* tertiary text, still AA on cream */
-  --border: #e5eae5; /* subtle border */
-  --border-strong: #c9d3cc;
+  --ink-900: #211a2e; /* primary text */
+  --ink-600: #6f687b; /* secondary text */
+  --ink-500: #625a70; /* tertiary text, still AA on cream */
+  --border: #ece7f4; /* subtle lilac border */
+  --border-strong: #d5cce4;
 
   /* Status */
   --danger-700: #b42318;
@@ -52,8 +52,8 @@
   --radius-pill: 999px;
 
   /* Elevation: restrained, per the brief */
-  --shadow-sm: 0 1px 2px rgba(18, 55, 42, 0.06);
-  --shadow-md: 0 4px 16px rgba(18, 55, 42, 0.08);
+  --shadow-sm: 0 1px 2px rgba(55, 28, 91, 0.07);
+  --shadow-md: 0 4px 16px rgba(55, 28, 91, 0.11);
 
   /* Motion: ordinary interface transitions sit in the 180–320ms range */
   --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
@@ -64,5 +64,5 @@
   /* Layout */
   --content-max: 1200px;
   --header-h: 64px;
-  --focus-ring: 0 0 0 3px rgba(5, 150, 105, 0.45);
+  --focus-ring: 0 0 0 3px rgba(109, 40, 217, 0.35);
 }
