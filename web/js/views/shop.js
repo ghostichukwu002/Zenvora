@@ -38,24 +38,66 @@ export function renderShop({ query }) {
   const meta = el('p', { class: 'results-meta', role: 'status', 'aria-live': 'polite' });
   const more = el('div', { class: 'load-more' });
 
+  let composing = false;
   const searchInput = el('input', {
     id: 'shop-search',
     class: 'input',
-    type: 'search',
+    type: 'text',
+    inputmode: 'search',
+    enterkeyhint: 'search',
     name: 'q',
     value: filters.q,
     placeholder: 'Search products or stores',
     'aria-label': 'Search products',
     autocomplete: 'off',
     maxlength: '100',
-    oninput: () => {
+    oninput: (event) => {
       clearTimeout(debounceTimer);
-      debounceTimer = setTimeout(() => {
-        filters.q = searchInput.value.trim();
-        commit();
-      }, SEARCH_DEBOUNCE_MS);
+      clearButton.hidden = !searchInput.value;
+      if (event.isComposing || composing) return;
+      scheduleSearch();
+    },
+    oncompositionstart: () => {
+      composing = true;
+      clearTimeout(debounceTimer);
+    },
+    oncompositionend: () => {
+      composing = false;
+      scheduleSearch();
+    },
+    onkeydown: (event) => {
+      if (event.key !== 'Enter' || event.isComposing || composing) return;
+      event.preventDefault();
+      scheduleSearch(true);
     },
   });
+  const clearButton = el('button', {
+    type: 'button',
+    class: 'search-clear',
+    'aria-label': 'Clear search',
+    title: 'Clear search',
+    hidden: !filters.q,
+    text: '×',
+    onclick: () => {
+      clearTimeout(debounceTimer);
+      searchInput.value = '';
+      clearButton.hidden = true;
+      filters.q = '';
+      commit();
+      searchInput.focus();
+    },
+  });
+
+  function scheduleSearch(immediate = false) {
+    clearTimeout(debounceTimer);
+    const run = () => {
+      if (!searchInput.isConnected) return;
+      filters.q = searchInput.value.trim();
+      commit();
+    };
+    if (immediate) run();
+    else debounceTimer = setTimeout(run, SEARCH_DEBOUNCE_MS);
+  }
 
   const sortSelect = el(
     'select',
@@ -278,7 +320,7 @@ export function renderShop({ query }) {
     el(
       'div',
       { class: 'toolbar' },
-      el('div', {}, el('label', { class: 'visually-hidden', for: 'shop-search', text: 'Search products' }), searchInput),
+      el('div', { class: 'toolbar__search' }, el('label', { class: 'visually-hidden', for: 'shop-search', text: 'Search products' }), searchInput, clearButton),
       el('div', {}, el('label', { class: 'visually-hidden', for: 'shop-sort', text: 'Sort products' }), sortSelect),
     ),
     categoryRow,
