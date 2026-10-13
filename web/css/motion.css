@@ -1,0 +1,91 @@
+/* ZENVORA motion system: tactile, polished, lightweight, and accessible. */
+:root {
+  --motion-fast: 160ms;
+  --motion-medium: 420ms;
+  --motion-slow: 680ms;
+  --motion-ease: cubic-bezier(.2,.75,.25,1);
+}
+html { scroll-behavior: smooth; }
+.site-header { transition: box-shadow 240ms ease, background-color 240ms ease, border-color 240ms ease; }
+.site-header.is-scrolled { box-shadow: 0 10px 30px rgba(36,16,68,.09); background: rgba(251,250,255,.95); }
+.brand__mark { transform-origin: 50% 50%; transition: transform 500ms var(--motion-ease), filter 500ms var(--motion-ease); }
+.brand:hover .brand__mark { transform: rotate(-8deg) scale(1.08); filter: drop-shadow(0 5px 12px rgba(109,40,217,.28)); }
+.hero__eyebrow::before { animation: violet-pulse 2.4s ease-in-out infinite; }
+.hero > * { animation: hero-arrive 720ms var(--motion-ease) both; }
+.hero > *:nth-child(2) { animation-delay: 90ms; }
+.hero__panel { isolation: isolate; transform: translateZ(0); }
+.hero__panel::before { animation: orbit-drift 13s ease-in-out infinite alternate; }
+.hero__panel::after { animation: sparkle-pulse 3.2s ease-in-out infinite; }
+.hero__panel-mark { animation: mark-float 7s ease-in-out infinite; transform-origin: center; }
+.search-form { transition: box-shadow 240ms ease, border-color 240ms ease, transform 240ms var(--motion-ease); }
+.search-form:focus-within { transform: translateY(-2px); }
+.btn { position: relative; overflow: hidden; isolation: isolate; }
+.btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(110deg, transparent 20%, rgba(255,255,255,.28) 48%, transparent 72%);
+  transform: translateX(-120%);
+}
+.btn--primary:hover::after { opacity: 1; animation: button-sheen 780ms var(--motion-ease) both; }
+.btn.is-tapped::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  left: var(--tap-x, 50%);
+  top: var(--tap-y, 50%);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.34);
+  transform: translate(-50%,-50%) scale(0);
+  animation: tap-ripple 480ms ease-out both;
+}
+.icon-button { transition: transform 180ms var(--motion-ease), background-color 180ms ease, color 180ms ease; }
+.icon-button:hover { transform: translateY(-2px); }
+.icon-button:active { transform: scale(.92); }
+.cart-count.is-bumping { animation: cart-pop 430ms var(--motion-ease); }
+.category-tile__icon { transition: transform 320ms var(--motion-ease), box-shadow 320ms ease; }
+.category-tile:hover .category-tile__icon { transform: translateY(-3px) rotate(-4deg) scale(1.06); box-shadow: 0 7px 16px rgba(109,40,217,.13); }
+.product-card { transform-origin: center bottom; will-change: transform; }
+.product-card__media img { will-change: transform; }
+.product-card:hover .product-card__badge { animation: badge-pop 360ms var(--motion-ease); }
+.product-card .btn:active { transform: scale(.975); }
+.bottom-nav a { transition: color 200ms ease, transform 200ms var(--motion-ease); }
+.bottom-nav a:active { transform: translateY(1px) scale(.96); }
+.bottom-nav a[aria-current='page'] svg { animation: nav-icon-in 300ms var(--motion-ease); }
+.dialog[open] { animation: dialog-spring 360ms var(--motion-ease) both; }
+.toast { animation: toast-arrive 360ms var(--motion-ease) both; }
+.toast:not(.is-visible) { transition: opacity 240ms ease, transform 240ms ease; }
+[data-motion-reveal] { opacity: 0; transform: translate3d(0,22px,0) scale(.99); transition: opacity 620ms var(--motion-ease), transform 620ms var(--motion-ease); transition-delay: var(--reveal-delay, 0ms); }
+[data-motion-reveal].motion-visible { opacity: 1; transform: translate3d(0,0,0) scale(1); }
+[data-motion-reveal].motion-visible.product-card,
+[data-motion-reveal].motion-visible.category-tile { transition-duration: 520ms; }
+@keyframes hero-arrive { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes violet-pulse { 0%,100% { box-shadow: 0 0 0 4px rgba(139,92,246,.1); } 50% { box-shadow: 0 0 0 8px rgba(139,92,246,.035); } }
+@keyframes orbit-drift { from { transform: translate(0,0) rotate(-7deg); } to { transform: translate(-12px,12px) rotate(8deg); } }
+@keyframes sparkle-pulse { 0%,100% { opacity: .8; box-shadow: 0 0 18px 6px rgba(196,181,253,.2); } 50% { opacity: 1; box-shadow: 0 0 30px 12px rgba(196,181,253,.35); } }
+@keyframes mark-float { 0%,100% { transform: translateY(0) rotate(-3deg); } 50% { transform: translateY(-9px) rotate(3deg); } }
+@keyframes button-sheen { to { transform: translateX(120%); opacity: 0; } }
+@keyframes tap-ripple { to { transform: translate(-50%,-50%) scale(22); opacity: 0; } }
+@keyframes cart-pop { 0% { transform: scale(1); } 38% { transform: scale(1.32); } 68% { transform: scale(.92); } 100% { transform: scale(1); } }
+@keyframes badge-pop { 0% { transform: scale(1); } 55% { transform: scale(1.08); } 100% { transform: scale(1); } }
+@keyframes nav-icon-in { from { transform: translateY(3px) scale(.85); } to { transform: translateY(0) scale(1); } }
+@keyframes dialog-spring { from { opacity: 0; transform: translateY(12px) scale(.975); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@keyframes toast-arrive { from { opacity: 0; transform: translate3d(0,10px,0) scale(.98); } to { opacity: 1; transform: translate3d(0,0,0) scale(1); } }
+@media (hover: hover) and (pointer: fine) {
+  .hero__panel { transition: transform 300ms ease, box-shadow 300ms ease; }
+  .hero__panel:hover { box-shadow: 0 30px 65px rgba(36,16,68,.22), inset 0 1px 0 rgba(255,255,255,.14); }
+}
+@media (max-width: 600px) {
+  .hero > * { animation-duration: 560ms; }
+  [data-motion-reveal] { transform: translate3d(0,14px,0); transition-duration: 440ms; }
+  .hero__panel::before { width: 150px; height: 150px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+  [data-motion-reveal] { opacity: 1; transform: none; }
+}
