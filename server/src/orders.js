@@ -22,22 +22,21 @@ function cleanText(value, { min, max, field }) {
   return text;
 }
 
-function validateDelivery(input, cart) {
+function validateDelivery(input, cart, merchant) {
   const d = input && typeof input === 'object' ? input : {};
   const name = cleanText(d.name, { min: 2, max: 100, field: 'name' });
   const phone = normalizeNigerianPhone(d.phone);
   if (!phone) {
     throw new HttpError(422, 'phone_invalid', 'Enter a valid Nigerian mobile number, for example 0803 123 4567.');
   }
-  const state = cleanText(d.state, { min: 2, max: 60, field: 'state' });
-  const city = cleanText(d.city, { min: 2, max: 60, field: 'city' });
   const address = cleanText(d.address, { min: 5, max: 300, field: 'address' });
   let notes = null;
   if (d.notes !== undefined && d.notes !== null && d.notes !== '') {
     notes = cleanText(d.notes, { min: 1, max: 300, field: 'notes' });
   }
-  // The delivery area comes from the cart, which the server already validated against the merchant.
-  return { name, phone, state, city, area: cart.deliveryArea, address, notes };
+  // Area, city and state come from the server's own data (the cart's validated area and the
+  // store's location), never from the browser, so they cannot disagree with where the store delivers.
+  return { name, phone, state: merchant.state, city: merchant.city, area: cart.deliveryArea, address, notes };
 }
 
 function newOrderId() {
@@ -100,7 +99,7 @@ export function createOrders(db, { now = () => new Date() } = {}) {
       }
       const merchant = catalogue.merchants.find((m) => m.id === cart.merchantId);
       assertDeliverable(merchant, cart.deliveryArea);
-      const deliveryDetails = validateDelivery(delivery, cart);
+      const deliveryDetails = validateDelivery(delivery, cart, merchant);
 
       // Re-check stock for every line against the current catalogue before taking anything.
       for (const line of cart.items) {

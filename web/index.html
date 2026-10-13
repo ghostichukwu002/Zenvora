@@ -28,6 +28,7 @@
       <symbol id="i-lamp" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4h8l3 6H5z"/><path d="M12 10v7M8.5 20h7"/></g></symbol>
       <symbol id="i-book" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M5 4.5A1.5 1.5 0 0 1 6.5 3H19v15H6.5A1.5 1.5 0 0 0 5 19.5z"/><path d="M5 19.5A1.5 1.5 0 0 0 6.5 21H19v-3"/></g></symbol>
       <symbol id="i-box" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M3.5 7.5 12 3l8.5 4.5v9L12 21l-8.5-4.5z"/><path d="M3.5 7.5 12 12l8.5-4.5M12 12v9"/></g></symbol>
+      <symbol id="i-user" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8.5" r="3.6"/><path d="M5 20c.8-3.6 3.6-5.4 7-5.4s6.2 1.8 7 5.4"/></g></symbol>
       <symbol id="i-plus" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></g></symbol>
       <symbol id="i-minus" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M5 12h14"/></g></symbol>
       <symbol id="i-trash" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9.5 7V4.5h5V7M6.5 7l1 12.5h9l1-12.5"/></g></symbol>
@@ -66,6 +67,9 @@
           <a class="icon-button" href="#/search" aria-label="Search" data-nav="search">
             <svg aria-hidden="true" focusable="false"><use href="#i-search"/></svg>
           </a>
+          <a class="icon-button header-account" href="#/account" aria-label="Log in" data-nav="account">
+            <svg aria-hidden="true" focusable="false"><use href="#i-user"/></svg>
+          </a>
           <a class="icon-button" href="#/cart" aria-label="Cart" data-nav="cart">
             <svg aria-hidden="true" focusable="false"><use href="#i-cart"/></svg>
             <span class="cart-count" id="cart-count" hidden>0</span>
@@ -97,6 +101,7 @@
             <h2>Help</h2>
             <ul>
               <li><a href="#/cart">Your cart</a></li>
+              <li><a href="#/account">Your account and orders</a></li>
               <li><span>Support: coming soon</span></li>
             </ul>
           </div>
@@ -118,6 +123,9 @@
       <a href="#/cart" data-nav="cart">
         <svg aria-hidden="true" focusable="false"><use href="#i-cart"/></svg>Cart
         <span class="cart-count" id="cart-count-mobile" hidden>0</span>
+      </a>
+      <a href="#/account" data-nav="account">
+        <svg aria-hidden="true" focusable="false"><use href="#i-user"/></svg>Account
       </a>
     </nav>
 

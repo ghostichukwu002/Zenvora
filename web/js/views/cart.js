@@ -98,6 +98,17 @@ function lineNode(line) {
   );
 }
 
+// Checkout is offered only when the cart can actually be ordered. The server re-checks everything anyway.
+function checkoutAction(cart) {
+  if (cart.deliveryAreaRequired) {
+    return el('button', { type: 'button', class: 'btn btn--primary btn--block', disabled: true, text: 'Choose a delivery area to continue' });
+  }
+  if (cart.lines.some((l) => l.stockWarning)) {
+    return el('button', { type: 'button', class: 'btn btn--primary btn--block', disabled: true, text: 'Fix stock issues to continue' });
+  }
+  return el('a', { class: 'btn btn--primary btn--block', href: '#/checkout', text: 'Checkout' });
+}
+
 function summaryNode(cart) {
   const areaSelect = el(
     'select',
@@ -128,11 +139,11 @@ function summaryNode(cart) {
     el('div', { class: 'summary__row' }, el('span', { text: `Subtotal (${cart.itemCount} ${cart.itemCount === 1 ? 'item' : 'items'})` }), el('span', { text: formatNaira(cart.subtotalKobo) })),
     el('div', { class: 'summary__row' }, el('span', { text: 'Delivery' }), deliveryValue),
     el('div', { class: 'summary__row summary__row--total' }, el('span', { text: 'Total' }), el('span', { text: formatNaira(cart.totalKobo) })),
-    el('button', { type: 'button', class: 'btn btn--primary btn--block', disabled: true, text: 'Checkout coming soon' }),
+    checkoutAction(cart),
     el(
       'p',
       { class: 'summary__note' },
-      'Delivery fees and totals are calculated on our servers. Checkout is not part of this build yet, so nothing is charged and no order is placed.',
+      'You’ll pay cash on delivery. Prices, stock and delivery fees are checked again on our servers when you place the order.',
     ),
   );
 }

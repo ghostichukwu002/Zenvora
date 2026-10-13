@@ -43,6 +43,44 @@ export async function loadCart() {
   }
 }
 
+// ---------- Signed-in user ----------
+// The server decides who is signed in (httpOnly cookie). This only caches what /api/auth/me returned,
+// so pages can show the right links. It is never used to protect anything.
+
+let user = null;
+let userLoaded = false;
+const userListeners = new Set();
+
+export function getUser() {
+  return user;
+}
+
+export function setUser(next) {
+  user = next;
+  userLoaded = true;
+  const link = document.querySelector('.site-header a[data-nav="account"]');
+  link?.setAttribute('aria-label', next ? `Account: ${next.fullName}` : 'Log in');
+  for (const fn of userListeners) fn(user);
+  return user;
+}
+
+export function onUserChange(fn) {
+  userListeners.add(fn);
+  return () => userListeners.delete(fn);
+}
+
+// Resolves once, then answers from the cache.
+export async function ensureUser() {
+  if (userLoaded) return user;
+  try {
+    const res = await api.get('/api/auth/me');
+    return setUser(res.user);
+  } catch {
+    // If the check fails, treat the visitor as signed out. The server still enforces access.
+    return setUser(null);
+  }
+}
+
 export function getArea() {
   try {
     return localStorage.getItem(AREA_KEY) || null;

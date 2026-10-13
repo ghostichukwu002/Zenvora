@@ -294,7 +294,7 @@ a:hover {
   bottom: 0;
   z-index: 50;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   background: var(--white);
   border-top: 1px solid var(--border);
   padding-bottom: env(safe-area-inset-bottom);
@@ -360,6 +360,14 @@ main {
 
   .header-actions {
     gap: 0;
+  }
+}
+
+/* Below desktop, search and account live in the bottom navigation. */
+@media (max-width: 899px) {
+  .header-actions a[data-nav='search'],
+  .header-account {
+    display: none;
   }
 }
 

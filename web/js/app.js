@@ -3,8 +3,12 @@
 
 import { initAreaDialog } from './area.js';
 import { refresh, route, start } from './router.js';
-import { loadCart } from './state.js';
+import { ensureUser, loadCart } from './state.js';
+import { renderAccount } from './views/account.js';
+import { renderForgot, renderLogin, renderRegister, renderReset } from './views/auth.js';
 import { renderCart } from './views/cart.js';
+import { renderCheckout } from './views/checkout.js';
+import { renderOrder } from './views/order.js';
 import { renderHome } from './views/home.js';
 import { renderProduct } from './views/product.js';
 import { renderShop } from './views/shop.js';
@@ -39,8 +43,17 @@ route('/cart', {
   render: () => renderCart(),
 });
 
+route('/login', { nav: 'account', title: 'Log in', render: (ctx) => renderLogin(ctx) });
+route('/register', { nav: 'account', title: 'Create account', render: (ctx) => renderRegister(ctx) });
+route('/forgot-password', { nav: 'account', title: 'Reset password', render: () => renderForgot() });
+route('/reset-password', { nav: 'account', title: 'New password', render: (ctx) => renderReset(ctx) });
+route('/account', { nav: 'account', title: 'Your account', render: () => renderAccount() });
+route('/checkout', { nav: 'cart', title: 'Checkout', render: () => renderCheckout() });
+route('/order/:id', { nav: 'account', title: 'Order', render: (ctx) => renderOrder(ctx) });
+
 initAreaDialog(() => refresh());
 
-// The cart badge fills in as soon as the cart is known. The page does not wait for it.
+// The cart badge and account link fill in as soon as they are known. The page does not wait for them.
 loadCart();
+ensureUser();
 start();

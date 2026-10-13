@@ -157,8 +157,6 @@ test('delivery details are validated', async () => {
     [{ name: '' }, 'name_invalid'],
     [{ phone: '12345' }, 'phone_invalid'],
     [{ address: 'abc' }, 'address_invalid'],
-    [{ state: '' }, 'state_invalid'],
-    [{ city: '' }, 'city_invalid'],
   ];
   for (const [override, code] of cases) {
     const res = await checkout(c, { delivery: validDelivery(override) });
@@ -166,6 +164,16 @@ test('delivery details are validated', async () => {
     assert.equal(res.json.error.code, code);
   }
   assert.equal(app.db.prepare('SELECT COUNT(*) AS n FROM orders').get().n, 0);
+});
+
+test('state, city and area come from the server, not the browser', async () => {
+  const c = await signedInClient();
+  await cartWith(c, [wrap()]);
+  const res = await checkout(c, { delivery: validDelivery({ state: 'Kano', city: 'Kano', area: 'Maitama' }) });
+  assert.equal(res.status, 201);
+  assert.equal(res.json.order.delivery.state, 'Lagos');
+  assert.equal(res.json.order.delivery.city, 'Lagos');
+  assert.equal(res.json.order.delivery.area, 'Ikoyi');
 });
 
 test('stock is re-checked at checkout and nothing is created if it ran out', async () => {
