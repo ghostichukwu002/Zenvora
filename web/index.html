@@ -12,9 +12,19 @@
     <link rel="stylesheet" href="css/components.css" />
     <link rel="stylesheet" href="css/polish.css" />
     <link rel="stylesheet" href="css/motion.css" />
+    <link rel="stylesheet" href="css/loading.css" />
     <script type="module" src="js/app.js"></script>
   </head>
   <body>
+    <div class="boot-screen" id="boot-screen" role="status" aria-label="Loading ZENVORA">
+      <div class="boot-screen__content">
+        <div class="boot-screen__mark-wrap"><img class="boot-screen__mark" src="assets/zenvora-mark.svg" alt="" width="56" height="56" /></div>
+        <p class="boot-screen__wordmark">ZENVORA</p>
+        <p class="boot-screen__tagline">Good things are on their way.</p>
+        <div class="boot-screen__loader" aria-hidden="true"><span></span></div>
+        <p class="boot-screen__hint">Made for your everyday</p>
+      </div>
+    </div>
     <!-- Icon sprite. Referenced with <use href="#i-…">. Styled through the .icon class. -->
     <svg class="icon-sprite" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
       <symbol id="i-home" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-4.5v-6h-5v6H5a1 1 0 0 1-1-1z"/></g></symbol>

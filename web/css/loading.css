@@ -1,0 +1,35 @@
+/* Branded first-load experience: violet glass, restrained motion, quick handoff. */
+body.is-booting { overflow: hidden; }
+.boot-screen {
+  position: fixed; inset: 0; z-index: 9999; display: grid; place-items: center;
+  padding: 24px; overflow: hidden; background:
+    radial-gradient(ellipse at 50% 42%, rgba(139,92,246,.12), transparent 42%),
+    linear-gradient(145deg, #fff 0%, #fbfaff 52%, #f2edff 100%);
+  opacity: 1; visibility: visible; transition: opacity 480ms cubic-bezier(.2,.75,.25,1), visibility 480ms;
+}
+.boot-screen::before, .boot-screen::after {
+  content: ''; position: absolute; width: min(76vw, 540px); aspect-ratio: 1; border-radius: 50%;
+  border: 1px solid rgba(139,92,246,.10); pointer-events: none;
+}
+.boot-screen::before { animation: boot-orbit 16s linear infinite; }
+.boot-screen::after { width: min(58vw, 400px); border-style: dashed; border-color: rgba(139,92,246,.12); animation: boot-orbit 24s linear infinite reverse; }
+.boot-screen.is-leaving { opacity: 0; visibility: hidden; pointer-events: none; }
+.boot-screen__content { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; text-align: center; }
+.boot-screen__mark-wrap { position: relative; display: grid; place-items: center; width: 100px; height: 100px; margin-bottom: 24px; }
+.boot-screen__mark-wrap::before { content: ''; position: absolute; inset: 0; border-radius: 30px; background: linear-gradient(145deg, #fff, #eee7ff); box-shadow: 0 18px 50px rgba(91,33,182,.14), inset 0 1px 0 #fff; transform: rotate(-8deg); animation: boot-mark-breathe 2.4s ease-in-out infinite; }
+.boot-screen__mark { position: relative; width: 56px; height: 56px; object-fit: contain; animation: boot-mark-float 2.4s ease-in-out infinite; }
+.boot-screen__wordmark { margin: 0; color: #241044; font: 850 clamp(1.5rem, 5vw, 2rem)/1 var(--font-sans, system-ui, sans-serif); letter-spacing: .18em; text-indent: .18em; }
+.boot-screen__tagline { margin: 12px 0 0; color: #6f687b; font-size: 14px; letter-spacing: .015em; }
+.boot-screen__loader { width: 136px; height: 3px; overflow: hidden; border-radius: 99px; margin-top: 30px; background: #e6def8; }
+.boot-screen__loader span { display: block; width: 42%; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #8b5cf6, #c4b5fd); animation: boot-progress 1.15s cubic-bezier(.6,0,.4,1) infinite; }
+.boot-screen__hint { margin: 12px 0 0; color: #8c839a; font-size: 10px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; }
+@keyframes boot-orbit { to { transform: rotate(360deg); } }
+@keyframes boot-mark-breathe { 0%,100% { transform: rotate(-8deg) scale(1); } 50% { transform: rotate(-3deg) scale(1.045); } }
+@keyframes boot-mark-float { 0%,100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-4px) rotate(3deg); } }
+@keyframes boot-progress { from { transform: translateX(-130%); } to { transform: translateX(340%); } }
+body.is-booting > :not(.boot-screen) { visibility: hidden; }
+@media (prefers-reduced-motion: reduce) {
+  .boot-screen::before, .boot-screen::after, .boot-screen__mark-wrap::before, .boot-screen__mark, .boot-screen__loader span { animation: none !important; }
+  .boot-screen__loader span { width: 100%; }
+  .boot-screen, .boot-screen.is-leaving { transition-duration: .01ms; }
+}

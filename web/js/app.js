@@ -3,6 +3,7 @@
 
 import { initAreaDialog } from './area.js';
 import { initMotion } from './motion.js';
+import { initLoadingScreen } from './loading.js';
 import { refresh, route, start } from './router.js';
 import { ensureUser, loadCart } from './state.js';
 import { renderAccount } from './views/account.js';
@@ -13,6 +14,8 @@ import { renderOrder } from './views/order.js';
 import { renderHome } from './views/home.js';
 import { renderProduct } from './views/product.js';
 import { renderShop } from './views/shop.js';
+
+initLoadingScreen();
 
 route('/', {
   nav: 'home',
