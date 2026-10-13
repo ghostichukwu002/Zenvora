@@ -2,6 +2,7 @@
 // Each view is a separate module, so a view's code only matters once that view is opened.
 
 import { initAreaDialog } from './area.js';
+import { initMotion } from './motion.js';
 import { refresh, route, start } from './router.js';
 import { ensureUser, loadCart } from './state.js';
 import { renderAccount } from './views/account.js';
@@ -52,6 +53,7 @@ route('/checkout', { nav: 'cart', title: 'Checkout', render: () => renderCheckou
 route('/order/:id', { nav: 'account', title: 'Order', render: (ctx) => renderOrder(ctx) });
 
 initAreaDialog(() => refresh());
+initMotion();
 
 // The cart badge and account link fill in as soon as they are known. The page does not wait for them.
 loadCart();
