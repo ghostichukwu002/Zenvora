@@ -76,3 +76,59 @@
 @media (prefers-reduced-motion: reduce) {
   .product-card, .product-card__media img { transition: none !important; }
 }
+
+
+/* Search is an owned control so clearing works consistently on touch and desktop. */
+.toolbar__search {
+  position: relative;
+  min-width: 0;
+}
+.toolbar__search .input {
+  width: 100%;
+  padding-right: 54px;
+}
+.search-clear {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  display: inline-grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: #f1eaff;
+  color: #5b21b6;
+  font: inherit;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  transform: translateY(-50%);
+  transition: background-color 160ms ease, transform 160ms ease;
+}
+.search-clear:hover {
+  background: #e7dcff;
+  transform: translateY(-50%) scale(1.04);
+}
+.search-clear:focus-visible {
+  outline: 2px solid #6d28d9;
+  outline-offset: 2px;
+}
+.search-clear[hidden] {
+  display: none;
+}
+@media (max-width: 600px) {
+  .toolbar__search .input {
+    min-height: 50px;
+    padding-right: 50px;
+  }
+  .search-clear {
+    right: 8px;
+    width: 36px;
+    height: 36px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .search-clear { transition: none; }
+}
