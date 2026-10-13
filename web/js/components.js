@@ -20,6 +20,16 @@ export function categoryGlyph(id) {
   return CATEGORY_GLYPH[id] ?? 'box';
 }
 
+// Read an optional image field when the existing product payload provides one.
+// No API contract is changed; products without a photo keep the category fallback.
+export function productImageUrl(product) {
+  const candidate = product.imageUrl ?? product.imageURL ?? product.photoUrl ?? product.thumbnailUrl ?? product.image
+    ?? (Array.isArray(product.images) ? product.images[0] : '');
+  if (typeof candidate === 'string') return candidate.trim();
+  if (candidate && typeof candidate === 'object') return String(candidate.url ?? candidate.secure_url ?? '').trim();
+  return '';
+}
+
 // Adds one line to the server cart. Returns the priced cart.
 // Errors bubble up to the caller, which decides how to show them.
 export async function addToCart({ productId, variantChoice = {}, quantity = 1 }) {
@@ -86,15 +96,20 @@ export function productCard(product, { reveal = true } = {}) {
     action = quickAddButton(product);
   }
 
+  const imageUrl = productImageUrl(product);
+  const media = el(
+    'div',
+    { class: 'product-card__media' },
+    imageUrl
+      ? el('img', { src: imageUrl, alt: product.name, loading: 'lazy', decoding: 'async', onerror: (event) => { event.currentTarget.remove(); } })
+      : icon(categoryGlyph(product.category.id), 'icon'),
+    onOffer ? el('span', { class: 'product-card__badge', text: 'Offer' }) : null,
+  );
+
   return el(
     'article',
     { class: 'product-card', 'data-reveal': reveal ? '' : undefined },
-    el(
-      'div',
-      { class: 'product-card__media' },
-      icon(categoryGlyph(product.category.id), 'icon'),
-      onOffer ? el('span', { class: 'product-card__badge', text: 'Offer' }) : null,
-    ),
+    media,
     el(
       'div',
       { class: 'product-card__body' },
