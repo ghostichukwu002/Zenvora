@@ -1,19 +1,39 @@
+import { mkdirSync } from 'node:fs';
 import { createServer } from 'node:http';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createApp } from './app.js';
 import { categories, merchants, products } from './catalogue.js';
+import { openDatabase } from './db.js';
 
 const port = Number.parseInt(process.env.PORT ?? '4000', 10);
-const webRoot = join(dirname(fileURLToPath(import.meta.url)), '..', '..', 'web');
+const here = dirname(fileURLToPath(import.meta.url));
+const webRoot = join(here, '..', '..', 'web');
+const dataDir = process.env.ZENVORA_DATA_DIR ?? join(here, '..', 'data');
+const isProduction = process.env.NODE_ENV === 'production';
+
+mkdirSync(dataDir, { recursive: true });
+const db = openDatabase(join(dataDir, 'zenvora.db'));
+
+// No email provider is connected yet. In development the reset link is printed here so the
+// flow can be tried. In production the token is never logged, so resets stay unavailable
+// until a real mail provider is wired in.
+async function sendResetEmail({ to, token, minutes }) {
+  if (isProduction) {
+    console.warn('Password reset requested but no email provider is configured. No email was sent.');
+    return;
+  }
+  const link = `http://localhost:${port}/#/reset-password?token=${token}`;
+  console.log(`[dev] Password reset for ${to} (valid ${minutes} min): ${link}`);
+}
 
 const server = createServer(
-  createApp({ catalogue: { categories, merchants, products }, webRoot }),
+  createApp({ catalogue: { categories, merchants, products }, webRoot, db, sendResetEmail }),
 );
 
 server.listen(port, () => {
   console.log(`ZENVORA running at http://localhost:${port}`);
-  console.log('Catalogue is SAMPLE data for development.');
+  console.log('Catalogue is SAMPLE data for development. Orders and accounts are stored in', dataDir);
 });
 
 // Close cleanly on Ctrl+C so the process does not hang.

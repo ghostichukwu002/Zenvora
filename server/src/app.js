@@ -1,13 +1,17 @@
+import { AUTH_COOKIE, createAuth, createRateLimiter, publicUser } from './auth.js';
 import {
   addItem,
   CartError,
+  emptyCart,
   priceCart,
   removeItem,
   setDeliveryArea,
   updateQuantity,
 } from './cart.js';
 import { createCartStore, readCookie, SESSION_COOKIE } from './cart-store.js';
-import { createRouter, readJsonBody, sendError, sendJson } from './router.js';
+import { openDatabase } from './db.js';
+import { createOrders } from './orders.js';
+import { createRouter, HttpError, readJsonBody, sendError, sendJson } from './router.js';
 import { serveStatic } from './static.js';
 
 const LOW_STOCK_THRESHOLD = 5;
@@ -100,8 +104,20 @@ function listProducts(query, catalogue) {
 
 // Builds the request handler. Pass it to http.createServer().
 // webRoot is optional. When given, non-API paths serve the browser app from that folder.
-export function createApp({ catalogue, store = createCartStore(), webRoot = null }) {
+// db, sendResetEmail and rateLimits can be injected, which tests rely on.
+export function createApp({
+  catalogue,
+  store = createCartStore(),
+  webRoot = null,
+  db = openDatabase(':memory:'),
+  sendResetEmail,
+  rateLimits = {},
+}) {
   const router = createRouter();
+  const auth = createAuth(db, { sendResetEmail });
+  const orders = createOrders(db);
+  const authLimiter = createRateLimiter({ windowMs: 15 * 60 * 1000, max: rateLimits.authMax ?? 30 });
+  const loginEmailLimiter = createRateLimiter({ windowMs: 15 * 60 * 1000, max: rateLimits.loginPerEmailMax ?? 8 });
 
   router.get('/api/health', () => ({ status: 200, body: { ok: true } }));
 
@@ -181,6 +197,103 @@ export function createApp({ catalogue, store = createCartStore(), webRoot = null
     return { status: 200, body: priceCart(cleared, catalogue) };
   });
 
+  // ---------- Accounts ----------
+
+  const authCookie = (token, maxAgeSeconds, secure) =>
+    `${AUTH_COOKIE}=${token}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${maxAgeSeconds}${secure}`;
+
+  function requireUser(ctx) {
+    if (!ctx.user) throw new HttpError(401, 'auth_required', 'Log in to continue.');
+    return ctx.user;
+  }
+
+  function limit(limiter, key) {
+    const wait = limiter.check(key);
+    if (wait > 0) {
+      const minutes = Math.max(1, Math.ceil(wait / 60));
+      throw new HttpError(429, 'rate_limited', `Too many attempts. Try again in ${minutes} minute${minutes === 1 ? '' : 's'}.`);
+    }
+  }
+
+  router.post('/api/auth/register', async (ctx) => {
+    limit(authLimiter, `auth:${ctx.ip}`);
+    const { user, session } = await auth.register(ctx.body);
+    return {
+      status: 201,
+      body: { user },
+      cookies: [authCookie(session.token, session.maxAgeSeconds, ctx.secure)],
+    };
+  });
+
+  router.post('/api/auth/login', async (ctx) => {
+    limit(authLimiter, `auth:${ctx.ip}`);
+    if (typeof ctx.body.email === 'string') limit(loginEmailLimiter, `login:${ctx.body.email.trim().toLowerCase()}`);
+    const { user, session } = await auth.login(ctx.body);
+    return {
+      status: 200,
+      body: { user },
+      cookies: [authCookie(session.token, session.maxAgeSeconds, ctx.secure)],
+    };
+  });
+
+  router.post('/api/auth/logout', (ctx) => {
+    auth.logout(ctx.authToken);
+    return { status: 200, body: { ok: true }, cookies: [authCookie('', 0, ctx.secure)] };
+  });
+
+  router.get('/api/auth/me', (ctx) => ({
+    status: 200,
+    body: { user: ctx.user ? publicUser(ctx.user) : null },
+  }));
+
+  router.patch('/api/auth/profile', (ctx) => {
+    const user = requireUser(ctx);
+    return { status: 200, body: { user: auth.updateProfile(user.id, ctx.body) } };
+  });
+
+  // Same response whether or not the email has an account, so it cannot be used to find accounts.
+  router.post('/api/auth/forgot-password', async (ctx) => {
+    limit(authLimiter, `auth:${ctx.ip}`);
+    await auth.requestPasswordReset(ctx.body.email);
+    return {
+      status: 200,
+      body: { ok: true, message: 'If an account exists for that email, a reset link has been sent.' },
+    };
+  });
+
+  router.post('/api/auth/reset-password', async (ctx) => {
+    limit(authLimiter, `auth:${ctx.ip}`);
+    await auth.resetPassword(ctx.body.token, ctx.body.password);
+    return { status: 200, body: { ok: true } };
+  });
+
+  // ---------- Orders ----------
+
+  router.post('/api/orders', (ctx) => {
+    const user = requireUser(ctx);
+    const { order, replayed } = orders.place({
+      userId: user.id,
+      cart: store.get(ctx.sid),
+      catalogue,
+      idempotencyKey: ctx.body.idempotencyKey,
+      delivery: ctx.body.delivery,
+      paymentMethod: ctx.body.paymentMethod,
+    });
+    // A new order empties the cart. A replay leaves it alone, since the first submission already did.
+    if (!replayed) store.set(ctx.sid, emptyCart());
+    return { status: replayed ? 200 : 201, body: { order, replayed } };
+  });
+
+  router.get('/api/orders', (ctx) => {
+    const user = requireUser(ctx);
+    return { status: 200, body: { items: orders.list(user.id) } };
+  });
+
+  router.get('/api/orders/:id', (ctx) => {
+    const user = requireUser(ctx);
+    return { status: 200, body: { order: orders.get(user.id, ctx.params.id) } };
+  });
+
   return async function handle(req, res) {
     try {
       const url = new URL(req.url ?? '/', 'http://localhost');
@@ -198,16 +311,46 @@ export function createApp({ catalogue, store = createCartStore(), webRoot = null
         return sendJson(res, status, { error: { code, message: 'No such endpoint.' } });
       }
 
+      const isWrite = req.method !== 'GET' && req.method !== 'HEAD';
+
+      // Cross-site request protection. Browsers send Origin on cross-site writes; if it names
+      // a different host, refuse. Writes must also be JSON, which a plain cross-site form cannot send.
+      if (isWrite) {
+        const origin = req.headers.origin;
+        if (origin && origin !== 'null') {
+          let originHost = null;
+          try {
+            originHost = new URL(origin).host;
+          } catch {
+            originHost = null;
+          }
+          if (originHost !== req.headers.host) {
+            return sendJson(res, 403, { error: { code: 'cross_origin', message: 'Request blocked.' } });
+          }
+        } else if (origin === 'null') {
+          return sendJson(res, 403, { error: { code: 'cross_origin', message: 'Request blocked.' } });
+        }
+        const hasBody = req.method !== 'DELETE';
+        if (hasBody && !String(req.headers['content-type'] ?? '').toLowerCase().startsWith('application/json')) {
+          return sendJson(res, 415, { error: { code: 'unsupported_media_type', message: 'Send JSON.' } });
+        }
+      }
+
       // Every visitor gets a server-issued session id, so the cart lives on the server.
+      const cookies = [];
+      const secure = process.env.NODE_ENV === 'production' ? '; Secure' : '';
       let sid = readCookie(req.headers.cookie, SESSION_COOKIE);
-      const headers = {};
       if (!sid || sid.length > 100) {
         sid = store.newSessionId();
-        const secure = process.env.NODE_ENV === 'production' ? '; Secure' : '';
-        headers['Set-Cookie'] =
+        cookies.push(
           `${SESSION_COOKIE}=${encodeURIComponent(sid)}; Path=/; HttpOnly; SameSite=Lax; ` +
-          `Max-Age=${SESSION_MAX_AGE_SECONDS}${secure}`;
+            `Max-Age=${SESSION_MAX_AGE_SECONDS}${secure}`,
+        );
       }
+
+      // Who is signed in, if anyone. Checked against the database on every request.
+      const authToken = readCookie(req.headers.cookie, AUTH_COOKIE);
+      const user = authToken ? auth.userForToken(authToken) : null;
 
       const body = req.method === 'GET' || req.method === 'DELETE' ? {} : await readJsonBody(req);
 
@@ -216,8 +359,13 @@ export function createApp({ catalogue, store = createCartStore(), webRoot = null
         query: Object.fromEntries(url.searchParams),
         body,
         sid,
+        user,
+        authToken,
+        ip: req.socket.remoteAddress ?? 'unknown',
+        secure,
       });
-      return sendJson(res, result.status, result.body, headers);
+      if (result.cookies) cookies.push(...result.cookies);
+      return sendJson(res, result.status, result.body, cookies.length ? { 'Set-Cookie': cookies } : {});
     } catch (err) {
       if (err instanceof URIError) {
         return sendJson(res, 400, { error: { code: 'bad_request', message: 'The URL is malformed.' } });

@@ -1,0 +1,89 @@
+// SQLite via Node's built-in node:sqlite (no npm packages).
+// Pass ':memory:' for tests, or a file path for development data.
+// node:sqlite is still marked experimental in Node 22, so it prints a one-time warning.
+
+import { DatabaseSync } from 'node:sqlite';
+
+const SCHEMA = `
+  PRAGMA foreign_keys = ON;
+
+  CREATE TABLE IF NOT EXISTS users (
+    id            TEXT PRIMARY KEY,
+    email         TEXT NOT NULL UNIQUE,
+    password_hash TEXT NOT NULL,
+    full_name     TEXT NOT NULL,
+    phone         TEXT,
+    role          TEXT NOT NULL DEFAULT 'customer',
+    created_at    TEXT NOT NULL
+  );
+
+  CREATE TABLE IF NOT EXISTS sessions (
+    token_hash TEXT PRIMARY KEY,
+    user_id    TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    created_at TEXT NOT NULL,
+    expires_at TEXT NOT NULL
+  );
+
+  CREATE TABLE IF NOT EXISTS password_resets (
+    token_hash TEXT PRIMARY KEY,
+    user_id    TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    expires_at TEXT NOT NULL,
+    used_at    TEXT
+  );
+
+  CREATE TABLE IF NOT EXISTS orders (
+    id                 TEXT PRIMARY KEY,
+    user_id            TEXT NOT NULL REFERENCES users(id),
+    merchant_id        TEXT NOT NULL,
+    merchant_name      TEXT NOT NULL,
+    status             TEXT NOT NULL,
+    payment_method     TEXT NOT NULL,
+    payment_status     TEXT NOT NULL,
+    subtotal_kobo      INTEGER NOT NULL,
+    delivery_fee_kobo  INTEGER NOT NULL,
+    total_kobo         INTEGER NOT NULL,
+    delivery_name      TEXT NOT NULL,
+    delivery_phone     TEXT NOT NULL,
+    delivery_state     TEXT NOT NULL,
+    delivery_city      TEXT NOT NULL,
+    delivery_area      TEXT NOT NULL,
+    delivery_address   TEXT NOT NULL,
+    delivery_notes     TEXT,
+    idempotency_key    TEXT NOT NULL,
+    created_at         TEXT NOT NULL,
+    UNIQUE (user_id, idempotency_key)
+  );
+
+  CREATE TABLE IF NOT EXISTS order_items (
+    id           INTEGER PRIMARY KEY AUTOINCREMENT,
+    order_id     TEXT NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
+    product_id   TEXT NOT NULL,
+    name         TEXT NOT NULL,
+    variant_json TEXT NOT NULL,
+    quantity     INTEGER NOT NULL,
+    unit_kobo    INTEGER NOT NULL,
+    line_kobo    INTEGER NOT NULL
+  );
+
+  CREATE INDEX IF NOT EXISTS idx_orders_user ON orders(user_id, created_at DESC);
+  CREATE INDEX IF NOT EXISTS idx_sessions_user ON sessions(user_id);
+`;
+
+export function openDatabase(path = ':memory:') {
+  const db = new DatabaseSync(path);
+  db.exec(SCHEMA);
+  return db;
+}
+
+// Runs fn inside a transaction. Rolls back and rethrows if fn throws.
+export function transaction(db, fn) {
+  db.exec('BEGIN IMMEDIATE');
+  try {
+    const result = fn();
+    db.exec('COMMIT');
+    return result;
+  } catch (err) {
+    db.exec('ROLLBACK');
+    throw err;
+  }
+}
