@@ -1,0 +1,17 @@
+{
+  "name": "zenvora-server",
+  "version": "0.1.0",
+  "private": true,
+  "description": "ZENVORA API: catalogue, server-side cart and totals.",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {}
+}

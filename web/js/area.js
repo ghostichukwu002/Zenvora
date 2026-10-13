@@ -1,0 +1,81 @@
+// Delivery-area picker. The chosen area is stored in this browser and drives which stores
+// the home page and shop show. The server still checks every area when a cart is priced.
+
+import * as api from './api.js';
+import { el } from './dom.js';
+import { getArea, onAreaChange, setArea } from './state.js';
+import { toast } from './ui.js';
+
+let areaCache = null;
+
+async function loadAreas() {
+  if (!areaCache) {
+    const res = await api.get('/api/areas');
+    areaCache = res.items;
+  }
+  return areaCache;
+}
+
+export function renderAreaLabel() {
+  const area = getArea();
+  const label = document.getElementById('location-text');
+  const button = document.getElementById('location-button');
+  if (label) label.textContent = area ?? 'Choose area';
+  // On narrow screens only the icon shows, so the accessible name carries the area.
+  if (button) {
+    button.setAttribute('aria-label', area ? `Delivery area: ${area}. Change area` : 'Choose delivery area');
+    button.title = area ? `Delivering to ${area}` : 'Choose your delivery area';
+  }
+}
+
+export async function openAreaDialog() {
+  const dialog = document.getElementById('area-dialog');
+  const select = document.getElementById('area-select');
+  select.replaceChildren(el('option', { value: '', text: 'Loading areas…' }));
+  if (typeof dialog.showModal === 'function') dialog.showModal();
+  else dialog.setAttribute('open', '');
+
+  try {
+    const items = await loadAreas();
+    select.replaceChildren(
+      el('option', { value: '', text: 'Select an area', disabled: true }),
+      ...items.map((a) => el('option', { value: a.name, text: `${a.name}, ${a.state}` })),
+    );
+    select.value = getArea() ?? '';
+    select.focus();
+  } catch (err) {
+    select.replaceChildren(el('option', { value: '', text: 'Areas unavailable' }));
+    toast(err.message, { tone: 'error' });
+  }
+}
+
+function closeAreaDialog() {
+  const dialog = document.getElementById('area-dialog');
+  if (typeof dialog.close === 'function') dialog.close();
+  else dialog.removeAttribute('open');
+}
+
+export function initAreaDialog(onChanged) {
+  const form = document.getElementById('area-form');
+  const select = document.getElementById('area-select');
+  const location = document.getElementById('location-button');
+
+  location.addEventListener('click', openAreaDialog);
+  document.getElementById('area-cancel').addEventListener('click', closeAreaDialog);
+
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const chosen = select.value;
+    if (!chosen) return;
+    setArea(chosen);
+    closeAreaDialog();
+    toast(`Showing stores that deliver to ${chosen}`);
+  });
+
+  // Keep the header label in step with the stored area, and refresh the page when it changes.
+  onAreaChange(() => {
+    renderAreaLabel();
+    onChanged();
+  });
+  renderAreaLabel();
+}

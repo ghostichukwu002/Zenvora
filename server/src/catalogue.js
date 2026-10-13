@@ -1,0 +1,133 @@
+// SAMPLE CATALOGUE — placeholder data for development only.
+// These merchants and products are not real businesses. Prices are stored in
+// kobo (1 NGN = 100 kobo) as integers so money never suffers float rounding.
+
+export const categories = [
+  { id: 'food', name: 'Food', glyph: 'bowl' },
+  { id: 'groceries', name: 'Groceries', glyph: 'basket' },
+  { id: 'fashion', name: 'Fashion', glyph: 'shirt' },
+  { id: 'electronics', name: 'Electronics', glyph: 'plug' },
+  { id: 'beauty', name: 'Beauty', glyph: 'drop' },
+  { id: 'home', name: 'Home & living', glyph: 'lamp' },
+  { id: 'books', name: 'Books & stationery', glyph: 'book' },
+  { id: 'essentials', name: 'Essentials', glyph: 'box' },
+];
+
+// Service areas are explicit. A merchant only fulfils inside areas listed here.
+export const merchants = [
+  {
+    id: 'm-sample-kitchen',
+    name: 'Sample Kitchen (demo)',
+    category: 'food',
+    city: 'Lagos',
+    state: 'Lagos',
+    serviceAreas: ['Lagos Island', 'Ikoyi'],
+    deliveryFeeKobo: 80000,
+    prepMinutes: 25,
+  },
+  {
+    id: 'm-sample-market',
+    name: 'Sample Market (demo)',
+    category: 'groceries',
+    city: 'Abuja',
+    state: 'FCT',
+    serviceAreas: ['Wuse', 'Maitama'],
+    deliveryFeeKobo: 120000,
+    prepMinutes: 40,
+  },
+  {
+    id: 'm-sample-tech',
+    name: 'Sample Tech Store (demo)',
+    category: 'electronics',
+    city: 'Lagos',
+    state: 'Lagos',
+    serviceAreas: ['Lagos Island', 'Yaba'],
+    deliveryFeeKobo: 150000,
+    prepMinutes: 60,
+  },
+];
+
+export const products = [
+  {
+    id: 'p-jollof-combo',
+    merchantId: 'm-sample-kitchen',
+    category: 'food',
+    name: 'Jollof rice combo',
+    description: 'Party-style jollof with fried plantain and a choice of protein.',
+    priceKobo: 260000,
+    promoPriceKobo: null,
+    stock: null, // null = made to order, not stock-tracked
+    variants: [
+      { id: 'portion', label: 'Portion', options: ['Regular', 'Large'], priceDeltaKobo: [0, 80000] },
+    ],
+    rating: null,
+    addedAt: '2026-10-01',
+  },
+  {
+    id: 'p-chicken-wrap',
+    merchantId: 'm-sample-kitchen',
+    category: 'food',
+    name: 'Grilled chicken wrap',
+    description: 'Grilled chicken, slaw and garlic sauce in a soft wrap.',
+    priceKobo: 180000,
+    promoPriceKobo: 150000,
+    stock: null,
+    variants: [],
+    rating: null,
+    addedAt: '2026-10-05',
+  },
+  {
+    id: 'p-rice-5kg',
+    merchantId: 'm-sample-market',
+    category: 'groceries',
+    name: 'Long-grain rice, 5 kg',
+    description: 'Parboiled long-grain rice in a 5 kg pack.',
+    priceKobo: 890000,
+    promoPriceKobo: null,
+    stock: 24,
+    variants: [],
+    rating: null,
+    addedAt: '2026-09-20',
+  },
+  {
+    id: 'p-cooking-oil',
+    merchantId: 'm-sample-market',
+    category: 'groceries',
+    name: 'Vegetable cooking oil, 3 L',
+    description: 'Refined vegetable oil in a 3 litre bottle.',
+    priceKobo: 720000,
+    promoPriceKobo: 650000,
+    stock: 0,
+    variants: [],
+    rating: null,
+    addedAt: '2026-09-22',
+  },
+  {
+    id: 'p-earbuds',
+    merchantId: 'm-sample-tech',
+    category: 'electronics',
+    name: 'Wireless earbuds',
+    description: 'Bluetooth earbuds with a charging case. Sample listing.',
+    priceKobo: 1850000,
+    promoPriceKobo: null,
+    stock: 8,
+    variants: [
+      { id: 'colour', label: 'Colour', options: ['Black', 'White'], priceDeltaKobo: [0, 0] },
+    ],
+    rating: null,
+    addedAt: '2026-10-07',
+  },
+  {
+    id: 'p-power-bank',
+    merchantId: 'm-sample-tech',
+    category: 'electronics',
+    name: 'Power bank, 10,000 mAh',
+    description: 'Portable charger with two USB outputs.',
+    priceKobo: 1200000,
+    promoPriceKobo: 999000,
+    stock: 3,
+    variants: [],
+    rating: null,
+    addedAt: '2026-10-08',
+  },
+];

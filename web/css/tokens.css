@@ -1,0 +1,68 @@
+/* ZENVORA design tokens.
+   Brand values come from the brief. Two refinements for accessibility:
+   - --emerald-700 is the button fill. White text on #059669 is only ~3.8:1,
+     which fails WCAG AA for normal text. #047857 gives ~5.5:1.
+   - Text colours were checked against cream and white backgrounds (AA, 4.5:1+). */
+
+:root {
+  /* Brand */
+  --emerald-600: #059669; /* brand primary: icons, highlights, large accents */
+  --emerald-700: #047857; /* button fill, active states, links */
+  --emerald-800: #065f46; /* hover and pressed states */
+  --forest-900: #12372a; /* deep forest: high-contrast sections, footer */
+  --forest-800: #1b4a39;
+  --mint-100: #d1fae5; /* accent surfaces, selected chips */
+  --mint-50: #ecfdf5;
+
+  /* Neutrals */
+  --cream-50: #fffdf5; /* page background */
+  --white: #ffffff;
+  --ink-900: #17231d; /* primary text */
+  --ink-600: #69766e; /* secondary text */
+  --ink-500: #5c6a62; /* tertiary text, still AA on cream */
+  --border: #e5eae5; /* subtle border */
+  --border-strong: #c9d3cc;
+
+  /* Status */
+  --danger-700: #b42318;
+  --danger-50: #fef3f2;
+  --warning-700: #b54708;
+  --warning-50: #fffaeb;
+
+  /* Type */
+  --font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue',
+    Arial, sans-serif;
+
+  /* Spacing (4px base) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* Shape */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-pill: 999px;
+
+  /* Elevation: restrained, per the brief */
+  --shadow-sm: 0 1px 2px rgba(18, 55, 42, 0.06);
+  --shadow-md: 0 4px 16px rgba(18, 55, 42, 0.08);
+
+  /* Motion: ordinary interface transitions sit in the 180–320ms range */
+  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --dur-fast: 160ms;
+  --dur-base: 240ms;
+  --dur-slow: 320ms;
+
+  /* Layout */
+  --content-max: 1200px;
+  --header-h: 64px;
+  --focus-ring: 0 0 0 3px rgba(5, 150, 105, 0.45);
+}
