@@ -89,3 +89,16 @@ html { scroll-behavior: smooth; }
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
   [data-motion-reveal] { opacity: 1; transform: none; }
 }
+
+
+/* The router toggles .view-enter before replacing the active route. */
+#app.view-enter > * {
+  animation: route-enter 360ms var(--motion-ease) both;
+}
+@keyframes route-enter {
+  from { opacity: 0; transform: translate3d(0, 10px, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  #app.view-enter > * { animation: none; }
+}
