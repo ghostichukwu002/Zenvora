@@ -43,3 +43,24 @@ test('without a trusted proxy, forwarded headers are ignored', async () => {
     await app.close();
   }
 });
+
+test('writes from another origin are refused unless that origin is allowed', async () => {
+  const blocked = await startApp();
+  try {
+    const res = await blocked.client().request('POST', '/api/auth/login', {}, { Origin: 'https://web.example.com' });
+    assert.equal(res.status, 403);
+    assert.equal(res.json.error.code, 'cross_origin');
+  } finally {
+    await blocked.close();
+  }
+
+  const allowed = await startApp({ allowedOrigins: ['https://web.example.com'] });
+  try {
+    const ok = await allowed.client().request('POST', '/api/auth/login', {}, { Origin: 'https://web.example.com' });
+    assert.notEqual(ok.status, 403, 'an allowed origin gets past the origin check');
+    const other = await allowed.client().request('POST', '/api/auth/login', {}, { Origin: 'https://evil.example.com' });
+    assert.equal(other.status, 403);
+  } finally {
+    await allowed.close();
+  }
+});

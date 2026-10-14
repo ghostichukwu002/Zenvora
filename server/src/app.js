@@ -130,7 +130,11 @@ export function createApp({
   rateLimits = {},
   merchantClaimCodes = {},
   trustProxy = false,
+  // Other sites allowed to send writes, as full origins (for example https://your-frontend.example).
+  // Only needed when the browser app is served from a different domain that forwards to this server.
+  allowedOrigins = [],
 }) {
+  const allowed = new Set(allowedOrigins);
   const router = createRouter();
   const auth = createAuth(db, { sendResetEmail });
   const orders = createOrders(db);
@@ -492,7 +496,7 @@ export function createApp({
           } catch {
             originHost = null;
           }
-          if (originHost !== req.headers.host) {
+          if (originHost !== req.headers.host && !allowed.has(origin)) {
             return sendJson(res, 403, { error: { code: 'cross_origin', message: 'Request blocked.' } });
           }
         } else if (origin === 'null') {

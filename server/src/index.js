@@ -48,6 +48,9 @@ const server = createServer(
     // Set ZENVORA_TRUST_PROXY=1 only when a proxy you control (for example your host's load balancer)
     // is in front of this server, so it appends the real client address to X-Forwarded-For.
     trustProxy: process.env.ZENVORA_TRUST_PROXY === '1',
+    // Comma-separated full origins of a separately hosted frontend, for example
+    // ZENVORA_ALLOWED_ORIGINS=https://zenvora-web-zeta.vercel.app
+    allowedOrigins: (process.env.ZENVORA_ALLOWED_ORIGINS || '').split(',').map((o) => o.trim()).filter(Boolean),
   }),
 );
 

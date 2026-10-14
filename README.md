@@ -36,7 +36,7 @@ npm start          # http://localhost:4000
 npm test           # server tests
 ```
 
-Environment variables: `PORT` (default 4000), `ZENVORA_DATA_DIR` (where the SQLite file lives, default `server/data`, git-ignored), `NODE_ENV=production` (adds the `Secure` cookie flag and stops logging reset links), `ZENVORA_MERCHANT_CLAIM_CODES` (a JSON map from store id to its staff access code, for example `{"m-sample-kitchen":"a-long-random-code"}`). `ZENVORA_TRUST_PROXY` (set to `1` only behind a proxy you control, such as Render or another host's load balancer, so login limits apply per visitor instead of per proxy).
+Environment variables: `PORT` (default 4000), `ZENVORA_DATA_DIR` (where the SQLite file lives, default `server/data`, git-ignored), `NODE_ENV=production` (adds the `Secure` cookie flag and stops logging reset links), `ZENVORA_MERCHANT_CLAIM_CODES` (a JSON map from store id to its staff access code, for example `{"m-sample-kitchen":"a-long-random-code"}`). `ZENVORA_ALLOWED_ORIGINS` (comma-separated full origins of a separately hosted frontend, for example `https://zenvora-web-zeta.vercel.app`; only needed when that frontend forwards `/api` to this server). `ZENVORA_TRUST_PROXY` (set to `1` only behind a proxy you control, such as Render or another host's load balancer, so login limits apply per visitor instead of per proxy).
 
 ### Administrator accounts
 
