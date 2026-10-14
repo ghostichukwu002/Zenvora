@@ -20,7 +20,7 @@ if (!email || !ROLES.includes(role)) {
 }
 
 const here = dirname(fileURLToPath(import.meta.url));
-const dataDir = process.env.ZENVORA_DATA_DIR ?? join(here, '..', 'data');
+const dataDir = process.env.ZENVORA_DATA_DIR || join(here, '..', 'data');
 const file = join(dataDir, 'zenvora.db');
 if (!existsSync(file)) {
   console.error(`No database found at ${file}. Start the server once, then create the account in the app first.`);

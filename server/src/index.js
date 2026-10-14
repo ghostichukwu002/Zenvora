@@ -6,10 +6,10 @@ import { createApp } from './app.js';
 import { categories, merchants, products } from './catalogue.js';
 import { openDatabase } from './db.js';
 
-const port = Number.parseInt(process.env.PORT ?? '4000', 10);
+const port = Number.parseInt(process.env.PORT || '4000', 10);
 const here = dirname(fileURLToPath(import.meta.url));
 const webRoot = join(here, '..', '..', 'web');
-const dataDir = process.env.ZENVORA_DATA_DIR ?? join(here, '..', 'data');
+const dataDir = process.env.ZENVORA_DATA_DIR || join(here, '..', 'data');
 const isProduction = process.env.NODE_ENV === 'production';
 
 mkdirSync(dataDir, { recursive: true });
