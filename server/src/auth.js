@@ -105,7 +105,8 @@ export function createRateLimiter({ windowMs, max, now = () => Date.now() }) {
   };
 }
 
-export function createAuth(db, { now = () => new Date(), sendResetEmail } = {}) {
+export function createAuth(db, { now = () => new Date(), sendResetEmail, adminEmails = [] } = {}) {
+  const admins = new Set(adminEmails);
   const iso = () => now().toISOString();
 
   function createSession(userId) {
@@ -141,7 +142,7 @@ export function createAuth(db, { now = () => new Date(), sendResetEmail } = {}) 
       try {
         db.prepare(
           'INSERT INTO users (id, email, password_hash, full_name, phone, role, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)',
-        ).run(id, cleanEmail, hash, name, cleanPhone, 'customer', iso());
+        ).run(id, cleanEmail, hash, name, cleanPhone, admins.has(cleanEmail) ? 'admin' : 'customer', iso());
       } catch {
         // Two sign-ups for one email at the same moment: the UNIQUE constraint decides.
         throw new HttpError(409, 'email_taken', 'An account with this email already exists. Try logging in.');

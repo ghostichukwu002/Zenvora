@@ -51,6 +51,8 @@ const server = createServer(
     // Comma-separated full origins of a separately hosted frontend, for example
     // ZENVORA_ALLOWED_ORIGINS=https://zenvora-web-zeta.vercel.app
     allowedOrigins: (process.env.ZENVORA_ALLOWED_ORIGINS || '').split(',').map((o) => o.trim()).filter(Boolean),
+    // Comma-separated account emails that are made administrators. Set on the host, never in the repo.
+    adminEmails: (process.env.ZENVORA_ADMIN_EMAILS || '').split(',').map((e) => e.trim().toLowerCase()).filter(Boolean),
   }),
 );
 

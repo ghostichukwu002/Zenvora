@@ -40,7 +40,9 @@ Environment variables: `PORT` (default 4000), `ZENVORA_DATA_DIR` (where the SQLi
 
 ### Administrator accounts
 
-There is no admin sign-up and no built-in admin login. Create an ordinary account in the app first, then grant the role on the server, against the real database:
+There is no admin sign-up and no built-in admin login. Set `ZENVORA_ADMIN_EMAILS` (comma-separated) on the host to name the accounts that should be administrators. Each one becomes an admin when it registers, and existing accounts are upgraded at startup. This only grants access: removing an email from the list does not demote anyone.
+
+To grant or remove the role from the command line, create an ordinary account in the app first, then run this on the server, against the real database:
 
 ```bash
 cd server

@@ -133,10 +133,22 @@ export function createApp({
   // Other sites allowed to send writes, as full origins (for example https://your-frontend.example).
   // Only needed when the browser app is served from a different domain that forwards to this server.
   allowedOrigins = [],
+  // Emails that become administrators: at registration, and for existing accounts at startup.
+  adminEmails = [],
 }) {
   const allowed = new Set(allowedOrigins);
   const router = createRouter();
-  const auth = createAuth(db, { sendResetEmail });
+  const auth = createAuth(db, { sendResetEmail, adminEmails });
+  // Accounts named in ZENVORA_ADMIN_EMAILS are made administrators at startup, for accounts that
+  // already exist. This only grants access. Removing an email from the list does not demote anyone;
+  // use scripts/grant-role.js for that.
+  for (const email of adminEmails) {
+    const changed = db.prepare("UPDATE users SET role = 'admin' WHERE email = ? AND role != 'admin'").run(email).changes;
+    if (changed) {
+      db.prepare('INSERT INTO audit_log (actor_user_id, action, target, detail_json, created_at) VALUES (?, ?, ?, ?, ?)')
+        .run('system', 'account.role_changed', email, JSON.stringify({ role: 'admin', via: 'ZENVORA_ADMIN_EMAILS' }), new Date().toISOString());
+    }
+  }
   const orders = createOrders(db);
   const merchantAccess = createMerchantAccess(db, { claimCodes: merchantClaimCodes });
   const dispatch = createDispatch(db, { catalogue });
