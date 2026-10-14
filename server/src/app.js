@@ -13,6 +13,8 @@ import { openDatabase } from './db.js';
 import { createOrders } from './orders.js';
 import { createMerchantAccess, serializeMerchantProduct, updateMerchantProduct } from './merchant.js';
 import { createDispatch } from './dispatch.js';
+import { createSupport } from './support.js';
+import { createTrust } from './trust.js';
 import { createRouter, HttpError, readJsonBody, sendError, sendJson } from './router.js';
 import { serveStatic } from './static.js';
 
@@ -43,6 +45,7 @@ function serializeProduct(product, catalogue) {
       state: merchant.state,
       serviceAreas: merchant.serviceAreas,
       prepMinutes: merchant.prepMinutes,
+      verified: merchant.verified === true,
     },
     priceKobo: product.priceKobo,
     promoPriceKobo: product.promoPriceKobo,
@@ -152,6 +155,8 @@ export function createApp({
   const orders = createOrders(db);
   const merchantAccess = createMerchantAccess(db, { claimCodes: merchantClaimCodes });
   const dispatch = createDispatch(db, { catalogue });
+  const support = createSupport(db);
+  const trust = createTrust(db, { catalogue });
   const authLimiter = createRateLimiter({ windowMs: 15 * 60 * 1000, max: rateLimits.authMax ?? 30 });
   const loginEmailLimiter = createRateLimiter({ windowMs: 15 * 60 * 1000, max: rateLimits.loginPerEmailMax ?? 8 });
 
@@ -327,7 +332,8 @@ export function createApp({
 
   router.get('/api/orders/:id', (ctx) => {
     const user = requireUser(ctx);
-    return { status: 200, body: { order: orders.get(user.id, ctx.params.id) } };
+    const order = orders.get(user.id, ctx.params.id);
+    return { status: 200, body: { order: { ...order, rider: dispatch.publicRiderFor(order.id) } } };
   });
 
   // ---------- Merchant workspace ----------
@@ -438,6 +444,18 @@ export function createApp({
     return { status: 200, body: dispatch.decline(user.id, ctx.params.orderId) };
   });
 
+  // ---------- Customer care ----------
+
+  router.post('/api/support', (ctx) => {
+    const user = requireUser(ctx);
+    return { status: 201, body: { request: support.create(user, ctx.body) } };
+  });
+
+  router.get('/api/support/mine', (ctx) => {
+    const user = requireUser(ctx);
+    return { status: 200, body: { items: support.listMine(user.id) } };
+  });
+
   // ---------- Administration ----------
   // Admin access is checked here on the server, for every route. Admin accounts are granted
   // from the command line (server/scripts/grant-role.js), never by sign-up or a hardcoded login.
@@ -471,6 +489,26 @@ export function createApp({
   router.patch('/api/admin/riders/:userId', (ctx) => {
     const user = requireAdmin(ctx);
     return { status: 200, body: { rider: dispatch.reviewRider(user.id, ctx.params.userId, ctx.body) } };
+  });
+
+  router.get('/api/admin/stores', (ctx) => {
+    requireAdmin(ctx);
+    return { status: 200, body: { items: trust.storesForAdmin() } };
+  });
+
+  router.patch('/api/admin/stores/:merchantId', (ctx) => {
+    const user = requireAdmin(ctx);
+    return { status: 200, body: { store: trust.setStoreVerified(user.id, ctx.params.merchantId, ctx.body.verified) } };
+  });
+
+  router.get('/api/admin/support', (ctx) => {
+    requireAdmin(ctx);
+    return { status: 200, body: { items: support.adminList(ctx.query.status) } };
+  });
+
+  router.patch('/api/admin/support/:requestId', (ctx) => {
+    const user = requireAdmin(ctx);
+    return { status: 200, body: { request: support.respond(user.id, ctx.params.requestId, ctx.body) } };
   });
 
   router.get('/api/admin/audit', (ctx) => {

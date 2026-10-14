@@ -11,6 +11,7 @@ import { renderForgot, renderLogin, renderRegister, renderReset } from './views/
 import { renderCart } from './views/cart.js';
 import { renderCheckout } from './views/checkout.js';
 import { renderOrder } from './views/order.js';
+import { renderHelp } from './views/help.js';
 import { renderAdmin } from './views/admin.js';
 import { renderMerchantDashboard, renderMerchantHome } from './views/merchant.js';
 import { renderRider } from './views/rider.js';
@@ -59,6 +60,7 @@ route('/checkout', { nav: 'cart', title: 'Checkout', render: () => renderCheckou
 route('/order/:id', { nav: 'account', title: 'Order', render: (ctx) => renderOrder(ctx) });
 route('/merchant', { nav: 'account', title: 'Store dashboard', render: () => renderMerchantHome() });
 route('/merchant/:id', { nav: 'account', title: 'Store dashboard', render: (ctx) => renderMerchantDashboard(ctx) });
+route('/help', { nav: 'account', title: 'Customer care', render: () => renderHelp() });
 route('/rider', { nav: 'account', title: 'Rider', render: () => renderRider() });
 route('/admin', { nav: 'account', title: 'Administration', render: () => renderAdmin() });
 

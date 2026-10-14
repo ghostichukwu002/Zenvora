@@ -1,5 +1,6 @@
 import * as api from '../api.js';
 import { el, linkButton } from '../dom.js';
+import { trustBadge } from '../components.js';
 import { field, formMessage, guardedSubmit } from '../form.js';
 import { formatNaira } from '../format.js';
 import { refresh } from '../router.js';
@@ -171,7 +172,7 @@ function dashboard(rider) {
 
   return el('div', { class: 'container section--tight' },
     el('div', { class: 'section__head' },
-      el('div', {}, el('h1', { tabindex: '-1', text: 'Your deliveries' }), el('p', { class: 'muted', text: `${rider.vehicle[0].toUpperCase()}${rider.vehicle.slice(1)} · ${rider.areas.join(', ')}` })),
+      el('div', {}, el('h1', { tabindex: '-1', text: 'Your deliveries' }), el('p', { class: 'muted' }, `${rider.vehicle[0].toUpperCase()}${rider.vehicle.slice(1)} · ${rider.areas.join(', ')} `, trustBadge('rider'))),
     ),
     el('div', { class: 'rider-availability' }, el('label', { class: 'availability__toggle', for: 'rider-available' }, availability, el('strong', { text: 'Available for jobs' })), availabilityText),
     el('section', { class: 'rider-section', 'aria-labelledby': 'active-title' }, el('h2', { id: 'active-title', text: 'Active' }), activeBox),

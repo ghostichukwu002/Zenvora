@@ -1,5 +1,5 @@
 import * as api from '../api.js';
-import { addToCart, categoryGlyph, productImageUrl } from '../components.js';
+import { addToCart, categoryGlyph, productImageUrl, trustBadge } from '../components.js';
 import { el, icon, linkButton } from '../dom.js';
 import { AVAILABILITY_LABEL, formatNaira } from '../format.js';
 import { getArea } from '../state.js';
@@ -203,6 +203,8 @@ function productView(product) {
           el('strong', { text: product.merchant.name }),
           ` · ${product.merchant.city}, ${product.merchant.state}`,
           prep,
+          product.merchant.verified ? ' ' : null,
+          product.merchant.verified ? trustBadge('store') : null,
         ),
         el(
           'div',

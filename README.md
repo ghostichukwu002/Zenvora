@@ -14,7 +14,9 @@ A commerce and delivery platform for the Nigerian market. This build covers the 
 - Checkout with **cash on delivery**, then order confirmation and order history
 - **Store dashboard.** Staff connect with an access code and manage orders (accept, prepare, mark ready), stock, prices and offers. Sales figures come from real orders.
 - **Riders.** Anyone can apply from `#/rider`, choosing a vehicle, a phone number and the areas they cover. Nothing is assigned until an administrator approves them. Approved riders go online or offline, then pick up, deliver or report a failed delivery. Delivery requires a proof note and confirmation that the cash was collected.
-- **Administration** (`#/admin`, administrators only). Dispatch shows every order needing a rider, with only the approved riders who cover that area. Riders can be approved, suspended or sent back to review, with a note. The audit log records every rider and dispatch change.
+- **Administration** (`#/admin`, administrators only). Dispatch shows every order needing a rider, with only the approved riders who cover that area. Riders can be approved, suspended or sent back to review, with a note. Support answers customer requests and sets them open, answered or closed. Stores can be marked verified. The audit log records every rider, dispatch, support and verification change.
+- **Customer care** (`#/help`, signed-in customers). Customers send a request about an order, payment, delivery, their account or anything else, optionally naming one of their own orders. Replies appear on that page. Customers can have up to five open requests at a time.
+- **Verification badges.** A store marked verified by an administrator shows a *Verified store* badge on its products. An approved rider shows a *Verified rider* badge on their own dashboard and on the customer's order page once assigned. Administrators see a *ZENVORA admin* badge. Verification is stored in the database, so it survives restarts.
 - Mobile-first layout, bottom navigation, reduced-motion support, keyboard focus states
 
 ## Not built yet
@@ -22,7 +24,8 @@ A commerce and delivery platform for the Nigerian market. This build covers the 
 - **Online payments.** Needs a provider (for example Paystack or Flutterwave) and your keys. The checkout shows "Pay online" as unavailable.
 - **Payment status.** Cash on delivery is marked collected only when the assigned rider confirms it on delivery. Nothing is charged online.
 - **Email.** No email provider is connected. In development the password-reset link is printed in the server console. In production it is never logged, so resets stay unavailable until email is connected.
-- **Rider identity checks.** Administrators approve riders after checking their details outside the app. No identity documents are uploaded or stored.
+- **Rider identity checks.** Administrators approve riders after checking their details outside the app. No identity documents are uploaded or stored. The *Verified rider* badge means only that an administrator approved the application.
+- **Support by email or phone.** Customer care is in-app only. Replies are not emailed and no phone line exists yet.
 - **Live tracking and delivery time estimates.** There is no rider location feed yet, so the app shows no live position and no estimated arrival time.
 - **Rider earnings, settlements, disputes, merchant applications, listing review, promotions and platform settings** are not built yet. Multi-merchant checkout, real product photography and live tracking are also later work.
 
@@ -93,5 +96,5 @@ web/      Browser app (plain ES modules, no build step)
 
 1. ~~Merchant accounts and dashboard~~ (done)
 2. Online payments with server-side verification and webhooks (needs a provider and keys)
-3. ~~Rider experience and admin panel, with manual dispatch~~ (done). Still to come: rider earnings and settlement records, admin review of merchant applications and listings, disputes, promotions, and platform settings
+3. ~~Rider experience and admin panel, with manual dispatch~~ (done). ~~Customer care, store and rider verification badges~~ (done). Still to come: rider earnings and settlement records, admin review of merchant applications and listings, disputes, promotions, and platform settings
 4. Move catalogue and carts into the database

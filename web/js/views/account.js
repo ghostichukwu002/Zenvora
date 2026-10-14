@@ -2,6 +2,7 @@ import * as api from '../api.js';
 import { el, linkButton } from '../dom.js';
 import { field, formMessage, guardedSubmit } from '../form.js';
 import { formatNaira } from '../format.js';
+import { trustBadge } from '../components.js';
 import { loadCart, setUser } from '../state.js';
 import { stateBox, toast } from '../ui.js';
 import { emptyView, formatDate, ORDER_STATUS_LABEL, requireLogin } from './guard.js';
@@ -99,7 +100,7 @@ export async function renderAccount() {
   return el(
     'div',
     { class: 'container section--tight' },
-    el('div', { class: 'section__head' }, el('div', {}, el('h1', { tabindex: '-1', text: 'Your account' }), el('p', { text: user.email }), el('nav', { class: 'account-links', 'aria-label': 'Work tools' }, el('a', { href: '#/merchant', text: 'Store dashboard' }), el('a', { href: '#/rider', text: 'Deliver with ZENVORA' }), user.role === 'admin' ? el('a', { href: '#/admin', text: 'Administration' }) : null)), logout),
+    el('div', { class: 'section__head' }, el('div', {}, el('h1', { tabindex: '-1', text: 'Your account' }, user.role === 'admin' ? trustBadge('admin') : null), el('p', { text: user.email }), el('nav', { class: 'account-links', 'aria-label': 'Work tools' }, el('a', { href: '#/help', text: 'Customer care' }), el('a', { href: '#/merchant', text: 'Store dashboard' }), el('a', { href: '#/rider', text: 'Deliver with ZENVORA' }), user.role === 'admin' ? el('a', { href: '#/admin', text: 'Administration' }) : null)), logout),
     el(
       'div',
       { class: 'account-grid' },

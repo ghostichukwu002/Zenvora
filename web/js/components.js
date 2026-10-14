@@ -156,3 +156,14 @@ export function categoryTile(category, index = 0) {
     }),
   );
 }
+
+// Trust badges. "store" and "rider" mean an administrator verified them; "admin" marks ZENVORA staff.
+const TRUST_LABEL = { store: 'Verified store', rider: 'Verified rider', admin: 'ZENVORA admin' };
+export function trustBadge(kind) {
+  return el(
+    'span',
+    { class: `trust-badge trust-badge--${kind}`, title: kind === 'admin' ? 'Works for ZENVORA' : 'Checked by ZENVORA' },
+    icon('check'),
+    TRUST_LABEL[kind],
+  );
+}

@@ -108,8 +108,31 @@ const SCHEMA = `
     created_at   TEXT NOT NULL
   );
 
+  -- Stores an administrator has verified. Survives restarts; loaded into the catalogue at startup.
+  CREATE TABLE IF NOT EXISTS store_verifications (
+    merchant_id TEXT PRIMARY KEY,
+    verified_at TEXT NOT NULL,
+    verified_by TEXT NOT NULL
+  );
+
+  -- Customer care requests from signed-in customers.
+  CREATE TABLE IF NOT EXISTS support_requests (
+    id          TEXT PRIMARY KEY,
+    user_id     TEXT REFERENCES users(id) ON DELETE SET NULL,
+    topic       TEXT NOT NULL,
+    order_id    TEXT,
+    message     TEXT NOT NULL,
+    status      TEXT NOT NULL,            -- open | answered | closed
+    reply       TEXT,
+    replied_at  TEXT,
+    created_at  TEXT NOT NULL,
+    updated_at  TEXT NOT NULL
+  );
+
   CREATE INDEX IF NOT EXISTS idx_deliveries_rider ON deliveries(rider_user_id, status);
   CREATE INDEX IF NOT EXISTS idx_audit_created ON audit_log(created_at DESC);
+  CREATE INDEX IF NOT EXISTS idx_support_status ON support_requests(status, created_at DESC);
+  CREATE INDEX IF NOT EXISTS idx_support_user ON support_requests(user_id, created_at DESC);
   CREATE INDEX IF NOT EXISTS idx_orders_user ON orders(user_id, created_at DESC);
   CREATE INDEX IF NOT EXISTS idx_orders_merchant ON orders(merchant_id, created_at DESC);
   CREATE INDEX IF NOT EXISTS idx_sessions_user ON sessions(user_id);

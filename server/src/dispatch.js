@@ -286,6 +286,18 @@ export function createDispatch(db, { catalogue, now = () => new Date() }) {
       return { declined: true };
     },
 
+    // What a customer may see about the rider on their order: a first name, the vehicle and whether
+    // the rider is verified. Never a phone number, address or any other detail.
+    publicRiderFor(orderId) {
+      const row = db.prepare(
+        `SELECT u.full_name, r.vehicle, r.status AS rider_status
+         FROM deliveries d JOIN users u ON u.id = d.rider_user_id JOIN riders r ON r.user_id = d.rider_user_id
+         WHERE d.order_id = ? AND d.status IN ('assigned', 'picked_up')`,
+      ).get(orderId);
+      if (!row || row.rider_status !== 'approved') return null;
+      return { firstName: row.full_name.split(' ')[0], vehicle: row.vehicle, verified: true };
+    },
+
     // ----- Administrators -----
 
     adminRiders,

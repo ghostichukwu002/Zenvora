@@ -1,6 +1,7 @@
 import * as api from '../api.js';
 import { el, icon, linkButton } from '../dom.js';
 import { formatNaira } from '../format.js';
+import { trustBadge } from '../components.js';
 import { stateBox } from '../ui.js';
 import { emptyView, formatDate, ORDER_STATUS_LABEL, PAYMENT_LABEL, requireLogin } from './guard.js';
 
@@ -47,8 +48,17 @@ export async function renderOrder({ params }) {
           { class: 'order-block' },
           el('h2', { text: 'Status' }),
           el('p', {}, el('span', { class: 'badge', text: ORDER_STATUS_LABEL[order.status] ?? order.status })),
-          el('p', { class: 'muted', text: `${order.merchant.name} has your order. Store confirmation, dispatch and delivery updates are not part of this build yet, so this status won’t change on its own.` }),
+          el('p', { class: 'muted', text: `${order.merchant.name} has your order. Reload this page to see the latest status.` }),
         ),
+        order.rider
+          ? el(
+            'section',
+            { class: 'order-block', 'aria-labelledby': 'order-rider-title' },
+            el('h2', { id: 'order-rider-title', text: 'Your rider' }),
+            el('p', {}, el('strong', { text: order.rider.firstName }), ` · ${order.rider.vehicle[0].toUpperCase()}${order.rider.vehicle.slice(1)} `, order.rider.verified ? trustBadge('rider') : null),
+            el('p', { class: 'muted', text: 'ZENVORA approves every rider before they can take a delivery. Pay them in cash on arrival.' }),
+          )
+          : null,
         el(
           'section',
           { class: 'order-block' },

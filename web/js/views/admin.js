@@ -2,6 +2,8 @@ import * as api from '../api.js';
 import { el, linkButton } from '../dom.js';
 import { formatNaira } from '../format.js';
 import { stateBox, toast } from '../ui.js';
+import { trustBadge } from '../components.js';
+import { storesPanel, supportPanel } from './admin-care.js';
 import { emptyView, formatDate, requireLogin } from './guard.js';
 
 // Administrator workspace. A dispatch desk: find the orders that need a rider, assign one,
@@ -29,6 +31,8 @@ const AUDIT_SENTENCE = {
   'delivery.failed': 'reported a failed delivery',
   'delivery.declined': 'declined a job',
   'account.role_changed': 'changed an account’s role',
+  'support.respond': 'answered a customer request',
+  'store.verification': 'changed a store’s verification',
 };
 
 const plural = (n, word, pluralWord = `${word}s`) => `${n} ${n === 1 ? word : pluralWord}`;
@@ -61,6 +65,8 @@ export async function renderAdmin() {
   const tabs = [
     ['dispatch', 'Dispatch'],
     ['riders', 'Riders'],
+    ['support', 'Support'],
+    ['stores', 'Stores'],
     ['audit', 'Activity'],
   ];
   let current = 'dispatch';
@@ -106,6 +112,8 @@ export async function renderAdmin() {
     try {
       if (key === 'dispatch') await dispatchPanel(panel, refreshOverview, () => loadPanel('dispatch'));
       else if (key === 'riders') await ridersPanel(panel, refreshOverview, () => loadPanel('riders'));
+      else if (key === 'support') await supportPanel(panel);
+      else if (key === 'stores') await storesPanel(panel, refreshOverview);
       else await auditPanel(panel);
     } catch (err) {
       panel.replaceChildren(stateBox({ tone: 'error', title: 'Couldn’t load this section', body: err.message, actions: [linkButton({ text: 'Try again', variant: 'secondary', small: true, onClick: () => loadPanel(key) })] }));
@@ -119,7 +127,7 @@ export async function renderAdmin() {
   return el('div', { class: 'container section--tight admin' },
     el('header', { class: 'admin-head' },
       el('div', {},
-        el('h1', { tabindex: '-1', text: 'Operations' }),
+        el('h1', { tabindex: '-1', text: 'Operations' }, trustBadge('admin')),
         status,
       ),
       el('button', { type: 'button', class: 'btn btn--secondary btn--small', text: 'Refresh', onclick: () => { refreshOverview(); loadPanel(current); } }),
