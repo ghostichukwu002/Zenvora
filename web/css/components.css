@@ -524,8 +524,26 @@
   gap: var(--space-2);
 }
 
-.product-card__footer .btn {
+/* Cards use a single-column grid, so the status line and the button always stack inside the card.
+   The product page's own button rules (a 180px minimum, flex growth) are overridden here,
+   with higher specificity, so they cannot push the button past the card edge. */
+.product-card__footer.purchase__row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: stretch;
+  gap: 8px;
+}
+
+.product-card__footer.purchase__row > * {
+  min-width: 0;
+  max-width: 100%;
+  flex: none;
+}
+
+.product-card__footer.purchase__row .btn {
   width: 100%;
+  min-width: 0;
+  justify-self: stretch;
 }
 
 .availability {
@@ -946,6 +964,8 @@
 /* ---------- Toasts ---------- */
 
 .toast-region {
+  grid-template-columns: minmax(0, 1fr);
+  width: auto;
   position: fixed;
   left: var(--space-4);
   right: var(--space-4);
@@ -1382,5 +1402,132 @@ textarea.input {
   [data-reveal] {
     opacity: 1;
     transform: none;
+  }
+}
+
+/* ---------- Store dashboard ---------- */
+
+.merchant-summary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+  margin-bottom: var(--space-8);
+}
+
+@media (min-width: 900px) {
+  .merchant-summary {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.merchant-stat {
+  display: grid;
+  gap: 2px;
+  padding: var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--white);
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.merchant-stat strong {
+  font-size: 1.1rem;
+}
+
+.merchant-block {
+  display: grid;
+  gap: var(--space-4);
+  margin-bottom: var(--space-10);
+}
+
+.order-card {
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--white);
+  list-style: none;
+}
+
+.order-card__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.order-card__items {
+  margin: 0;
+  padding-left: var(--space-5);
+  font-size: 0.95rem;
+}
+
+.order-card__delivery {
+  font-size: 0.9rem;
+  color: var(--ink-600);
+}
+
+.order-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+.product-table {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.product-row {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--white);
+}
+
+.product-row__name {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.product-row__fields {
+  display: grid;
+  gap: var(--space-3);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.product-row__fields .field label {
+  font-size: 0.8rem;
+}
+
+.product-row__fields .input {
+  min-height: 44px;
+  padding: 0 var(--space-3);
+}
+
+.product-row__save {
+  justify-self: start;
+}
+
+.merchant-switch {
+  min-width: 220px;
+}
+
+/* Hero buttons inherit the 180px minimum from the product page. On phones they stack full width. */
+.hero .purchase__row .btn {
+  min-width: 0;
+  max-width: 100%;
+}
+
+@media (max-width: 479px) {
+  .hero .purchase__row .btn {
+    width: 100%;
   }
 }

@@ -11,6 +11,7 @@ import { renderForgot, renderLogin, renderRegister, renderReset } from './views/
 import { renderCart } from './views/cart.js';
 import { renderCheckout } from './views/checkout.js';
 import { renderOrder } from './views/order.js';
+import { renderMerchantDashboard, renderMerchantHome } from './views/merchant.js';
 import { renderHome } from './views/home.js';
 import { renderProduct } from './views/product.js';
 import { renderShop } from './views/shop.js';
@@ -54,6 +55,8 @@ route('/reset-password', { nav: 'account', title: 'New password', render: (ctx) 
 route('/account', { nav: 'account', title: 'Your account', render: () => renderAccount() });
 route('/checkout', { nav: 'cart', title: 'Checkout', render: () => renderCheckout() });
 route('/order/:id', { nav: 'account', title: 'Order', render: (ctx) => renderOrder(ctx) });
+route('/merchant', { nav: 'account', title: 'Store dashboard', render: () => renderMerchantHome() });
+route('/merchant/:id', { nav: 'account', title: 'Store dashboard', render: (ctx) => renderMerchantDashboard(ctx) });
 
 initAreaDialog(() => refresh());
 initMotion();

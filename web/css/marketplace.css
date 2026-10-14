@@ -20,6 +20,7 @@ body {
 .hero {
   position: relative;
   isolation: isolate;
+  overflow: clip; /* decorative glow sits partly off-screen; clip it so it never widens the page on phones */
   padding-top: clamp(32px, 5vw, 68px);
   padding-bottom: clamp(34px, 5vw, 64px);
   align-items: center;

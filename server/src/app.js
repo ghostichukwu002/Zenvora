@@ -11,6 +11,7 @@ import {
 import { createCartStore, readCookie, SESSION_COOKIE } from './cart-store.js';
 import { openDatabase } from './db.js';
 import { createOrders } from './orders.js';
+import { createMerchantAccess, serializeMerchantProduct, updateMerchantProduct } from './merchant.js';
 import { createRouter, HttpError, readJsonBody, sendError, sendJson } from './router.js';
 import { serveStatic } from './static.js';
 
@@ -112,10 +113,12 @@ export function createApp({
   db = openDatabase(':memory:'),
   sendResetEmail,
   rateLimits = {},
+  merchantClaimCodes = {},
 }) {
   const router = createRouter();
   const auth = createAuth(db, { sendResetEmail });
   const orders = createOrders(db);
+  const merchantAccess = createMerchantAccess(db, { claimCodes: merchantClaimCodes });
   const authLimiter = createRateLimiter({ windowMs: 15 * 60 * 1000, max: rateLimits.authMax ?? 30 });
   const loginEmailLimiter = createRateLimiter({ windowMs: 15 * 60 * 1000, max: rateLimits.loginPerEmailMax ?? 8 });
 
@@ -292,6 +295,71 @@ export function createApp({
   router.get('/api/orders/:id', (ctx) => {
     const user = requireUser(ctx);
     return { status: 200, body: { order: orders.get(user.id, ctx.params.id) } };
+  });
+
+  // ---------- Merchant workspace ----------
+  // Every route checks store membership on the server. The screens only hide what is not allowed.
+
+  const requireMerchant = (ctx) => {
+    const user = requireUser(ctx);
+    merchantAccess.requireMember(user.id, ctx.params.merchantId);
+    return user;
+  };
+
+  router.get('/api/merchant/memberships', (ctx) => {
+    const user = requireUser(ctx);
+    const items = merchantAccess.memberships(user.id).map(({ id }) => ({
+      id,
+      name: catalogue.merchants.find((m) => m.id === id)?.name ?? id,
+    }));
+    return { status: 200, body: { items } };
+  });
+
+  router.post('/api/merchant/claim', (ctx) => {
+    const user = requireUser(ctx);
+    limit(authLimiter, `claim:${ctx.ip}`);
+    const merchantId = typeof ctx.body.merchantId === 'string' ? ctx.body.merchantId : '';
+    if (!catalogue.merchants.some((m) => m.id === merchantId)) {
+      throw new HttpError(404, 'merchant_not_found', 'Store not found.');
+    }
+    merchantAccess.claim(user.id, merchantId, ctx.body.code);
+    return { status: 201, body: { ok: true, merchantId } };
+  });
+
+  router.get('/api/merchant/:merchantId/orders', (ctx) => {
+    requireMerchant(ctx);
+    return {
+      status: 200,
+      body: {
+        items: orders.listForMerchant(ctx.params.merchantId),
+        summary: orders.summaryForMerchant(ctx.params.merchantId),
+      },
+    };
+  });
+
+  router.patch('/api/merchant/:merchantId/orders/:orderId', (ctx) => {
+    requireMerchant(ctx);
+    const order = orders.setMerchantStatus({
+      merchantId: ctx.params.merchantId,
+      orderId: ctx.params.orderId,
+      nextStatus: ctx.body.status,
+      catalogue,
+    });
+    return { status: 200, body: { order } };
+  });
+
+  router.get('/api/merchant/:merchantId/products', (ctx) => {
+    requireMerchant(ctx);
+    const items = catalogue.products
+      .filter((p) => p.merchantId === ctx.params.merchantId)
+      .map(serializeMerchantProduct);
+    return { status: 200, body: { items } };
+  });
+
+  router.patch('/api/merchant/:merchantId/products/:productId', (ctx) => {
+    requireMerchant(ctx);
+    const product = updateMerchantProduct(catalogue, ctx.params.merchantId, ctx.params.productId, ctx.body);
+    return { status: 200, body: { product: serializeMerchantProduct(product) } };
   });
 
   return async function handle(req, res) {

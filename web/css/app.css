@@ -291,10 +291,12 @@ a:hover {
   position: fixed;
   left: 0;
   right: 0;
+  width: 100%; /* explicit, so the nav's contents cannot widen it past the screen */
   bottom: 0;
   z-index: 50;
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  /* minmax(0, 1fr): columns may shrink below their content, so five items never widen the screen */
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   background: var(--white);
   border-top: 1px solid var(--border);
   padding-bottom: env(safe-area-inset-bottom);

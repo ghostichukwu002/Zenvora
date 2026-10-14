@@ -14,6 +14,16 @@ import { HttpError } from './router.js';
 
 export const PAYMENT_METHODS = ['cash_on_delivery'];
 
+// Statuses a store can set. "delivered" is deliberately absent: it needs a verified handover
+// from a rider, which does not exist yet, so a store cannot mark an order delivered by itself.
+export const MERCHANT_TRANSITIONS = {
+  placed: ['accepted', 'rejected'],
+  accepted: ['preparing', 'rejected'],
+  preparing: ['ready'],
+  ready: [],
+  rejected: [],
+};
+
 function cleanText(value, { min, max, field }) {
   const text = typeof value === 'string' ? value.trim().replace(/\s+/g, ' ') : '';
   if (text.length < min || text.length > max) {
@@ -164,6 +174,63 @@ export function createOrders(db, { now = () => new Date() } = {}) {
       const row = db.prepare('SELECT * FROM orders WHERE id = ? AND user_id = ?').get(orderId, userId);
       if (!row) throw new HttpError(404, 'order_not_found', 'Order not found.');
       return serializeOrder(db, row);
+    },
+
+    listForMerchant(merchantId) {
+      const rows = db
+        .prepare('SELECT * FROM orders WHERE merchant_id = ? ORDER BY created_at DESC, id DESC LIMIT 200')
+        .all(merchantId);
+      return rows.map((r) => serializeOrder(db, r));
+    },
+
+    // Rejected orders are excluded from sales figures. Totals include delivery fees.
+    summaryForMerchant(merchantId) {
+      const since = new Date(now().getTime() - 7 * 24 * 60 * 60 * 1000).toISOString();
+      const sales = (sinceIso) =>
+        db
+          .prepare(
+            `SELECT COUNT(*) AS orders, COALESCE(SUM(total_kobo), 0) AS valueKobo FROM orders
+             WHERE merchant_id = ? AND status != 'rejected' AND created_at >= ?`,
+          )
+          .get(merchantId, sinceIso);
+      const byStatus = db
+        .prepare('SELECT status, COUNT(*) AS n FROM orders WHERE merchant_id = ? GROUP BY status')
+        .all(merchantId);
+      return {
+        allTime: sales('1970-01-01T00:00:00.000Z'),
+        last7Days: sales(since),
+        byStatus: Object.fromEntries(byStatus.map((r) => [r.status, r.n])),
+      };
+    },
+
+    // Moves an order one allowed step. Rejecting returns the reserved stock to the catalogue.
+    setMerchantStatus({ merchantId, orderId, nextStatus, catalogue }) {
+      const row = db.prepare('SELECT * FROM orders WHERE id = ? AND merchant_id = ?').get(orderId, merchantId);
+      if (!row) throw new HttpError(404, 'order_not_found', 'Order not found.');
+
+      if (!(MERCHANT_TRANSITIONS[row.status] ?? []).includes(nextStatus)) {
+        throw new HttpError(409, 'invalid_transition', `An order that is ${row.status} can't be set to ${nextStatus}.`);
+      }
+
+      transaction(db, () => {
+        // Conditional update: if another request changed the status first, this changes nothing.
+        const result = db
+          .prepare('UPDATE orders SET status = ? WHERE id = ? AND status = ?')
+          .run(nextStatus, orderId, row.status);
+        if (result.changes !== 1) {
+          throw new HttpError(409, 'status_changed', 'This order was just updated. Refresh and try again.');
+        }
+      });
+
+      if (nextStatus === 'rejected') {
+        const items = db.prepare('SELECT product_id, quantity FROM order_items WHERE order_id = ?').all(orderId);
+        for (const item of items) {
+          const product = catalogue.products.find((p) => p.id === item.product_id);
+          if (product && product.stock !== null) product.stock += item.quantity;
+        }
+      }
+
+      return serializeOrder(db, db.prepare('SELECT * FROM orders WHERE id = ?').get(orderId));
     },
 
     list(userId) {

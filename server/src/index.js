@@ -27,8 +27,25 @@ async function sendResetEmail({ to, token, minutes }) {
   console.log(`[dev] Password reset for ${to} (valid ${minutes} min): ${link}`);
 }
 
+// Store claim codes, for example {"m-sample-kitchen":"a-long-random-code"}. Set them in the
+// environment, never in the code. Without them, no account can be linked to a store.
+let merchantClaimCodes = {};
+if (process.env.ZENVORA_MERCHANT_CLAIM_CODES) {
+  try {
+    merchantClaimCodes = JSON.parse(process.env.ZENVORA_MERCHANT_CLAIM_CODES);
+  } catch {
+    console.error('ZENVORA_MERCHANT_CLAIM_CODES is not valid JSON. No store claims will work.');
+  }
+}
+
 const server = createServer(
-  createApp({ catalogue: { categories, merchants, products }, webRoot, db, sendResetEmail }),
+  createApp({
+    catalogue: { categories, merchants, products },
+    webRoot,
+    db,
+    sendResetEmail,
+    merchantClaimCodes,
+  }),
 );
 
 server.listen(port, () => {

@@ -65,7 +65,16 @@ const SCHEMA = `
     line_kobo    INTEGER NOT NULL
   );
 
+  -- Which accounts may act for which store. Granted by a claim code (see merchant.js).
+  CREATE TABLE IF NOT EXISTS merchant_members (
+    user_id     TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    merchant_id TEXT NOT NULL,
+    created_at  TEXT NOT NULL,
+    PRIMARY KEY (user_id, merchant_id)
+  );
+
   CREATE INDEX IF NOT EXISTS idx_orders_user ON orders(user_id, created_at DESC);
+  CREATE INDEX IF NOT EXISTS idx_orders_merchant ON orders(merchant_id, created_at DESC);
   CREATE INDEX IF NOT EXISTS idx_sessions_user ON sessions(user_id);
 `;
 
