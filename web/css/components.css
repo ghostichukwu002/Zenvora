@@ -1727,49 +1727,51 @@ textarea.input {
   justify-self: start;
 }
 
-/* Administration */
+/* Administration: a dispatch desk. Tables carry the data; the status line says what needs attention. */
 
-.admin-summary {
+.admin {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--space-2);
-  margin: 0 0 var(--space-6);
+  gap: var(--space-6);
+  padding-top: var(--space-8);
+  padding-bottom: var(--space-12);
 }
 
-.admin-summary__item {
-  padding: var(--space-3);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  background: var(--white);
-  min-width: 0;
+.admin-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
 }
 
-.admin-summary__item dt {
-  font-size: 0.8rem;
+.admin-head h1 {
+  font-size: clamp(1.6rem, 4vw, 2rem);
+  letter-spacing: -0.02em;
+}
+
+.admin-status {
+  margin-top: var(--space-2);
   color: var(--ink-600);
-}
-
-.admin-summary__item dd {
-  margin: 0;
-  font-size: 1.4rem;
-  font-weight: 700;
-  font-variant-numeric: tabular-nums;
+  max-width: 60ch;
 }
 
 .admin-tabs {
   display: flex;
-  gap: var(--space-2);
+  gap: var(--space-6);
   border-bottom: 1px solid var(--border);
-  margin-bottom: var(--space-6);
   overflow-x: auto;
 }
 
 .admin-tabs [role='tab'] {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
   flex-shrink: 0;
+  margin-bottom: -1px;
+  padding: var(--space-3) 0;
   background: none;
   border: 0;
   border-bottom: 2px solid transparent;
-  padding: var(--space-2) var(--space-3);
   font: inherit;
   font-weight: 600;
   color: var(--ink-600);
@@ -1777,71 +1779,271 @@ textarea.input {
 }
 
 .admin-tabs [role='tab'][aria-selected='true'] {
-  color: var(--emerald-700);
+  color: var(--ink-900);
   border-bottom-color: var(--emerald-700);
 }
 
-.admin-group + .admin-group {
-  margin-top: var(--space-8);
+.admin-tabs [role='tab'][data-count]:not([data-count=''])::after {
+  content: attr(data-count);
+  display: inline-grid;
+  place-items: center;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 7px;
+  border-radius: var(--radius-pill);
+  background: var(--danger-50);
+  color: var(--danger-700);
+  font-size: 0.8rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
 }
 
-.admin-group h2 {
-  margin-bottom: var(--space-3);
+.admin-panel {
+  min-width: 0;
+  transition: opacity var(--dur-fast) var(--ease-out);
 }
 
-.admin-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  gap: var(--space-3);
+.admin-panel[aria-busy='true'] {
+  opacity: 0.55;
 }
 
-.admin-row {
-  display: grid;
-  gap: var(--space-2);
-  padding: var(--space-4);
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--white);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  background: var(--white);
+  box-shadow: var(--shadow-sm);
+  font-size: 0.92rem;
+  overflow: hidden;
+}
+
+.admin-table th {
+  padding: var(--space-3) var(--space-4);
+  text-align: left;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--ink-600);
+  background: var(--mint-50);
+  border-bottom: 1px solid var(--border);
+}
+
+.admin-table td {
+  padding: var(--space-4);
+  vertical-align: top;
+  border-bottom: 1px solid var(--border);
   min-width: 0;
   overflow-wrap: anywhere;
 }
 
-.admin-row p {
-  margin: 0;
-  font-size: 0.9rem;
+.admin-table td > * {
+  display: block;
 }
 
-.admin-row__head {
+.admin-table td > * + * {
+  margin-top: 2px;
+}
+
+.admin-table tbody:last-child tr:last-child td {
+  border-bottom: 0;
+}
+
+.admin-group__row th {
+  padding: var(--space-5) var(--space-4) var(--space-2);
+  background: none;
+  border-bottom: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--ink-900);
+}
+
+.admin-id {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.riders-table td:first-child {
+  min-width: 240px;
+}
+
+.admin-money {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.admin-table .muted,
+.admin-table a.muted {
+  font-size: 0.85rem;
+}
+
+.admin-table__assign,
+.admin-table__actions {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: var(--space-2);
 }
 
-.admin-row__controls {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
-  align-items: center;
+.admin-table__assign > * + * {
+  margin-top: 0;
 }
 
-.admin-row__controls .select,
-.admin-row__controls .input {
-  flex: 1 1 200px;
+.admin-table__select {
+  flex: 1 1 180px;
   min-width: 0;
   width: auto;
+  max-width: 280px;
 }
 
-.admin-row__detail {
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 0.8rem;
-  word-break: break-all;
+.admin-table__note {
+  width: 100%;
+  min-width: 160px;
 }
 
-@media (min-width: 768px) {
-  .admin-summary {
-    grid-template-columns: repeat(5, minmax(0, 1fr));
+.admin-table .badge {
+  justify-self: start;
+  width: fit-content;
+}
+
+.badge--unassigned { background: var(--warning-50); color: var(--warning-700); }
+.badge--failed { background: var(--danger-50); color: var(--danger-700); }
+.badge--assigned { background: var(--mint-100); color: var(--forest-900); }
+.badge--picked_up { background: var(--forest-900); color: var(--white); }
+.badge--delivered { background: var(--white); color: var(--ink-600); box-shadow: inset 0 0 0 1px var(--border-strong); }
+
+/* One moment of motion: the row just assigned. Reduced-motion users get the highlight without the fade. */
+.admin-table tr.is-updated td {
+  animation: admin-flash 900ms var(--ease-out);
+}
+
+@keyframes admin-flash {
+  from { background-color: var(--mint-100); }
+  to { background-color: transparent; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .admin-table tr.is-updated td { animation: none; }
+  .admin-panel { transition: none; }
+}
+
+/* Phones: each row becomes a stacked block, with the column name above its value. */
+@media (max-width: 767px) {
+  .admin-table {
+    background: none;
+    border: 0;
+    box-shadow: none;
+    overflow: visible;
   }
+
+  .admin-table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+  }
+
+  .admin-table,
+  .admin-table tbody,
+  .admin-table tr,
+  .admin-table td,
+  .admin-table th {
+    display: block;
+    width: 100%;
+  }
+
+  .admin-table tbody {
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  .admin-group + .admin-group,
+  .admin-table tbody + tbody {
+    margin-top: var(--space-4);
+  }
+
+  .admin-table tr:not(.admin-group__row) {
+    padding: var(--space-4);
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .admin-table td {
+    display: grid;
+    gap: 2px;
+    padding: var(--space-2) 0;
+    border: 0;
+  }
+
+  .admin-table td + td {
+    border-top: 1px solid var(--border);
+    padding-top: var(--space-3);
+    margin-top: var(--space-2);
+  }
+
+  .admin-table td::before {
+    content: attr(data-label);
+    font-size: 0.78rem;
+    color: var(--ink-600);
+  }
+
+  .admin-table__select,
+  .admin-table__note {
+    flex-basis: 100%;
+    width: 100%;
+  }
+
+  .admin-table__actions .btn {
+    flex: 1 1 auto;
+  }
+
+  .admin-group__row th {
+    padding: 0 0 var(--space-1);
+  }
+}
+
+/* Activity: a plain timeline, most recent first. */
+.timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 0 var(--space-2);
+  border-left: 1px solid var(--border-strong);
+  display: grid;
+}
+
+.timeline__item {
+  position: relative;
+  display: grid;
+  gap: 2px;
+  padding: 0 0 var(--space-5) var(--space-6);
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.timeline__item::before {
+  content: '';
+  position: absolute;
+  left: -6px;
+  top: 6px;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: var(--white);
+  box-shadow: inset 0 0 0 2px var(--emerald-700);
+}
+
+.timeline__item p {
+  margin: 0;
+}
+
+.timeline__time {
+  font-size: 0.82rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.timeline__detail {
+  font-size: 0.9rem;
 }
