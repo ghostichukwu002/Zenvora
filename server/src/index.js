@@ -45,6 +45,9 @@ const server = createServer(
     db,
     sendResetEmail,
     merchantClaimCodes,
+    // Set ZENVORA_TRUST_PROXY=1 only when a proxy you control (for example your host's load balancer)
+    // is in front of this server, so it appends the real client address to X-Forwarded-For.
+    trustProxy: process.env.ZENVORA_TRUST_PROXY === '1',
   }),
 );
 

@@ -104,6 +104,20 @@ function listProducts(query, catalogue) {
   };
 }
 
+// The address rate limits are keyed on. Behind a reverse proxy the socket address is the proxy
+// itself, so every visitor would share one limit. When the proxy is trusted, the address it appended
+// to X-Forwarded-For is used. That is the last entry: anything a client sends before it is ignored.
+export function clientAddress(req, trustProxy) {
+  if (trustProxy) {
+    const header = req.headers['x-forwarded-for'];
+    if (typeof header === 'string') {
+      const last = header.split(',').pop().trim();
+      if (last && last.length <= 45) return last;
+    }
+  }
+  return req.socket.remoteAddress ?? 'unknown';
+}
+
 // Builds the request handler. Pass it to http.createServer().
 // webRoot is optional. When given, non-API paths serve the browser app from that folder.
 // db, sendResetEmail and rateLimits can be injected, which tests rely on.
@@ -115,6 +129,7 @@ export function createApp({
   sendResetEmail,
   rateLimits = {},
   merchantClaimCodes = {},
+  trustProxy = false,
 }) {
   const router = createRouter();
   const auth = createAuth(db, { sendResetEmail });
@@ -514,7 +529,7 @@ export function createApp({
         sid,
         user,
         authToken,
-        ip: req.socket.remoteAddress ?? 'unknown',
+        ip: clientAddress(req, trustProxy),
         secure,
       });
       if (result.cookies) cookies.push(...result.cookies);

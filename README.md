@@ -36,7 +36,7 @@ npm start          # http://localhost:4000
 npm test           # server tests
 ```
 
-Environment variables: `PORT` (default 4000), `ZENVORA_DATA_DIR` (where the SQLite file lives, default `server/data`, git-ignored), `NODE_ENV=production` (adds the `Secure` cookie flag and stops logging reset links), `ZENVORA_MERCHANT_CLAIM_CODES` (a JSON map from store id to its staff access code, for example `{"m-sample-kitchen":"a-long-random-code"}`).
+Environment variables: `PORT` (default 4000), `ZENVORA_DATA_DIR` (where the SQLite file lives, default `server/data`, git-ignored), `NODE_ENV=production` (adds the `Secure` cookie flag and stops logging reset links), `ZENVORA_MERCHANT_CLAIM_CODES` (a JSON map from store id to its staff access code, for example `{"m-sample-kitchen":"a-long-random-code"}`). `ZENVORA_TRUST_PROXY` (set to `1` only behind a proxy you control, such as Render or another host's load balancer, so login limits apply per visitor instead of per proxy).
 
 ### Administrator accounts
 
@@ -74,7 +74,7 @@ web/      Browser app (plain ES modules, no build step)
 
 - Passwords are hashed with scrypt. Session and reset tokens are stored only as SHA-256 hashes.
 - Sessions are `HttpOnly`, `SameSite=Lax` cookies checked against the database on every request. Logout and password reset end sessions on the server.
-- Login, registration and reset are rate limited per IP and (for login) per email. The limiter keys on the connection address. If you deploy behind a proxy, add trusted-proxy handling first, or every user will share one limit.
+- Login, registration and reset are rate limited per IP and (for login) per email. Behind a proxy, set `ZENVORA_TRUST_PROXY=1` so the limit uses the client address the proxy appends to `X-Forwarded-For`. Leave it off when the server is reached directly, or clients could spoof their address.
 - Writes must be JSON and must not come from another origin.
 - Customers can read only their own orders. Another customer's order returns "not found".
 - The checkout re-prices the cart, re-checks stock and the delivery area, and takes city and state from the store's own data. A retry key (`idempotencyKey`) means a repeated submission returns the original order instead of creating another.
