@@ -1,6 +1,6 @@
 # ZENVORA
 
-A commerce and delivery platform for the Nigerian market. This build covers the customer side end to end: browse, search, choose a delivery area, create an account, and place a cash-on-delivery order.
+A commerce and delivery platform for the Nigerian market. This build covers the customer side end to end (browse, search, choose a delivery area, create an account, place a cash-on-delivery order), the merchant dashboard, and delivery dispatch: rider applications, manual assignment by administrators, and proof of delivery.
 
 > **All stores, products and prices in this build are sample data for development.** They are not real businesses.
 
@@ -12,14 +12,19 @@ A commerce and delivery platform for the Nigerian market. This build covers the 
 - Cart held on the server. Prices, stock, delivery fees and totals are calculated server-side
 - Accounts: register, log in, log out, profile, password reset
 - Checkout with **cash on delivery**, then order confirmation and order history
+- **Store dashboard.** Staff connect with an access code and manage orders (accept, prepare, mark ready), stock, prices and offers. Sales figures come from real orders.
+- **Riders.** Anyone can apply from `#/rider`, choosing a vehicle, a phone number and the areas they cover. Nothing is assigned until an administrator approves them. Approved riders go online or offline, then pick up, deliver or report a failed delivery. Delivery requires a proof note and confirmation that the cash was collected.
+- **Administration** (`#/admin`, administrators only). Dispatch shows every order needing a rider, with only the approved riders who cover that area. Riders can be approved, suspended or sent back to review, with a note. The audit log records every rider and dispatch change.
 - Mobile-first layout, bottom navigation, reduced-motion support, keyboard focus states
 
 ## Not built yet
 
 - **Online payments.** Needs a provider (for example Paystack or Flutterwave) and your keys. The checkout shows "Pay online" as unavailable.
-- **Order progress.** Orders stay at "Placed" because there is no merchant dashboard, rider app or admin panel yet to confirm, dispatch or deliver them. Nothing is ever marked paid or delivered.
+- **Payment status.** Cash on delivery is marked collected only when the assigned rider confirms it on delivery. Nothing is charged online.
 - **Email.** No email provider is connected. In development the password-reset link is printed in the server console. In production it is never logged, so resets stay unavailable until email is connected.
-- Merchant dashboard, rider app, admin panel, multi-merchant checkout, real product photography, live tracking.
+- **Rider identity checks.** Administrators approve riders after checking their details outside the app. No identity documents are uploaded or stored.
+- **Live tracking and delivery time estimates.** There is no rider location feed yet, so the app shows no live position and no estimated arrival time.
+- **Rider earnings, settlements, disputes, merchant applications, listing review, promotions and platform settings** are not built yet. Multi-merchant checkout, real product photography and live tracking are also later work.
 
 ## Run it
 
@@ -31,7 +36,19 @@ npm start          # http://localhost:4000
 npm test           # server tests
 ```
 
-Environment variables: `PORT` (default 4000), `ZENVORA_DATA_DIR` (where the SQLite file lives, default `server/data`, git-ignored), `NODE_ENV=production` (adds the `Secure` cookie flag and stops logging reset links).
+Environment variables: `PORT` (default 4000), `ZENVORA_DATA_DIR` (where the SQLite file lives, default `server/data`, git-ignored), `NODE_ENV=production` (adds the `Secure` cookie flag and stops logging reset links), `ZENVORA_MERCHANT_CLAIM_CODES` (a JSON map from store id to its staff access code, for example `{"m-sample-kitchen":"a-long-random-code"}`).
+
+### Administrator accounts
+
+There is no admin sign-up and no built-in admin login. Create an ordinary account in the app first, then grant the role on the server, against the real database:
+
+```bash
+cd server
+node scripts/grant-role.js you@example.com admin        # grant
+node scripts/grant-role.js you@example.com customer     # remove
+```
+
+Every grant is recorded in the audit log.
 
 Node prints a one-time warning that `node:sqlite` is experimental. That is expected on Node 22.
 
@@ -42,7 +59,10 @@ server/   Node http API and static file server (no dependencies)
   src/catalogue.js   sample merchants and products (prices in kobo)
   src/cart.js        cart rules, pure functions
   src/auth.js        accounts, sessions, password reset, rate limiting
-  src/orders.js      order placement and access rules
+  src/orders.js      order placement, merchant status rules
+  src/merchant.js    store access codes and product rules
+  src/dispatch.js    riders, assignments, pickup and delivery rules
+  scripts/           command-line tools (administrator roles)
   src/db.js          SQLite schema (node:sqlite)
   src/app.js         API routes
 web/      Browser app (plain ES modules, no build step)
@@ -69,7 +89,7 @@ web/      Browser app (plain ES modules, no build step)
 
 ## Next slices
 
-1. Merchant accounts and dashboard (products, stock, accept and prepare orders)
-2. Online payments with server-side verification and webhooks
-3. Rider experience and admin panel (manual dispatch first)
+1. ~~Merchant accounts and dashboard~~ (done)
+2. Online payments with server-side verification and webhooks (needs a provider and keys)
+3. ~~Rider experience and admin panel, with manual dispatch~~ (done). Still to come: rider earnings and settlement records, admin review of merchant applications and listings, disputes, promotions, and platform settings
 4. Move catalogue and carts into the database

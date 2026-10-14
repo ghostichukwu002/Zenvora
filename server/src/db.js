@@ -73,6 +73,43 @@ const SCHEMA = `
     PRIMARY KEY (user_id, merchant_id)
   );
 
+  -- Delivery partners. A rider can only take work once an administrator has approved them.
+  CREATE TABLE IF NOT EXISTS riders (
+    user_id     TEXT PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+    status      TEXT NOT NULL,            -- pending | approved | suspended
+    vehicle     TEXT NOT NULL,
+    phone       TEXT NOT NULL,
+    areas_json  TEXT NOT NULL,            -- delivery areas the rider covers
+    available   INTEGER NOT NULL DEFAULT 0,
+    admin_note  TEXT,
+    created_at  TEXT NOT NULL,
+    approved_at TEXT
+  );
+
+  -- One active assignment per order. Rows are removed when a rider declines before pickup.
+  CREATE TABLE IF NOT EXISTS deliveries (
+    order_id       TEXT PRIMARY KEY REFERENCES orders(id) ON DELETE CASCADE,
+    rider_user_id  TEXT NOT NULL REFERENCES users(id),
+    status         TEXT NOT NULL,         -- assigned | picked_up | delivered | failed
+    assigned_at    TEXT NOT NULL,
+    picked_up_at   TEXT,
+    completed_at   TEXT,
+    proof_note     TEXT,
+    failure_reason TEXT
+  );
+
+  -- Record of staff and rider actions that change orders, riders or access.
+  CREATE TABLE IF NOT EXISTS audit_log (
+    id           INTEGER PRIMARY KEY AUTOINCREMENT,
+    actor_user_id TEXT NOT NULL,
+    action       TEXT NOT NULL,
+    target       TEXT NOT NULL,
+    detail_json  TEXT NOT NULL,
+    created_at   TEXT NOT NULL
+  );
+
+  CREATE INDEX IF NOT EXISTS idx_deliveries_rider ON deliveries(rider_user_id, status);
+  CREATE INDEX IF NOT EXISTS idx_audit_created ON audit_log(created_at DESC);
   CREATE INDEX IF NOT EXISTS idx_orders_user ON orders(user_id, created_at DESC);
   CREATE INDEX IF NOT EXISTS idx_orders_merchant ON orders(merchant_id, created_at DESC);
   CREATE INDEX IF NOT EXISTS idx_sessions_user ON sessions(user_id);

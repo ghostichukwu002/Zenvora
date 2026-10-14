@@ -215,7 +215,7 @@ function orderCard(order, merchantId, reload) {
     steps.length
       ? el('div', { class: 'order-card__actions' }, actions)
       : order.status === 'ready'
-        ? el('p', { class: 'muted', text: 'Ready. Rider handover isn’t connected yet, so this order stays here until it is.' })
+        ? el('p', { class: 'muted', text: 'Ready. ZENVORA dispatch assigns a rider, who collects the order from you.' })
         : null,
   );
 }

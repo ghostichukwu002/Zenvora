@@ -27,8 +27,16 @@ export function formatDate(iso) {
 
 export const ORDER_STATUS_LABEL = {
   placed: 'Placed',
+  accepted: 'Accepted',
+  preparing: 'Preparing',
+  ready: 'Ready for pickup',
+  out_for_delivery: 'On the way',
+  delivered: 'Delivered',
+  delivery_failed: 'Delivery failed',
+  rejected: 'Rejected',
 };
 
 export const PAYMENT_LABEL = {
   cod_pending: 'Pay on delivery',
+  cod_collected: 'Cash collected',
 };

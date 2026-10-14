@@ -53,7 +53,7 @@ function newOrderId() {
   return `ZV-${randomBytes(5).toString('hex').toUpperCase()}`;
 }
 
-function serializeOrder(db, row) {
+export function serializeOrder(db, row) {
   const items = db
     .prepare('SELECT product_id, name, variant_json, quantity, unit_kobo, line_kobo FROM order_items WHERE order_id = ? ORDER BY id')
     .all(row.id);

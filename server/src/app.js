@@ -12,6 +12,7 @@ import { createCartStore, readCookie, SESSION_COOKIE } from './cart-store.js';
 import { openDatabase } from './db.js';
 import { createOrders } from './orders.js';
 import { createMerchantAccess, serializeMerchantProduct, updateMerchantProduct } from './merchant.js';
+import { createDispatch } from './dispatch.js';
 import { createRouter, HttpError, readJsonBody, sendError, sendJson } from './router.js';
 import { serveStatic } from './static.js';
 
@@ -119,6 +120,7 @@ export function createApp({
   const auth = createAuth(db, { sendResetEmail });
   const orders = createOrders(db);
   const merchantAccess = createMerchantAccess(db, { claimCodes: merchantClaimCodes });
+  const dispatch = createDispatch(db, { catalogue });
   const authLimiter = createRateLimiter({ windowMs: 15 * 60 * 1000, max: rateLimits.authMax ?? 30 });
   const loginEmailLimiter = createRateLimiter({ windowMs: 15 * 60 * 1000, max: rateLimits.loginPerEmailMax ?? 8 });
 
@@ -360,6 +362,89 @@ export function createApp({
     requireMerchant(ctx);
     const product = updateMerchantProduct(catalogue, ctx.params.merchantId, ctx.params.productId, ctx.body);
     return { status: 200, body: { product: serializeMerchantProduct(product) } };
+  });
+
+  // ---------- Riders ----------
+  // Riders apply, wait for approval, then take only the jobs an administrator assigns to them.
+
+  router.get('/api/rider/me', (ctx) => {
+    const user = requireUser(ctx);
+    return { status: 200, body: { rider: dispatch.riderProfile(user.id) } };
+  });
+
+  router.post('/api/rider/apply', (ctx) => {
+    const user = requireUser(ctx);
+    return { status: 201, body: { rider: dispatch.applyAsRider(user.id, ctx.body) } };
+  });
+
+  router.patch('/api/rider/me', (ctx) => {
+    const user = requireUser(ctx);
+    return { status: 200, body: { rider: dispatch.setAvailability(user.id, ctx.body.available) } };
+  });
+
+  router.get('/api/rider/jobs', (ctx) => {
+    const user = requireUser(ctx);
+    return { status: 200, body: dispatch.riderJobs(user.id) };
+  });
+
+  router.post('/api/rider/jobs/:orderId/pickup', (ctx) => {
+    const user = requireUser(ctx);
+    return { status: 200, body: { job: dispatch.pickUp(user.id, ctx.params.orderId) } };
+  });
+
+  router.post('/api/rider/jobs/:orderId/complete', (ctx) => {
+    const user = requireUser(ctx);
+    return { status: 200, body: { job: dispatch.complete(user.id, ctx.params.orderId, ctx.body) } };
+  });
+
+  router.post('/api/rider/jobs/:orderId/fail', (ctx) => {
+    const user = requireUser(ctx);
+    return { status: 200, body: { job: dispatch.fail(user.id, ctx.params.orderId, ctx.body) } };
+  });
+
+  router.post('/api/rider/jobs/:orderId/decline', (ctx) => {
+    const user = requireUser(ctx);
+    return { status: 200, body: dispatch.decline(user.id, ctx.params.orderId) };
+  });
+
+  // ---------- Administration ----------
+  // Admin access is checked here on the server, for every route. Admin accounts are granted
+  // from the command line (server/scripts/grant-role.js), never by sign-up or a hardcoded login.
+
+  const requireAdmin = (ctx) => {
+    const user = requireUser(ctx);
+    if (user.role !== 'admin') throw new HttpError(403, 'forbidden', 'Only administrators can do that.');
+    return user;
+  };
+
+  router.get('/api/admin/overview', (ctx) => {
+    requireAdmin(ctx);
+    return { status: 200, body: dispatch.adminOverview() };
+  });
+
+  router.get('/api/admin/orders', (ctx) => {
+    requireAdmin(ctx);
+    return { status: 200, body: { items: dispatch.adminOrders() } };
+  });
+
+  router.post('/api/admin/orders/:orderId/assign', (ctx) => {
+    const user = requireAdmin(ctx);
+    return { status: 200, body: { order: dispatch.assignDelivery(user.id, ctx.params.orderId, ctx.body.riderUserId) } };
+  });
+
+  router.get('/api/admin/riders', (ctx) => {
+    requireAdmin(ctx);
+    return { status: 200, body: { items: dispatch.adminRiders() } };
+  });
+
+  router.patch('/api/admin/riders/:userId', (ctx) => {
+    const user = requireAdmin(ctx);
+    return { status: 200, body: { rider: dispatch.reviewRider(user.id, ctx.params.userId, ctx.body) } };
+  });
+
+  router.get('/api/admin/audit', (ctx) => {
+    requireAdmin(ctx);
+    return { status: 200, body: { items: dispatch.auditLog() } };
   });
 
   return async function handle(req, res) {

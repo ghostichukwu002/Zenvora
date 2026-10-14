@@ -99,7 +99,7 @@ export async function renderAccount() {
   return el(
     'div',
     { class: 'container section--tight' },
-    el('div', { class: 'section__head' }, el('div', {}, el('h1', { tabindex: '-1', text: 'Your account' }), el('p', { text: user.email }), el('a', { href: '#/merchant', text: 'Store dashboard' })), logout),
+    el('div', { class: 'section__head' }, el('div', {}, el('h1', { tabindex: '-1', text: 'Your account' }), el('p', { text: user.email }), el('nav', { class: 'account-links', 'aria-label': 'Work tools' }, el('a', { href: '#/merchant', text: 'Store dashboard' }), el('a', { href: '#/rider', text: 'Deliver with ZENVORA' }), user.role === 'admin' ? el('a', { href: '#/admin', text: 'Administration' }) : null)), logout),
     el(
       'div',
       { class: 'account-grid' },
