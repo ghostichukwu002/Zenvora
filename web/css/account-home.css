@@ -1,0 +1,122 @@
+/* Focused homepage + account improvements from the live mobile review. */
+.hero__area {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 10px;
+  margin-top: 17px;
+  line-height: 1.55;
+}
+.hero__area .btn, .hero__area a {
+  margin-left: auto;
+  min-height: 40px;
+  padding-inline: 14px;
+  border: 1px solid #e8def6;
+  border-radius: 12px;
+  background: rgba(255,255,255,.76);
+  box-shadow: 0 5px 16px rgba(40,20,71,.035);
+}
+.hero .purchase__row {
+  display: grid;
+  grid-template-columns: repeat(2,minmax(0,1fr));
+  align-items: stretch;
+}
+.hero .purchase__row > * { min-width: 0; }
+.hero .purchase__row .btn { width: 100%; }
+.account-page { padding-top: clamp(24px,4vw,48px); padding-bottom: clamp(40px,6vw,76px); }
+.account-page > .section__head { margin-bottom: 22px; }
+.account-hero {
+  align-items: center;
+  padding: clamp(20px,3.6vw,34px);
+  border: 1px solid #e7ddf4;
+  border-radius: 26px;
+  background:
+    radial-gradient(circle at 95% 0%,rgba(215,197,255,.6),transparent 38%),
+    linear-gradient(130deg,rgba(255,255,255,.98),rgba(247,242,255,.92));
+  box-shadow: 0 12px 36px rgba(40,20,71,.055),inset 0 1px 0 #fff;
+}
+.account-hero__identity { display: flex; align-items: center; gap: 16px; min-width: 0; }
+.account-avatar {
+  display: grid; place-items: center; flex: 0 0 auto;
+  width: clamp(54px,8vw,76px); aspect-ratio: 1;
+  border-radius: 23px; color: #fff; font-size: 1.75rem; font-weight: 850;
+  background: radial-gradient(circle at 28% 15%,#bda4ff,transparent 42%),linear-gradient(145deg,#8b5cf6,#4c1d95);
+  box-shadow: 0 12px 25px rgba(109,40,217,.24),inset 0 1px 0 rgba(255,255,255,.35);
+}
+.account-hero__copy { min-width: 0; }
+.account-kicker { margin: 0 0 6px; color: #8a71aa; font-size: .68rem; line-height: 1.35; letter-spacing: .13em; font-weight: 850; }
+.account-hero h1 { display: flex; align-items: center; flex-wrap: wrap; gap: 9px; margin: 0; font-size: clamp(1.6rem,1.3rem + 1.3vw,2.25rem); line-height: 1.08; letter-spacing: -.055em; }
+.account-hero h1 .badge, .account-hero h1 .trust-badge { font-size: .72rem; letter-spacing: 0; }
+.account-email { margin-top: 9px; color: #756782; font-size: .9rem; overflow-wrap: anywhere; }
+.account-hero__actions { flex: 0 0 auto; }
+.account-hero__actions .btn { min-height: 42px; border-radius: 12px; }
+.account-links {
+  display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px;
+  margin: 18px 0 30px;
+}
+.account-link {
+  display: flex; align-items: center; gap: 12px; min-width: 0; min-height: 84px;
+  padding: 14px; border: 1px solid #e9e1f4; border-radius: 18px;
+  background: rgba(255,255,255,.88); color: #2b1943; text-decoration: none;
+  box-shadow: 0 5px 18px rgba(40,20,71,.03);
+  transition: transform 180ms ease,border-color 180ms ease,box-shadow 180ms ease;
+}
+.account-link:hover { transform: translateY(-2px); border-color: #cbb6f1; box-shadow: 0 10px 25px rgba(70,36,118,.08); text-decoration: none; }
+.account-link__icon { display: grid; place-items: center; flex: 0 0 42px; height: 42px; border-radius: 14px; background: #f0e8ff; color: #6d28d9; font-size: 1.25rem; font-weight: 800; }
+.account-link__copy { display: grid; gap: 4px; min-width: 0; }
+.account-link__copy strong { font-size: .9rem; line-height: 1.25; }
+.account-link__copy small { color: #80738e; font-size: .74rem; line-height: 1.35; }
+.account-link__arrow { margin-left: auto; align-self: flex-start; color: #8b5cf6; font-size: 1rem; }
+.account-link--admin { border-color: #d9c8f7; background: linear-gradient(130deg,#fff,#f4edff); }
+.account-grid { display: grid; grid-template-columns: minmax(0,1.05fr) minmax(0,.95fr); align-items: start; gap: 18px; }
+.account-grid > section { min-width: 0; }
+.account-panel {
+  min-width: 0; padding: clamp(18px,2.7vw,28px);
+  border: 1px solid #e8e0f3; border-radius: 23px;
+  background: rgba(255,255,255,.91);
+  box-shadow: 0 8px 28px rgba(40,20,71,.04);
+}
+.account-panel__head { display: flex; align-items: end; justify-content: space-between; gap: 12px; margin-bottom: 18px; }
+.account-panel__head h2 { margin: 0; font-size: 1.35rem; letter-spacing: -.045em; }
+.account-panel__link { font-size: .8rem; font-weight: 750; white-space: nowrap; }
+.account-panel .state { margin: 0; padding: 20px; border-radius: 17px; background: linear-gradient(145deg,#fff,#fcfaff); box-shadow: none; }
+.account-panel .state .icon { width: 26px; height: 26px; }
+.account-panel .state h2, .account-panel .state h3 { font-size: 1.08rem; }
+.account-panel .state p { margin-block: 8px 15px; font-size: .9rem; line-height: 1.65; }
+.account-panel .state .btn { min-height: 44px; border-radius: 12px; }
+.account-panel .form { gap: 16px; }
+.account-panel .form > .btn { min-height: 48px; border-radius: 13px; }
+.account-panel .order-list { gap: 10px; }
+.account-panel .order-row { border-radius: 15px; }
+@media (max-width: 760px) {
+  .hero__area { align-items: flex-start; }
+  .hero__area .btn, .hero__area a { margin-left: 0; }
+  .hero .purchase__row { grid-template-columns: 1fr; gap: 10px; }
+  .account-page { padding-top: 18px; }
+  .account-hero { gap: 16px; padding: 18px; border-radius: 22px; }
+  .account-hero__identity { gap: 12px; }
+  .account-avatar { border-radius: 18px; }
+  .account-hero__actions .btn { min-height: 40px; padding-inline: 12px; }
+  .account-links { gap: 9px; margin: 14px 0 24px; }
+  .account-link { min-height: 83px; gap: 9px; padding: 11px; border-radius: 15px; }
+  .account-link__icon { flex-basis: 35px; height: 35px; border-radius: 11px; }
+  .account-link__copy strong { font-size: .82rem; }
+  .account-link__copy small { font-size: .68rem; }
+  .account-link__arrow { display: none; }
+  .account-grid { grid-template-columns: minmax(0,1fr); gap: 14px; }
+  .account-panel { padding: 18px; border-radius: 20px; }
+  .account-panel__head { margin-bottom: 14px; }
+  .account-panel .state { padding: 18px; }
+}
+@media (max-width: 390px) {
+  .account-hero { align-items: flex-start; }
+  .account-hero__identity { align-items: flex-start; }
+  .account-hero__actions { align-self: flex-start; }
+  .account-hero__actions .btn { font-size: .78rem; }
+  .account-links { grid-template-columns: 1fr; }
+  .account-link { min-height: 70px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .account-link { transition: none; }
+  .account-link:hover { transform: none; }
+}

@@ -99,13 +99,14 @@ export async function renderAccount() {
 
   return el(
     'div',
-    { class: 'container section--tight' },
-    el('div', { class: 'section__head' }, el('div', {}, el('h1', { tabindex: '-1', text: 'Your account' }, user.role === 'admin' ? trustBadge('admin') : null), el('p', { text: user.email }), el('nav', { class: 'account-links', 'aria-label': 'Work tools' }, el('a', { href: '#/help', text: 'Customer care' }), el('a', { href: '#/merchant', text: 'Store dashboard' }), el('a', { href: '#/rider', text: 'Deliver with ZENVORA' }), user.role === 'admin' ? el('a', { href: '#/admin', text: 'Administration' }) : null)), logout),
+    { class: 'container section--tight account-page' },
+    el('div', { class: 'section__head account-hero' }, el('div', { class: 'account-hero__identity' }, el('div', { class: 'account-avatar', 'aria-hidden': 'true', text: (user.fullName || user.email || 'Z').trim().charAt(0).toUpperCase() }), el('div', { class: 'account-hero__copy' }, el('p', { class: 'account-kicker', text: 'YOUR ZENVORA' }), el('h1', { tabindex: '-1', text: 'Your account' }, user.role === 'admin' ? trustBadge('admin') : null), el('p', { class: 'account-email', text: user.email }))), el('div', { class: 'account-hero__actions' }, logout)),
+    el('nav', { class: 'account-links', 'aria-label': 'Your services' }, el('a', { class: 'account-link', href: '#/help' }, el('span', { class: 'account-link__icon', 'aria-hidden': 'true', text: '✳' }), el('span', { class: 'account-link__copy' }, el('strong', { text: 'Customer care' }), el('small', { text: 'Get help with an order' })), el('span', { class: 'account-link__arrow', 'aria-hidden': 'true', text: '↗' })), el('a', { class: 'account-link', href: '#/merchant' }, el('span', { class: 'account-link__icon', 'aria-hidden': 'true', text: '▦' }), el('span', { class: 'account-link__copy' }, el('strong', { text: 'Store dashboard' }), el('small', { text: 'Manage your store' })), el('span', { class: 'account-link__arrow', 'aria-hidden': 'true', text: '↗' })), el('a', { class: 'account-link', href: '#/rider' }, el('span', { class: 'account-link__icon', 'aria-hidden': 'true', text: '➜' }), el('span', { class: 'account-link__copy' }, el('strong', { text: 'Deliver with ZENVORA' }), el('small', { text: 'Delivery partner tools' })), el('span', { class: 'account-link__arrow', 'aria-hidden': 'true', text: '↗' })), user.role === 'admin' ? el('a', { class: 'account-link account-link--admin', href: '#/admin' }, el('span', { class: 'account-link__icon', 'aria-hidden': 'true', text: '⌘' }), el('span', { class: 'account-link__copy' }, el('strong', { text: 'Administration' }), el('small', { text: 'Manage the marketplace' })), el('span', { class: 'account-link__arrow', 'aria-hidden': 'true', text: '↗' })) : null),
     el(
       'div',
       { class: 'account-grid' },
-      el('section', { 'aria-labelledby': 'orders-title' }, el('h2', { id: 'orders-title', text: 'Your orders' }), ordersBox),
-      el('section', { 'aria-labelledby': 'profile-title' }, el('h2', { id: 'profile-title', text: 'Profile' }), form),
+      el('section', { class: 'account-panel account-panel--orders', 'aria-labelledby': 'orders-title' }, el('div', { class: 'account-panel__head' }, el('div', {}, el('p', { class: 'account-kicker', text: 'YOUR ACTIVITY' }), el('h2', { id: 'orders-title', text: 'Your orders' })), el('a', { class: 'account-panel__link', href: '#/shop', text: 'Shop now ↗' })), ordersBox),
+      el('section', { class: 'account-panel account-panel--profile', 'aria-labelledby': 'profile-title' }, el('div', { class: 'account-panel__head' }, el('div', {}, el('p', { class: 'account-kicker', text: 'YOUR DETAILS' }), el('h2', { id: 'profile-title', text: 'Profile' }))), form),
     ),
   );
 }
