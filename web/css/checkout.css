@@ -1,0 +1,29 @@
+/* Checkout is a plain white page, like the login page, whichever storefront it was opened from.
+   Loaded before flat.css, which removes any remaining shadow. */
+html[data-section] body:has(.checkout) {
+  background: #fff;
+  color: #1b1d2a;
+}
+html[data-section] body:has(.checkout) .site-header,
+html[data-section] body:has(.checkout) .site-footer,
+html[data-section] body:has(.checkout) .bottom-nav {
+  background: #fff;
+  color: #1b1d2a;
+  border-color: #e6e6ee;
+}
+html[data-section] body:has(.checkout) .site-header .brand,
+html[data-section] body:has(.checkout) .site-nav a,
+html[data-section] body:has(.checkout) .site-footer * { color: #1b1d2a; }
+html[data-section] body:has(.checkout) .checkout h1,
+html[data-section] body:has(.checkout) .checkout h2,
+html[data-section] body:has(.checkout) .checkout h3,
+html[data-section] body:has(.checkout) .checkout h4 { color: #1b1d2a; }
+html[data-section] body:has(.checkout) .checkout p,
+html[data-section] body:has(.checkout) .checkout label,
+html[data-section] body:has(.checkout) .checkout li,
+html[data-section] body:has(.checkout) .checkout td,
+html[data-section] body:has(.checkout) .checkout dt,
+html[data-section] body:has(.checkout) .checkout dd,
+html[data-section] body:has(.checkout) .checkout span { color: inherit; }
+html[data-section] body:has(.checkout) .checkout .muted { color: #6b6f86; }
+html[data-section] body:has(.checkout) .checkout .breadcrumb a { color: #6b6f86; }

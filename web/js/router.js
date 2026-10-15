@@ -68,7 +68,9 @@ const isPuffPath = (p) => p === '/puff-sip' || p.startsWith('/puff-sip/');
 async function navigate() {
   const id = ++navigationId;
   const { path, query } = currentLocation();
-  document.documentElement.dataset.section = isPuffPath(path) ? 'puff-sip' : 'shop-n-delight';
+  // Only the Puff & Sip landing page carries the Puff theme. Its shop, product and checkout pages
+  // use the same catalog styling as Shop n Delight.
+  document.documentElement.dataset.section = path === '/puff-sip' ? 'puff-sip' : 'shop-n-delight';
 
   // Keep the active storefront's original brand identity in the shared shell.
   const isPuffSip = isPuffPath(path);

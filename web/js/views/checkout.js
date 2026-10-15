@@ -24,7 +24,7 @@ export async function renderCheckout({ section = 'shop' } = {}) {
   const cart = setCart(await api.get('/api/cart'));
 
   if (!cart.lines.length) {
-    return el('div', { class: 'container section--tight' }, stateBox({
+    return el('div', { class: 'container section--tight checkout' }, stateBox({
       title: 'Your cart is empty',
       body: 'Add something first, then come back to check out.',
       actions: [linkButton({ href: shopHref(activeSection), text: 'Browse the shop' })],
@@ -32,7 +32,7 @@ export async function renderCheckout({ section = 'shop' } = {}) {
     }));
   }
   if (cart.deliveryAreaRequired) {
-    return el('div', { class: 'container section--tight' }, stateBox({
+    return el('div', { class: 'container section--tight checkout' }, stateBox({
       title: 'Choose a delivery area first',
       body: 'We need to know where to deliver so we can confirm the store reaches you and add the right delivery fee.',
       actions: [linkButton({ href: '#/cart', text: 'Go to cart' })],
@@ -139,7 +139,7 @@ export async function renderCheckout({ section = 'shop' } = {}) {
 
   return el(
     'div',
-    { class: 'container' },
+    { class: 'container checkout' },
     el('nav', { class: 'breadcrumb', 'aria-label': 'Breadcrumb' }, el('ol', {}, el('li', {}, el('a', { href: '#/cart', text: 'Cart' })), el('li', { text: 'Checkout' }))),
     el('h1', { id: 'checkout-title', tabindex: '-1', text: 'Checkout' }),
     el('div', { class: 'cart-layout' }, form, summary(cart)),
