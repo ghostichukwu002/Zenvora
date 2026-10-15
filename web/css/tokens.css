@@ -6,16 +6,17 @@
 
 :root {
   /* Brand — ZENVORA signature violet palette */
-  --emerald-600: #8b5cf6; /* vivid violet accent */
-  --emerald-700: #6d28d9; /* accessible primary buttons, links and active states */
-  --emerald-800: #5b21b6; /* hover and pressed states */
-  --forest-900: #241044; /* deep aubergine for premium contrast */
-  --forest-800: #38205e;
+  --emerald-600: #a855f7; /* vivid violet accent */
+  --emerald-700: #7c3aed; /* primary buttons, links and active states (5.7:1 with white) */
+  --emerald-800: #6d28d9; /* hover and pressed states */
+  --forest-900: #2e1065; /* deep violet for headings and dark surfaces */
+  --forest-800: #4c1d95;
+  --brand-gradient: linear-gradient(135deg, #7c3aed 0%, #a21caf 100%);
   --mint-100: #ede9fe; /* lavender accent surfaces */
-  --mint-50: #f5f3ff;
+  --mint-50: #f7f5ff;
 
   /* Neutrals */
-  --cream-50: #fbfaff; /* cool porcelain page background */
+  --cream-50: #fcfbff; /* bright porcelain page background */
   --white: #ffffff;
   --ink-900: #211a2e; /* primary text */
   --ink-600: #6f687b; /* secondary text */
@@ -52,8 +53,8 @@
   --radius-pill: 999px;
 
   /* Elevation: restrained, per the brief */
-  --shadow-sm: 0 1px 2px rgba(55, 28, 91, 0.07);
-  --shadow-md: 0 4px 16px rgba(55, 28, 91, 0.11);
+  --shadow-sm: 0 1px 2px rgba(91, 33, 182, 0.07);
+  --shadow-md: 0 4px 16px rgba(91, 33, 182, 0.11);
 
   /* Motion: ordinary interface transitions sit in the 180–320ms range */
   --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
@@ -64,5 +65,5 @@
   /* Layout */
   --content-max: 1200px;
   --header-h: 64px;
-  --focus-ring: 0 0 0 3px rgba(109, 40, 217, 0.35);
+  --focus-ring: 0 0 0 3px rgba(124, 58, 237, 0.35);
 }

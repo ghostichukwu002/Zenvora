@@ -5,7 +5,7 @@
 .toolbar .input { padding-left: 18px; }
 .chip-row { gap: 9px; padding-block: 4px 10px; }
 .chip { min-height: 42px; padding-inline: 16px; border-color: #e4dcef; background: rgba(255,255,255,.9); }
-.chip[aria-pressed='true'] { box-shadow: 0 5px 14px rgba(109,40,217,.16); }
+.chip[aria-pressed='true'] { box-shadow: 0 5px 14px rgba(124,58,237,.16); }
 .results-meta { padding-block: 8px 14px; }
 .product-grid[aria-busy='true'] { opacity: .72; transition: opacity 180ms ease; }
 .product-card { position: relative; border-radius: 20px; border-color: #ebe4f4; box-shadow: 0 5px 18px rgba(36,16,68,.045); }
@@ -13,7 +13,7 @@
 .product-card__media { overflow: hidden; aspect-ratio: 1 / .86; background: linear-gradient(145deg,#f7f3ff,#ebe3fb); }
 .product-card__media > img { width: 100%; height: 100%; object-fit: cover; }
 .product-card__media > svg { width: 48px; height: 48px; padding: 11px; box-sizing: content-box; border-radius: 18px; background: rgba(255,255,255,.72); box-shadow: 0 6px 18px rgba(36,16,68,.05); }
-.product-card__badge { top: 12px; left: 12px; border-radius: 999px; padding: 5px 10px; color: #fff; background: #6d28d9; box-shadow: 0 4px 12px rgba(109,40,217,.22); }
+.product-card__badge { top: 12px; left: 12px; border-radius: 999px; padding: 5px 10px; color: #fff; background: var(--emerald-700); box-shadow: 0 4px 12px rgba(124,58,237,.22); }
 .product-card__body { padding: 15px 15px 12px; gap: 5px; }
 .product-card__merchant { font-size: .75rem; letter-spacing: .025em; text-transform: uppercase; color: #7a6a91; font-weight: 700; }
 .product-card__name { font-size: .97rem; letter-spacing: -.015em; }
@@ -22,7 +22,7 @@
 .product-card__footer.purchase__row { padding: 0 15px 15px; gap: 10px; }
 .product-card__footer .availability { font-size: .74rem; }
 .product-card__footer .btn { border-radius: 12px; min-height: 42px; }
-.product-card__footer .btn--primary { box-shadow: 0 6px 14px rgba(109,40,217,.15); }
+.product-card__footer .btn--primary { box-shadow: 0 6px 14px rgba(124,58,237,.15); }
 .product-detail { gap: clamp(24px, 4vw, 56px); padding-bottom: 56px; }
 .product-detail__media { position: relative; overflow: hidden; border: 1px solid #e9e0f5; border-radius: 28px; background: radial-gradient(circle at 75% 20%,#fff,transparent 38%), linear-gradient(145deg,#f5efff,#e8ddfa); box-shadow: 0 20px 48px rgba(36,16,68,.07); }
 .product-detail__media img { width: 100%; height: 100%; object-fit: contain; }
@@ -32,7 +32,7 @@
 .product-detail__info > p:not(.muted) { line-height: 1.75; color: #665b75; }
 .product-detail__info .purchase { border-radius: 20px; border-color: #e6dcf2; box-shadow: 0 12px 32px rgba(36,16,68,.05); }
 .product-detail__info .purchase .btn { min-height: 52px; border-radius: 14px; }
-.product-detail__info .chip[aria-pressed='true'] { background: #6d28d9; border-color: #6d28d9; }
+.product-detail__info .chip[aria-pressed='true'] { background: var(--emerald-700); border-color: var(--emerald-700); }
 .cart-layout { gap: 28px; }
 .cart-lines { border-top: 0; gap: 12px; }
 .cart-line { padding: 16px; border: 1px solid #ebe4f4; border-radius: 18px; background: rgba(255,255,255,.94); gap: 15px; }
@@ -53,9 +53,9 @@
 .payment__option { border-radius: 12px; }
 .payment__option--selected { border-color: #b9a0eb; background: #f7f2ff; }
 .state { border-color: #e7def3; border-style: solid; border-radius: 20px; padding: clamp(24px, 4vw, 42px); box-shadow: 0 8px 24px rgba(36,16,68,.035); }
-.state .icon { width: 32px; height: 32px; padding: 10px; box-sizing: content-box; border-radius: 14px; color: #6d28d9; background: #f1eaff; }
+.state .icon { width: 32px; height: 32px; padding: 10px; box-sizing: content-box; border-radius: 14px; color: var(--emerald-700); background: #f1eaff; }
 .breadcrumb { color: #837593; }
-.breadcrumb a { color: #6d28d9; }
+.breadcrumb a { color: var(--emerald-700); }
 .load-more .btn { min-width: 170px; border-radius: 14px; }
 @media (max-width: 600px) {
   .product-grid { gap: 11px; }
@@ -112,7 +112,7 @@
   transform: translateY(-50%) scale(1.04);
 }
 .search-clear:focus-visible {
-  outline: 2px solid #6d28d9;
+  outline: 2px solid var(--emerald-700);
   outline-offset: 2px;
 }
 .search-clear[hidden] {

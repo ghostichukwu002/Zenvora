@@ -1,14 +1,14 @@
 /* ZENVORA marketplace art direction — inspired by premium commerce themes, built for our own brand. */
 :root {
-  --zv-violet: #6d28d9;
-  --zv-violet-deep: #241044;
+  --zv-violet: #7c3aed;
+  --zv-violet-deep: #2e1065;
   --zv-lavender: #f1eaff;
   --zv-line: #e8e0f3;
 }
 body {
   background:
-    radial-gradient(ellipse at 92% 7%, rgba(196,181,253,.22), transparent 28rem),
-    linear-gradient(180deg, #fff 0%, #fbf9ff 62%, #fff 100%);
+    radial-gradient(ellipse at 92% 7%, rgba(216,180,254,.30), transparent 28rem),
+    linear-gradient(180deg, #fff 0%, #faf8ff 62%, #fff 100%);
 }
 .site-header { border-bottom-color: rgba(213,204,228,.72); }
 .site-header__inner { min-height: 70px; }
@@ -83,10 +83,10 @@ body {
   border-radius: 30px;
   padding: clamp(25px, 3vw, 38px);
   background:
-    radial-gradient(ellipse at 82% 10%, rgba(196,181,253,.42), transparent 32%),
-    radial-gradient(ellipse at 5% 95%, rgba(124,58,237,.42), transparent 42%),
-    linear-gradient(145deg, #4c1d95 0%, #2e1060 47%, #1b0b35 100%);
-  box-shadow: 0 28px 70px rgba(55,28,91,.2), inset 0 1px 0 rgba(255,255,255,.15);
+    radial-gradient(ellipse at 82% 10%, rgba(255,255,255,.30), transparent 32%),
+    radial-gradient(ellipse at 5% 95%, rgba(244,114,182,.30), transparent 42%),
+    linear-gradient(145deg, #7c3aed 0%, #9333ea 52%, #a21caf 100%);
+  box-shadow: 0 28px 70px rgba(124,58,237,.26), inset 0 1px 0 rgba(255,255,255,.22);
 }
 .hero__panel::before {
   width: 230px; height: 230px; top: -85px; right: -52px;
