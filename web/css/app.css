@@ -173,6 +173,9 @@ a:hover {
   flex-shrink: 0;
 }
 
+.brand .wordmark { font-size: .98rem; letter-spacing: -.035em; white-space: nowrap; }
+.site-footer .wordmark { letter-spacing: -.025em; }
+
 .wordmark {
   font-weight: 800;
   font-size: 1.05rem;
