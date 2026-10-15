@@ -44,7 +44,7 @@ function applyServerError(err, fields, message) {
 }
 
 export function renderLogin({ query }) {
-  document.title = 'Log in · ZENVORA';
+  document.title = 'Log in · Shop n Delight';
   const next = safeNext(query);
   const email = field({ name: 'email', label: 'Email', type: 'email', autocomplete: 'email', inputmode: 'email', maxlength: 254 });
   const password = field({ name: 'password', label: 'Password', type: 'password', autocomplete: 'current-password', maxlength: 128 });
@@ -77,14 +77,14 @@ export function renderLogin({ query }) {
     el(
       'p',
       { class: 'auth__links' },
-      'New to ZENVORA? ',
+      'New to Shop n Delight? ',
       el('a', { href: `#/register?next=${encodeURIComponent(next)}`, text: 'Create an account' }),
     ),
   );
 }
 
 export function renderRegister({ query }) {
-  document.title = 'Create account · ZENVORA';
+  document.title = 'Create account · Shop n Delight';
   const next = safeNext(query);
   const fields = {
     fullName: field({ name: 'fullName', label: 'Full name', autocomplete: 'name', maxlength: 100 }),
@@ -153,7 +153,7 @@ export function renderRegister({ query }) {
 }
 
 export function renderForgot() {
-  document.title = 'Reset password · ZENVORA';
+  document.title = 'Reset password · Shop n Delight';
   const email = field({ name: 'email', label: 'Email', type: 'email', autocomplete: 'email', inputmode: 'email', maxlength: 254 });
   const message = formMessage();
   const submit = el('button', { type: 'submit', class: 'btn btn--primary btn--block', text: 'Send reset link' });
@@ -183,7 +183,7 @@ export function renderForgot() {
 }
 
 export function renderReset({ query }) {
-  document.title = 'Choose a new password · ZENVORA';
+  document.title = 'Choose a new password · Shop n Delight';
   const token = query.get('token') ?? '';
   const password = field({
     name: 'password',

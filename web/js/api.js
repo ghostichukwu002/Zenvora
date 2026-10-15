@@ -1,4 +1,4 @@
-// Thin client for the ZENVORA API. Every failure becomes an ApiError with a
+// Thin client for the Shop n Delight API. Every failure becomes an ApiError with a
 // stable code, so views can show a useful message instead of a raw exception.
 
 export class ApiError extends Error {
@@ -48,7 +48,7 @@ async function send(method, path, body, timeoutMs) {
     if (err.name === 'AbortError') {
       throw new ApiError('timeout', 'That took too long. Check your connection and try again.');
     }
-    throw new ApiError('network', 'We can’t reach ZENVORA right now. Check your connection and try again.');
+    throw new ApiError('network', 'We can’t reach Shop n Delight right now. Check your connection and try again.');
   } finally {
     clearTimeout(timer);
   }

@@ -43,7 +43,7 @@ let justAssigned = null;
 export async function renderAdmin() {
   const user = await requireLogin();
   if (!user) return emptyView();
-  document.title = 'Administration · ZENVORA';
+  document.title = 'Administration · Shop n Delight';
 
   let overview;
   try {
@@ -52,7 +52,7 @@ export async function renderAdmin() {
     if (err.status === 403) {
       return el('div', { class: 'container section--tight' }, stateBox({
         title: 'Administrators only',
-        body: 'This area is for ZENVORA staff. If you should have access, ask an administrator to grant it.',
+        body: 'This area is for Shop n Delight staff. If you should have access, ask an administrator to grant it.',
         iconName: 'shield',
         actions: [linkButton({ href: '#/account', text: 'Back to your account', variant: 'secondary', small: true })],
       }));
@@ -263,7 +263,7 @@ async function ridersPanel(panel, refreshOverview, reload) {
   if (!items.length) {
     panel.replaceChildren(stateBox({
       title: 'No rider applications yet',
-      body: 'People who apply to deliver with ZENVORA appear here for review.',
+      body: 'People who apply to deliver with Shop n Delight appear here for review.',
       iconName: 'truck',
     }));
     return;

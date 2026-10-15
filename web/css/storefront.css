@@ -132,3 +132,8 @@
 @media (prefers-reduced-motion: reduce) {
   .search-clear { transition: none; }
 }
+
+/* Keep the product image inside the phone column; its SVG uses content-box padding. */
+.product-detail__media { min-width: 0; max-width: 100%; }
+.product-detail__media svg { max-width: 100%; }
+.product-detail > *, .product-detail__info { min-width: 0; }

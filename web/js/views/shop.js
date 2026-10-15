@@ -306,7 +306,7 @@ export function renderShop({ query }) {
       : 'Shop everything';
 
   // Keep page-level state in the title so back and forward stay understandable.
-  document.title = `${heading} · ZENVORA`;
+  document.title = `${heading} · Shop n Delight`;
 
   const page = el(
     'div',

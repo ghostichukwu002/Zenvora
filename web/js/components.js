@@ -157,12 +157,12 @@ export function categoryTile(category, index = 0) {
   );
 }
 
-// Trust badges. "store" and "rider" mean an administrator verified them; "admin" marks ZENVORA staff.
-const TRUST_LABEL = { store: 'Verified store', rider: 'Verified rider', admin: 'ZENVORA admin' };
+// Trust badges. "store" and "rider" mean an administrator verified them; "admin" marks Shop n Delight staff.
+const TRUST_LABEL = { store: 'Verified store', rider: 'Verified rider', admin: 'Shop n Delight admin' };
 export function trustBadge(kind) {
   return el(
     'span',
-    { class: `trust-badge trust-badge--${kind}`, title: kind === 'admin' ? 'Works for ZENVORA' : 'Checked by ZENVORA' },
+    { class: `trust-badge trust-badge--${kind}`, title: kind === 'admin' ? 'Works for Shop n Delight' : 'Checked by Shop n Delight' },
     icon('check'),
     TRUST_LABEL[kind],
   );

@@ -24,7 +24,7 @@ export async function renderOrder({ params }) {
     throw err;
   }
 
-  document.title = `Order ${order.id} · ZENVORA`;
+  document.title = `Order ${order.id} · Shop n Delight`;
   const d = order.delivery;
 
   return el(
@@ -56,7 +56,7 @@ export async function renderOrder({ params }) {
             { class: 'order-block', 'aria-labelledby': 'order-rider-title' },
             el('h2', { id: 'order-rider-title', text: 'Your rider' }),
             el('p', {}, el('strong', { text: order.rider.firstName }), ` · ${order.rider.vehicle[0].toUpperCase()}${order.rider.vehicle.slice(1)} `, order.rider.verified ? trustBadge('rider') : null),
-            el('p', { class: 'muted', text: 'ZENVORA approves every rider before they can take a delivery. Pay them in cash on arrival.' }),
+            el('p', { class: 'muted', text: 'Shop n Delight approves every rider before they can take a delivery. Pay them in cash on arrival.' }),
           )
           : null,
         el(

@@ -15,7 +15,7 @@ const CART_CODES = new Set(['out_of_stock', 'insufficient_stock', 'cart_empty', 
 export async function renderCheckout() {
   const user = await requireLogin();
   if (!user) return emptyView();
-  document.title = 'Checkout · ZENVORA';
+  document.title = 'Checkout · Shop n Delight';
 
   const cart = setCart(await api.get('/api/cart'));
 

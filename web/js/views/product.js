@@ -46,7 +46,7 @@ export async function renderProduct({ params }) {
     });
   }
 
-  document.title = `${product.name} · ZENVORA`;
+  document.title = `${product.name} · Shop n Delight`;
   return productView(product);
 }
 

@@ -12,7 +12,7 @@ import { observeReveals, stateBox } from './ui.js';
 const routes = [];
 let navigationId = 0;
 
-export function route(pattern, { nav = null, title = 'ZENVORA', render }) {
+export function route(pattern, { nav = null, title = 'Shop n Delight', render }) {
   const names = [];
   const regex = new RegExp(
     '^' +

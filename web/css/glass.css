@@ -1,0 +1,180 @@
+/* Site-wide glassmorphism. One blue-to-orange field sits behind every page, and panels are frosted
+   glass with white text. Loaded last, so it applies to every storefront section. */
+
+:root {
+  --glass-tint: rgba(12, 22, 60, .55);
+  --glass-tint-strong: rgba(12, 22, 60, .68);
+  --glass-edge: rgba(255, 255, 255, .34);
+  --glass-blur: blur(22px) saturate(160%);
+  --glass-shadow: 0 24px 60px rgba(10, 18, 50, .32), inset 0 1px 0 rgba(255, 255, 255, .28);
+  --glass-text: #fff;
+  --glass-muted: rgba(255, 255, 255, .92);
+}
+
+html[data-section] body {
+  background:
+    radial-gradient(ellipse at 10% 6%, rgba(47, 111, 214, .9), transparent 46%),
+    radial-gradient(ellipse at 94% 96%, rgba(244, 119, 33, .85), transparent 50%),
+    linear-gradient(135deg, #1a3f86 0%, #2f6fd6 36%, #a3481b 72%, #f47721 100%);
+  background-attachment: fixed;
+  color: var(--glass-text);
+}
+
+/* Header, bottom navigation and footer become frosted bars. */
+html[data-section] .site-header,
+html[data-section] .bottom-nav,
+html[data-section] .site-footer {
+  background: var(--glass-tint);
+  border-color: var(--glass-edge);
+  box-shadow: 0 10px 30px rgba(10, 18, 50, .22);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  color: var(--glass-text);
+}
+html[data-section] .brand,
+html[data-section] .site-nav a,
+html[data-section] .site-nav a:hover,
+html[data-section] .bottom-nav a,
+html[data-section] .site-footer,
+html[data-section] .site-footer a,
+html[data-section] .site-footer h2,
+html[data-section] .site-footer .wordmark { color: var(--glass-text); }
+html[data-section] .site-nav a[aria-current="page"],
+html[data-section] .bottom-nav a[aria-current="page"] { color: #fff; border-bottom-color: #fff; }
+html[data-section] .bottom-nav a[aria-current="page"]::before { background: #fff; }
+
+/* Surfaces: cards, panels and summaries are glass. */
+html[data-section] .product-card,
+html[data-section] .category-tile,
+html[data-section] .summary,
+html[data-section] .order-block,
+html[data-section] .auth__card,
+html[data-section] .job-card,
+html[data-section] .trust-item,
+html[data-section] .admin-panel,
+html[data-section] .skeleton-card,
+html[data-section] .puff-collection-card,
+html[data-section] .puff-promise,
+html[data-section] .puff-hero,
+html[data-section] .puff-closing,
+html[data-section] .hero__panel,
+html[data-section] .cart-layout > *,
+html[data-section] .search-form,
+html[data-section] .toolbar__search .input {
+  background: linear-gradient(160deg, rgba(255, 255, 255, .22), rgba(255, 255, 255, .06)), var(--glass-tint);
+  border-color: var(--glass-edge);
+  border-radius: 22px;
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  color: var(--glass-text);
+}
+html[data-section] .product-card__media,
+html[data-section] .product-detail__media,
+html[data-section] .category-tile__media {
+  background: rgba(255, 255, 255, .1);
+}
+html[data-section] .puff-sip-page { background: none; }
+
+html[data-section] .puff-hero {
+  background: linear-gradient(160deg, rgba(255, 255, 255, .2), rgba(255, 255, 255, .04)), rgba(31, 79, 158, .5);
+}
+
+html[data-section] .muted,
+html[data-section] .product-card__store,
+html[data-section] .field__hint,
+html[data-section] .summary__note,
+html[data-section] .timeline__detail {
+  color: var(--glass-muted);
+}
+html[data-section] h1,
+html[data-section] h2,
+html[data-section] h3 { color: #fff; }
+html[data-section] a { color: #fff; }
+
+/* Form controls: translucent wells with white text. */
+html[data-section] .input,
+html[data-section] .select,
+html[data-section] textarea.input {
+  background: rgba(12, 22, 60, .38);
+  border-color: rgba(255, 255, 255, .42);
+  color: #fff;
+}
+html[data-section] .input::placeholder,
+html[data-section] .select option { color: #fff; }
+html[data-section] .select option { background: #1a3f86; }
+html[data-section] .input:focus,
+html[data-section] .input:focus-visible,
+html[data-section] .select:focus-visible {
+  background: rgba(12, 22, 60, .5);
+  border-color: #fff;
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, .25);
+}
+
+/* Chips, icon buttons and secondary buttons are small glass pills. */
+html[data-section] .chip,
+html[data-section] .location-button,
+html[data-section] .btn--secondary,
+html[data-section] .icon-button {
+  background: rgba(255, 255, 255, .16);
+  border-color: rgba(255, 255, 255, .42);
+  color: #fff;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+html[data-section] .chip:hover,
+html[data-section] .btn--secondary:hover:not(:disabled),
+html[data-section] .icon-button:hover { background: rgba(255, 255, 255, .26); }
+html[data-section] .chip[aria-pressed="true"],
+html[data-section] .chip[aria-current="true"] {
+  background: linear-gradient(120deg, #2457a6 0%, #c94f0b 100%);
+  border-color: rgba(255, 255, 255, .6);
+  color: #fff;
+}
+
+/* Primary buttons blend the two brand colours. */
+html[data-section] .btn--primary {
+  background: linear-gradient(120deg, #2457a6 0%, #c94f0b 100%);
+  color: #fff;
+  box-shadow: 0 14px 30px rgba(10, 18, 50, .3), inset 0 1px 0 rgba(255, 255, 255, .35);
+}
+html[data-section] .btn--primary:hover:not(:disabled) {
+  background: linear-gradient(120deg, #1f4f9e 0%, #a83d06 100%);
+}
+
+/* Reduced transparency: solid panels, same layout. */
+@media (prefers-reduced-transparency: reduce) {
+  html[data-section] .site-header,
+  html[data-section] .bottom-nav,
+  html[data-section] .site-footer,
+  html[data-section] .product-card,
+  html[data-section] .summary,
+  html[data-section] .auth__card {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: rgba(12, 22, 60, .92);
+  }
+}
+
+/* Text that older rules coloured for light surfaces. Glass needs white or near-white here.
+   Kept specific on purpose: broad selectors also catch header icons. */
+html[data-section] .product-card p,
+html[data-section] .product-card .results-meta,
+html[data-section] .results-meta,
+html[data-section] .price--was,
+html[data-section] .muted:not(.icon-button):not(a) {
+  color: var(--glass-muted);
+}
+html[data-section] .price--was { text-decoration-color: rgba(255, 255, 255, .8); }
+
+/* Header icon buttons stay as light chips with a dark icon, so they read on the glass bar. */
+html[data-section] .site-header .icon-button,
+html[data-section] .site-header .icon-button:hover {
+  background: #fff;
+  color: #1f4f9e;
+}
+html[data-section] .header-actions a {
+  background: #fff;
+  color: #1f4f9e;
+  border-color: rgba(255, 255, 255, .6);
+}

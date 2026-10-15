@@ -20,7 +20,7 @@ const STATUS_LABEL = { open: 'Waiting for reply', answered: 'Answered', closed: 
 export async function renderHelp() {
   const user = await requireLogin();
   if (!user) return emptyView();
-  document.title = 'Customer care · ZENVORA';
+  document.title = 'Customer care · Shop n Delight';
 
   const topicId = 'support-topic';
   const topic = el(
@@ -92,7 +92,7 @@ export async function renderHelp() {
     el('header', { class: 'section__head' },
       el('div', {},
         el('h1', { tabindex: '-1', text: 'Customer care' }),
-        el('p', { class: 'help__lead', text: 'Tell us what went wrong and a ZENVORA team member will reply here, in your account.' }),
+        el('p', { class: 'help__lead', text: 'Tell us what went wrong and a Shop n Delight team member will reply here, in your account.' }),
       ),
       linkButton({ href: '#/account', text: 'Back to your account', variant: 'secondary', small: true }),
     ),
@@ -122,7 +122,7 @@ function requestItem(r) {
     el('p', { text: r.message }),
     r.reply
       ? el('div', { class: 'help__reply' },
-        el('strong', { text: `ZENVORA replied${r.repliedAt ? ` · ${formatDate(r.repliedAt)}` : ''}` }),
+        el('strong', { text: `Shop n Delight replied${r.repliedAt ? ` · ${formatDate(r.repliedAt)}` : ''}` }),
         el('p', { text: r.reply }),
       )
       : null,

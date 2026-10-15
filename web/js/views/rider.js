@@ -7,7 +7,7 @@ import { refresh } from '../router.js';
 import { stateBox, toast } from '../ui.js';
 import { emptyView, formatDate, requireLogin } from './guard.js';
 
-// Rider workspace: apply, wait for approval, then take the jobs ZENVORA dispatch assigns.
+// Rider workspace: apply, wait for approval, then take the jobs Shop n Delight dispatch assigns.
 // The server decides every action. These screens only show the buttons that apply to a job.
 
 const VEHICLES = [
@@ -27,7 +27,7 @@ const DELIVERY_LABEL = {
 export async function renderRider() {
   const user = await requireLogin();
   if (!user) return emptyView();
-  document.title = 'Rider · ZENVORA';
+  document.title = 'Rider · Shop n Delight';
 
   let rider;
   try {
@@ -41,7 +41,7 @@ export async function renderRider() {
     return el('div', { class: 'container section--tight' }, stateBox({
       tone: 'error',
       title: 'Your rider account is suspended',
-      body: 'You can’t take deliveries right now. Contact ZENVORA support for details.',
+      body: 'You can’t take deliveries right now. Contact Shop n Delight support for details.',
       iconName: 'shield',
     }));
   }
@@ -104,7 +104,7 @@ async function applyPage() {
     'div',
     { class: 'container auth' },
     el('div', { class: 'auth__card auth__card--wide' },
-      el('h1', { text: 'Deliver with ZENVORA' }),
+      el('h1', { text: 'Deliver with Shop n Delight' }),
       el('p', { class: 'muted', text: 'Apply once. An administrator reviews every application and checks your details before you can take a delivery.' }),
       form,
       el('p', { class: 'auth__links' }, linkButton({ href: '#/account', text: 'Back to your account', variant: 'ghost', small: true })),

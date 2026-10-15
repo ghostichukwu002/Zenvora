@@ -22,7 +22,7 @@ const NEXT_STEPS = {
 export async function renderMerchantHome() {
   const user = await requireLogin();
   if (!user) return emptyView();
-  document.title = 'Store dashboard · ZENVORA';
+  document.title = 'Store dashboard · Shop n Delight';
 
   const { items } = await api.get('/api/merchant/memberships');
   if (items.length) {
@@ -43,7 +43,7 @@ function claimPage() {
       ['m-sample-tech', 'Sample Tech Store (demo)'],
     ].map(([value, text]) => el('option', { value, text })),
   );
-  const code = field({ name: 'code', label: 'Store access code', autocomplete: 'off', hint: 'Issued to your store by ZENVORA. Ask the team if you don’t have one.' });
+  const code = field({ name: 'code', label: 'Store access code', autocomplete: 'off', hint: 'Issued to your store by Shop n Delight. Ask the team if you don’t have one.' });
   const message = formMessage();
   const submit = el('button', { type: 'submit', class: 'btn btn--primary btn--block', text: 'Connect store' });
   const form = el(
@@ -104,7 +104,7 @@ export async function renderMerchantDashboard({ params }) {
       iconName: 'shop',
     }));
   }
-  document.title = `${store.name} · ZENVORA`;
+  document.title = `${store.name} · Shop n Delight`;
 
   const summaryBox = el('div', { class: 'merchant-summary', 'aria-live': 'polite' });
   const ordersBox = el('div', { 'aria-busy': 'true' }, el('p', { class: 'muted', text: 'Loading orders…' }));
@@ -215,7 +215,7 @@ function orderCard(order, merchantId, reload) {
     steps.length
       ? el('div', { class: 'order-card__actions' }, actions)
       : order.status === 'ready'
-        ? el('p', { class: 'muted', text: 'Ready. ZENVORA dispatch assigns a rider, who collects the order from you.' })
+        ? el('p', { class: 'muted', text: 'Ready. Shop n Delight dispatch assigns a rider, who collects the order from you.' })
         : null,
   );
 }

@@ -17,7 +17,7 @@ function variantLabel(choice) {
 
 export async function renderCart() {
   const cart = setCart(await api.get('/api/cart'));
-  document.title = 'Your cart · ZENVORA';
+  document.title = 'Your cart · Shop n Delight';
   return cartView(cart);
 }
 
