@@ -49,7 +49,7 @@ html[data-section="puff-sip"] .btn--secondary:hover:not(:disabled) { background:
   --puff-ink: #15273b;
   --puff-muted: #65717d;
   --puff-paper: #f7faff;
-  --puff-line: #e9e1d9;
+  --puff-line: #dce7f6;
   overflow: clip;
   color: var(--puff-ink);
   background:
@@ -179,7 +179,7 @@ html[data-section="puff-sip"] .btn--secondary:hover:not(:disabled) { background:
   transform: rotate(7deg);
   animation: puff-cup-float 4.6s ease-in-out infinite;
 }
-.puff-art__cup-rim { position: absolute; top: -14px; left: -9px; right: -9px; height: 22px; border: 4px solid #fff; border-radius: 50%; background: #f8c095; }
+.puff-art__cup-rim { position: absolute; top: -14px; left: -9px; right: -9px; height: 22px; border: 4px solid #fff; border-radius: 50%; background: #9bbef0; }
 .puff-art__straw { position: absolute; top: -61px; right: 26px; width: 11px; height: 68px; border: 2px solid #fff; border-radius: 8px; background: var(--puff-navy); transform: rotate(13deg); transform-origin: bottom; }
 .puff-art__cup-label { position: absolute; inset: 46px 14px auto; display: grid; place-items: center; height: 58px; border-radius: 13px; color: #fff; background: var(--puff-navy); font-size: 1.2rem; font-weight: 900; letter-spacing: .14em; }
 .puff-art__cup-shine { position: absolute; top: 28px; left: 10px; width: 8px; height: 95px; border-radius: 99px; background: rgba(255,255,255,.72); }
