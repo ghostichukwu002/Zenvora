@@ -311,11 +311,6 @@ export function renderShop({ query }) {
   const page = el(
     'div',
     { class: 'container section--tight' },
-    el(
-      'nav',
-      { class: 'breadcrumb', 'aria-label': 'Breadcrumb' },
-      el('ol', {}, el('li', {}, el('a', { href: '#/', text: 'Home' })), el('li', { text: 'Shop' })),
-    ),
     el('div', { class: 'section__head' }, el('div', {}, el('h1', { text: heading }))),
     el(
       'div',
