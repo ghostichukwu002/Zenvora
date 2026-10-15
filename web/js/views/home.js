@@ -22,7 +22,7 @@ function hero(area) {
     type: 'search',
     name: 'q',
     placeholder: 'Search jollof, rice, earbuds…',
-    'aria-label': 'Search ZENVORA',
+    'aria-label': 'Search Shop n Delight',
     autocomplete: 'off',
     maxlength: '100',
   });
@@ -76,6 +76,7 @@ function hero(area) {
         { class: 'purchase__row' },
         linkButton({ href: '#/shop', text: 'Shop everything' }),
         linkButton({ href: '#/shop?category=food', text: 'Order food', variant: 'secondary' }),
+        linkButton({ href: '#/puff-sip', text: 'Explore Puff & Sip', variant: 'secondary' }),
       ),
     ),
     el(
@@ -83,7 +84,7 @@ function hero(area) {
       { class: 'hero__panel', 'aria-label': 'What you can shop for' },
       el('p', { class: 'hero__panel-title', text: 'You only see stores that deliver to you.' }),
       el('ul', { class: 'hero__panel-list' }, CATEGORY_LIST.map((name) => el('li', { text: name }))),
-      el('img', { class: 'hero__panel-mark', src: 'assets/zenvora-mark.svg', alt: '', width: '180', height: '180' }),
+      el('img', { class: 'hero__panel-mark', src: 'assets/shop-n-delight-mark.svg', alt: '', width: '180', height: '180' }),
     ),
   );
 }
@@ -191,7 +192,7 @@ export function renderHome() {
   const trust = el(
     'section',
     { class: 'section' },
-    el('div', { class: 'section__head' }, el('div', {}, el('h2', { text: 'How ZENVORA works' }))),
+    el('div', { class: 'section__head' }, el('div', {}, el('h2', { text: 'How Shop n Delight works' }))),
     el(
       'div',
       { class: 'trust-list' },
