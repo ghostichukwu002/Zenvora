@@ -18,6 +18,7 @@ import { renderRider } from './views/rider.js';
 import { renderHome } from './views/home.js';
 import { renderProduct } from './views/product.js';
 import { renderShop } from './views/shop.js';
+import { renderPuffSip } from './views/puff-sip.js';
 
 initLoadingScreen();
 
@@ -31,6 +32,12 @@ route('/shop', {
   nav: 'shop',
   title: 'Shop',
   render: ({ query }) => renderShop({ query }),
+});
+
+route('/puff-sip', {
+  nav: 'puff-sip',
+  title: 'Puff & Sip',
+  render: () => renderPuffSip(),
 });
 
 route('/search', {
