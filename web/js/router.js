@@ -67,6 +67,20 @@ async function navigate() {
   const { path, query } = currentLocation();
   document.documentElement.dataset.section = path === '/puff-sip' ? 'puff-sip' : 'shop-n-delight';
 
+  // Keep the active storefront's original brand identity in the shared shell.
+  const isPuffSip = path === '/puff-sip';
+  const brandName = isPuffSip ? 'Puff & Sip' : 'Shop n Delight';
+  const brandLogo = isPuffSip
+    ? 'https://kommodo.ai/i/e6xpOGN3SUDwzxP7tZd7'
+    : 'https://kommodo.ai/i/3SX09vfHWtlv9mt8rilD';
+  document.querySelectorAll('[data-brand-logo]').forEach((logo) => {
+    logo.src = brandLogo;
+    logo.alt = brandName;
+  });
+  document.querySelectorAll('[data-brand-name]').forEach((name) => {
+    name.textContent = brandName;
+  });
+
   let match = null;
   let params = {};
   for (const r of routes) {
