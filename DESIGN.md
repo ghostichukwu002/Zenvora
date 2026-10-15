@@ -1,73 +1,31 @@
----
-version: alpha
-colors:
-  primary: "#6d28d9"
-  primaryDeep: "#281447"
-  primaryBright: "#8b5cf6"
-  lavender: "#eee7ff"
-  paper: "#fcfbff"
-  white: "#ffffff"
-  ink: "#211a2e"
-  muted: "#6f687b"
-  border: "#ece7f4"
-typography:
-  display:
-    fontFamily: "ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif"
-  body:
-    fontFamily: "ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif"
-rounded:
-  card: "22px"
-  control: "14px"
-  pill: "999px"
-spacing:
-  base: "4px"
-  section: "clamp(30px, 4.6vw, 66px)"
-components:
-  productCard:
-    radius: "22px"
-    border: "#eee7f6"
-    surface: "rgba(255,255,255,.94)"
-  primaryButton:
-    background: "linear-gradient(135deg, #7c3aed, #5b21b6)"
-    radius: "14px"
-omitted:
-  - section: elevation
-    reason: "Elevation is defined by runtime shadow tokens and contextual CSS recipes."
----
-# ZENVORA Design Direction
+# Shop n Delight + Puff & Sip — Design Direction
 
-## Overview
-ZENVORA is a Nigeria-first marketplace for food, groceries, fashion, electronics, home goods, books, beauty, and everyday essentials. The interface should feel like a beautifully art-directed night market translated into a bright, trustworthy digital storefront: lively violet energy, porcelain whitespace, rich aubergine contrast, and tactile shopping surfaces. It serves customers on phones first, while supporting merchants, riders, and administrators in the same web app.
+## Product context
+Shop n Delight is the main storefront. Puff & Sip is a distinct section within it, not a separate website. The current Zenvora codebase is the starting template; Zenvora is not the customer-facing brand. The Shop n Delight logo is still pending, so its final visual identity should not be treated as approved yet.
 
-The memorable signature is the **violet night-market panel**: a deep aubergine hero surface with orbiting lavender light, paired with a bright editorial shopping canvas. Keep the rest disciplined so products and prices stay easy to scan.
+## Puff & Sip palette
+Use this palette for the dedicated Puff & Sip route only, based on the section logo shared by the owner:
+- Orange: `#F47721` — primary action and energetic accents.
+- Deep orange: `#D95B16` — accessible orange for text and hover states.
+- Navy: `#12243A` — strong contrast, headings, dark surfaces.
+- Warm white: `#FFFAF5` — section canvas.
+- White: `#FFFFFF` — cards and clean surfaces.
+- Muted slate: `#65717D` — supporting copy.
 
-## Colors
-Use violet for actions and active states, aubergine for deep brand moments, lavender for supporting surfaces, porcelain for the page canvas, and near-black plum for text. Status colors remain semantic; do not recolor warnings, errors, or success merely for branding.
+Do not apply this sub-brand palette indiscriminately to Shop n Delight pages until its own logo is supplied and the shared brand system is approved.
 
 ## Typography
-Use the system sans stack for readable, dependable rendering on low-end and mid-range Android devices. Give display headings tight tracking and strong scale; body copy remains comfortably spaced and calm. Avoid loading remote font files as a requirement for core layout.
+Use the system sans stack for dependable rendering on low-end and mid-range Android devices. Display headings are bold, tightly tracked, and oversized only where they add brand personality. Body copy remains calm and readable. Do not make remote fonts a requirement for core layout.
 
-## Layout
-The marketplace is mobile-first. Keep the primary shopping path visible early: search, choose a delivery area, browse categories, then scan product cards. Use generous desktop gutters and compact-but-comfortable phone layouts. Cards should have stable image geometry, clear pricing, and a single obvious action.
+## Puff & Sip signature
+The memorable signature is the oversized editorial headline beside a layered orange-and-navy graphic with a floating cup motif, orbiting linework, and a small label inspired by the section's playful logo. The art is CSS-based and decorative; it must not be mistaken for real product photography. Product images should come from the owner's future uploads.
 
-## Elevation & Depth
-Use shadows sparingly to establish hierarchy rather than adding a shadow to every surface. The hero panel can be dramatic; product and form surfaces should use soft, low-contrast elevation.
+## Layout and motion
+Mobile-first, responsive down to narrow phones. Use one strong hero moment, then three useful collection links and a concise explanation of the shopping flow. Motion should feel light and deliberate: floating hero artwork and small card lifts, with all animation disabled or reduced when the user requests reduced motion. Avoid movement that obscures text or controls.
 
-## Shapes
-Use rounded rectangular cards and controls with a consistent family: about 14px for controls, 17–22px for product surfaces, and pill shapes only for status/chip controls.
-
-## Components
-- Primary actions: saturated violet gradient, white text, 14–15px radius, visible focus ring.
-- Search: wide white surface with inset padding and an elevated focus state.
-- Category tiles: lavender icon block, short label, subtle border.
-- Product cards: stable media ratio, merchant label, two-line product name, strong price, availability, then action.
-- Forms: clear labels, 52px touch-friendly controls, and one clear primary action.
-- Mobile navigation: fixed, translucent white surface with a clear active marker and safe-area padding.
-
-## Do's and Don'ts
-- Do make shopping feel alive through one strong branded hero and restrained micro-interactions.
-- Do preserve the same interaction behavior and product hierarchy on desktop and mobile.
-- Do use product photos when supplied; never fabricate product images or pretend placeholders are real photography.
-- Don't add decorative cards around every piece of content.
-- Don't let animation, gradients, or glass effects reduce legibility.
-- Don't touch backend contracts when improving presentation.
+## Shared storefront principles
+- Keep product search, prices, availability, and checkout actions easy to find.
+- Preserve existing routes and API contracts while the frontend is being branded.
+- Never present placeholder products as real inventory or claim that Paystack, pickup, dispatch, QR verification, or automated payment confirmation is live until those integrations are implemented and tested.
+- Use semantic links and buttons, visible keyboard focus, readable contrast, and stable mobile layouts.
+- The logo currently shown in the Shop n Delight shell is a temporary typographic mark, not the final official logo. Replace it when the owner supplies the Shop n Delight logo.
