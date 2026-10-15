@@ -1,0 +1,13 @@
+/* Flat surfaces: no box, text or drop shadows anywhere. Focus stays visible through outlines,
+   since removing shadows also removes the focus ring drawn with box-shadow. Loaded last. */
+*,
+*::before,
+*::after {
+  box-shadow: none !important;
+  text-shadow: none !important;
+  filter: none !important;
+}
+:focus-visible {
+  outline: 3px solid var(--emerald-700);
+  outline-offset: 2px;
+}

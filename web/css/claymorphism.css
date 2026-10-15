@@ -261,3 +261,48 @@ html[data-section="puff-sip"] .site-header .icon-button,
 html[data-section="puff-sip"] .site-header .icon-button:hover { color: #1f4f9e; }
 html[data-section="shop-n-delight"] .site-header .icon-button,
 html[data-section="shop-n-delight"] .site-header .icon-button:hover { color: #7d2e08; }
+
+/* Storefront colours. Puff & Sip is blue and Shop n Delight is orange; white surfaces keep their text dark. */
+html[data-section="shop-n-delight"] body {
+  background: linear-gradient(180deg, #f47721 0%, #e0600f 100%);
+  color: #fff;
+}
+html[data-section="shop-n-delight"] body h1,
+html[data-section="shop-n-delight"] body h2,
+html[data-section="shop-n-delight"] body h3 { color: #fff; }
+/* Cards and panels sit on light surfaces, so their text stays dark even on the orange page. */
+html[data-section="shop-n-delight"] .product-card,
+html[data-section="shop-n-delight"] .summary,
+html[data-section="shop-n-delight"] .order-block,
+html[data-section="shop-n-delight"] .job-card {
+  color: var(--ink-900);
+}
+html[data-section="shop-n-delight"] .product-card .muted,
+html[data-section="shop-n-delight"] .product-card .product-card__meta { color: var(--ink-600); }
+
+/* Login and account pages are plain white. */
+html[data-section] body:has(.auth) {
+  background: #fff;
+  color: var(--ink-900);
+}
+html[data-section] body:has(.auth) .site-header,
+html[data-section] body:has(.auth) .site-footer,
+html[data-section] body:has(.auth) .bottom-nav {
+  background: #fff;
+  color: var(--ink-900);
+  border-color: #e6e6ee;
+}
+html[data-section] body:has(.auth) .brand,
+html[data-section] body:has(.auth) .site-nav a,
+html[data-section] body:has(.auth) .site-footer h2,
+html[data-section] body:has(.auth) .site-footer .wordmark,
+html[data-section] body:has(.auth) .site-footer a { color: var(--ink-900); }
+html[data-section] body:has(.auth) .site-nav a[aria-current="page"] { color: var(--emerald-700); border-bottom-color: var(--emerald-700); }
+html[data-section] body:has(.auth) .auth h1,
+html[data-section] body:has(.auth) .auth__card h1 { color: var(--ink-900); }
+html[data-section] body:has(.auth) .auth__card { background: #fff; color: var(--ink-900); border: 1px solid #e6e6ee; }
+html[data-section] body:has(.auth) .auth__card .muted,
+html[data-section] body:has(.auth) .auth__links { color: var(--ink-600); }
+html[data-section] body:has(.auth) .auth__card a { color: var(--emerald-700); }
+html[data-section] body:has(.auth) .header-account,
+html[data-section] body:has(.auth) .site-header .icon-button { background: #f4f4f8; color: var(--ink-900); }
