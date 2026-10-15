@@ -1,0 +1,112 @@
+/* Shop n Delight — orange-first identity. Puff & Sip is independently themed in puff-sip.css. */
+html[data-section="shop-n-delight"] {
+  --emerald-600: #f47721;
+  --emerald-700: #c94f0b;
+  --emerald-800: #a83d06;
+  --forest-900: #7d2e08;
+  --forest-800: #9c3b0a;
+  --mint-100: #ffe0c7;
+  --mint-50: #fff1e5;
+  --cream-50: #fff1e5;
+  --border: #f4c8a8;
+  --border-strong: #e8a879;
+  --focus-ring: 0 0 0 3px rgba(201, 79, 11, .35);
+  background: #fff1e5;
+}
+html[data-section="shop-n-delight"] body {
+  background:
+    radial-gradient(ellipse at 88% 5%, rgba(244, 119, 33, .22), transparent 30rem),
+    linear-gradient(180deg, #ffe7d3 0%, #fff4ea 42%, #ffede0 100%);
+  color: #351b10;
+}
+html[data-section="shop-n-delight"] .site-header {
+  background: rgba(244, 119, 33, .97);
+  border-bottom-color: rgba(125, 46, 8, .2);
+  box-shadow: 0 8px 28px rgba(125, 46, 8, .14);
+  color: #fff;
+}
+html[data-section="shop-n-delight"] .brand,
+html[data-section="shop-n-delight"] .site-nav a,
+html[data-section="shop-n-delight"] .site-nav a:hover,
+html[data-section="shop-n-delight"] .site-header .icon-button {
+  color: #fff;
+}
+html[data-section="shop-n-delight"] .site-nav a[aria-current="page"] {
+  border-bottom-color: #fff;
+}
+html[data-section="shop-n-delight"] .site-header .icon-button:hover {
+  color: #7d2e08;
+  background: rgba(255,255,255,.2);
+}
+html[data-section="shop-n-delight"] .location-button {
+  color: #7d2e08;
+  background: #fff7f0;
+  border-color: rgba(125,46,8,.15);
+}
+html[data-section="shop-n-delight"] .hero__panel {
+  background:
+    radial-gradient(circle at 85% 14%, rgba(255, 211, 170, .55), transparent 34%),
+    linear-gradient(145deg, #f47721 0%, #d9570d 58%, #9f3708 100%);
+  border-color: rgba(255,255,255,.36);
+  box-shadow: 0 24px 55px rgba(151, 57, 8, .2), inset 0 1px 0 rgba(255,255,255,.2);
+}
+html[data-section="shop-n-delight"] .hero__panel-title,
+html[data-section="shop-n-delight"] .hero__panel-list,
+html[data-section="shop-n-delight"] .hero__panel-list li {
+  color: #fffaf6;
+}
+html[data-section="shop-n-delight"] .hero__panel-list li::marker {
+  color: #ffd0aa;
+}
+html[data-section="shop-n-delight"] .btn--primary {
+  background: linear-gradient(135deg, #f47721, #c94f0b);
+  box-shadow: 0 7px 18px rgba(201, 79, 11, .22);
+}
+html[data-section="shop-n-delight"] .btn--primary:hover:not(:disabled) {
+  background: linear-gradient(135deg, #dc5d0e, #a83d06);
+}
+html[data-section="shop-n-delight"] .site-footer {
+  background:
+    radial-gradient(ellipse at 88% 0%, rgba(255, 185, 127, .22), transparent 38%),
+    linear-gradient(135deg, #a83d06, #7d2e08);
+  color: #fff7f0;
+}
+html[data-section="shop-n-delight"] .site-footer h2,
+html[data-section="shop-n-delight"] .site-footer .wordmark {
+  color: #fff;
+}
+html[data-section="shop-n-delight"] .site-footer a:hover {
+  color: #ffd0aa;
+}
+html[data-section="shop-n-delight"] .bottom-nav {
+  background: rgba(255, 241, 229, .97);
+  border-top-color: #f4c8a8;
+}
+html[data-section="shop-n-delight"] .bottom-nav a[aria-current="page"] {
+  color: #c94f0b;
+}
+html[data-section="shop-n-delight"] .bottom-nav a[aria-current="page"]::before {
+  background: #f47721;
+}
+html[data-section="shop-n-delight"] .product-card,
+html[data-section="shop-n-delight"] .purchase,
+html[data-section="shop-n-delight"] .category-tile {
+  border-color: #f1c8a8;
+}
+html[data-section="shop-n-delight"] .product-card__media {
+  background: linear-gradient(145deg, #fff2e7, #ffdfc6);
+}
+html[data-section="shop-n-delight"] .product-card__badge {
+  background: #c94f0b;
+}
+html[data-section="shop-n-delight"] ::selection {
+  background: #f47721;
+  color: #fff;
+}
+@media (prefers-reduced-motion: reduce) {
+  html[data-section="shop-n-delight"] *,
+  html[data-section="shop-n-delight"] *::before,
+  html[data-section="shop-n-delight"] *::after {
+    scroll-behavior: auto !important;
+  }
+}
