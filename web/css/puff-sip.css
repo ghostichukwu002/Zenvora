@@ -1,10 +1,10 @@
-/* Puff & Sip sub-brand. Orange, deep navy and white are scoped to this section. */
+/* Puff & Sip sub-brand. Blue is the primary colour, with white and deep navy for contrast. */
 html[data-section="puff-sip"] body {
   color: #15273b;
   background: #f7faff;
 }
 html[data-section="puff-sip"] .site-header {
-  background: rgba(255, 250, 245, .92);
+  background: rgba(247, 250, 255, .94);
   border-bottom-color: rgba(21, 39, 59, .09);
   box-shadow: 0 8px 28px rgba(21, 39, 59, .045);
   backdrop-filter: saturate(1.25) blur(18px);
@@ -21,7 +21,7 @@ html[data-section="puff-sip"] .site-footer {
 html[data-section="puff-sip"] .site-footer h2 { color: #a9ccff; }
 html[data-section="puff-sip"] .site-footer a:hover { color: #a9ccff; }
 html[data-section="puff-sip"] .bottom-nav {
-  background: rgba(255, 250, 245, .94);
+  background: rgba(247, 250, 255, .96);
   border-top-color: rgba(21, 39, 59, .1);
 }
 html[data-section="puff-sip"] .bottom-nav a[aria-current="page"] { color: #2457a6; }
@@ -32,7 +32,7 @@ html[data-section="puff-sip"] .btn--primary {
   box-shadow: 0 9px 22px rgba(36, 87, 166, .2);
 }
 html[data-section="puff-sip"] .btn--primary:hover:not(:disabled) {
-  background: linear-gradient(135deg, #e96a19, #bd4810);
+  background: linear-gradient(135deg, #2f6fc9, #1e4c91);
   box-shadow: 0 12px 26px rgba(36, 87, 166, .26);
 }
 html[data-section="puff-sip"] .btn--secondary {
