@@ -1,3 +1,4 @@
+import { checkoutHref, productHref, sectionOf } from './sections.js';
 import * as api from './api.js';
 import { el, icon } from './dom.js';
 import { AVAILABILITY_LABEL, formatNaira } from './format.js';
@@ -60,7 +61,7 @@ function quickAddButton(product) {
       await addToCart({ productId: product.id, quantity: 1 });
       button.replaceChildren(icon('check', 'icon'), 'Added');
       button.classList.add('btn--added');
-      toast(`${product.name} added to your cart`, { linkHref: '#/cart', linkText: 'View cart' });
+      toast(`${product.name} added to your cart`, { linkHref: checkoutHref(sectionOf(product)), linkText: 'Checkout' });
       setTimeout(() => {
         button.classList.remove('btn--added');
         button.textContent = original;
@@ -89,7 +90,7 @@ export function productCard(product, { reveal = true } = {}) {
   } else if (hasOptions) {
     action = el(
       'a',
-      { class: 'btn btn--secondary btn--small', href: `#/product/${encodeURIComponent(product.id)}` },
+      { class: 'btn btn--secondary btn--small', href: productHref(product.id, sectionOf(product)) },
       'Choose options',
     );
   } else {
@@ -117,7 +118,7 @@ export function productCard(product, { reveal = true } = {}) {
       el(
         'h3',
         { class: 'product-card__name' },
-        el('a', { href: `#/product/${encodeURIComponent(product.id)}`, text: product.name }),
+        el('a', { href: productHref(product.id, sectionOf(product)), text: product.name }),
       ),
       el(
         'div',

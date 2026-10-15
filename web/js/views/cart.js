@@ -1,3 +1,4 @@
+import { checkoutHref, productHref } from '../sections.js';
 import * as api from '../api.js';
 import { el, icon, linkButton, setMain } from '../dom.js';
 import { formatNaira } from '../format.js';
@@ -78,7 +79,7 @@ function lineNode(line) {
     el(
       'div',
       {},
-      el('a', { class: 'cart-line__name', href: `#/product/${encodeURIComponent(line.productId)}`, text: line.name }),
+      el('a', { class: 'cart-line__name', href: productHref(line.productId, line.section), text: line.name }),
       el('div', { class: 'cart-line__meta' }, [
         variants || null,
         line.onPromotion ? 'On offer' : null,
@@ -106,7 +107,7 @@ function checkoutAction(cart) {
   if (cart.lines.some((l) => l.stockWarning)) {
     return el('button', { type: 'button', class: 'btn btn--primary btn--block', disabled: true, text: 'Fix stock issues to continue' });
   }
-  return el('a', { class: 'btn btn--primary btn--block', href: '#/checkout', text: 'Checkout' });
+  return el('a', { class: 'btn btn--primary btn--block', href: checkoutHref(cart.section), text: 'Checkout' });
 }
 
 function summaryNode(cart) {

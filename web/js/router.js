@@ -62,13 +62,16 @@ function markActiveNav(match, query) {
   }
 }
 
+// Puff & Sip owns its whole path tree: its landing page, shop, product and checkout.
+const isPuffPath = (p) => p === '/puff-sip' || p.startsWith('/puff-sip/');
+
 async function navigate() {
   const id = ++navigationId;
   const { path, query } = currentLocation();
-  document.documentElement.dataset.section = path === '/puff-sip' ? 'puff-sip' : 'shop-n-delight';
+  document.documentElement.dataset.section = isPuffPath(path) ? 'puff-sip' : 'shop-n-delight';
 
   // Keep the active storefront's original brand identity in the shared shell.
-  const isPuffSip = path === '/puff-sip';
+  const isPuffSip = isPuffPath(path);
   const brandName = isPuffSip ? 'Puff & Sip' : 'Shop n Delight';
   const brandLogo = isPuffSip ? 'assets/puff-sip-logo.jpg' : 'assets/shop-n-delight-logo.png';
   const brandTagline = isPuffSip ? 'Little treats. Big mood.' : 'Everyday shopping, with a little extra delight.'

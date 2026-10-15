@@ -1,3 +1,4 @@
+import { checkoutHref, sectionOf, shopHref } from '../sections.js';
 import * as api from '../api.js';
 import { addToCart, categoryGlyph, productImageUrl, trustBadge } from '../components.js';
 import { el, icon, linkButton } from '../dom.js';
@@ -116,6 +117,14 @@ function productView(product) {
     refresh();
   });
 
+  let goToCheckout = false;
+  const buyNow = el('button', { type: 'button', class: 'btn btn--secondary btn--block', text: 'Buy now' });
+  buyNow.addEventListener('click', () => {
+    if (addButton.disabled) return;
+    goToCheckout = true;
+    addButton.click();
+  });
+
   addButton.addEventListener('click', async () => {
     // Ignore repeat taps while a request is in flight, so one tap cannot add twice.
     if (addButton.dataset.busy === 'true') return;
@@ -129,7 +138,11 @@ function productView(product) {
       await addToCart({ productId: product.id, variantChoice: { ...choices }, quantity });
       added = true;
       addLabel.textContent = 'Added to cart';
-      toast(`${product.name} added to your cart`, { linkHref: '#/cart', linkText: 'View cart' });
+      toast(`${product.name} added to your cart`, { linkHref: checkoutHref(sectionOf(product)), linkText: 'Checkout' });
+      if (goToCheckout) {
+        window.location.hash = checkoutHref(sectionOf(product));
+        return;
+      }
     } catch (err) {
       errorNode.textContent = err.message;
       toast(err.message, { tone: 'error' });
@@ -177,7 +190,7 @@ function productView(product) {
         'ol',
         {},
         el('li', {}, el('a', { href: '#/', text: 'Home' })),
-        el('li', {}, el('a', { href: `#/shop?category=${encodeURIComponent(product.category.id)}`, text: product.category.name })),
+        el('li', {}, el('a', { href: `${shopHref(sectionOf(product))}?category=${encodeURIComponent(product.category.id)}`, text: product.category.name })),
         el('li', { text: product.name }),
       ),
     ),
@@ -230,7 +243,7 @@ function productView(product) {
             el('span', { class: 'field__label', text: 'Quantity' }),
             el('div', { class: 'stepper' }, decrement, quantityOutput, increment),
           ),
-          el('div', { class: 'purchase__row' }, addButton),
+          el('div', { class: 'purchase__row' }, addButton, buyNow),
           hint,
           errorNode,
         ),

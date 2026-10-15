@@ -45,6 +45,7 @@ function serializeProduct(product, catalogue) {
       state: merchant.state,
       serviceAreas: merchant.serviceAreas,
       prepMinutes: merchant.prepMinutes,
+      section: merchant.section,
       verified: merchant.verified === true,
     },
     priceKobo: product.priceKobo,
@@ -68,6 +69,11 @@ function parseIntParam(value, fallback, min, max) {
   return Math.min(max, Math.max(min, n));
 }
 
+// Which storefront a request is for. Anything unknown means the main shop.
+function sectionParam(query) {
+  return query?.section === 'puff' ? 'puff' : 'shop';
+}
+
 function listProducts(query, catalogue) {
   const q = typeof query.q === 'string' ? query.q.trim().toLowerCase().slice(0, 100) : '';
   const category = typeof query.category === 'string' ? query.category : null;
@@ -78,7 +84,10 @@ function listProducts(query, catalogue) {
   const limit = parseIntParam(query.limit, 12, 1, 50);
   const offset = parseIntParam(query.offset, 0, 0, Number.MAX_SAFE_INTEGER);
 
-  let results = catalogue.products.map((p) => serializeProduct(p, catalogue));
+  // Each storefront only lists its own merchants: Shop n Delight never shows Puff & Sip stock.
+  let results = catalogue.products
+    .map((p) => serializeProduct(p, catalogue))
+    .filter((p) => p.merchant.section === sectionParam(query));
 
   if (category) results = results.filter((p) => p.category.id === category);
   if (merchant) results = results.filter((p) => p.merchant.id === merchant);
@@ -164,11 +173,14 @@ export function createApp({
 
   router.get('/api/categories', (ctx) => {
     const counts = new Map();
+    const section = sectionParam(ctx.query);
     for (const p of catalogue.products) counts.set(p.category, (counts.get(p.category) ?? 0) + 1);
     return {
       status: 200,
       body: {
-        items: catalogue.categories.map((c) => ({ ...c, productCount: counts.get(c.id) ?? 0 })),
+        items: catalogue.categories
+          .filter((c) => c.section === section)
+          .map((c) => ({ id: c.id, name: c.name, glyph: c.glyph, productCount: counts.get(c.id) ?? 0 })),
       },
     };
   });
@@ -469,6 +481,11 @@ export function createApp({
   router.get('/api/admin/overview', (ctx) => {
     requireAdmin(ctx);
     return { status: 200, body: dispatch.adminOverview() };
+  });
+
+  router.get('/api/admin/insights', (ctx) => {
+    requireAdmin(ctx);
+    return { status: 200, body: dispatch.adminInsights() };
   });
 
   router.get('/api/admin/orders', (ctx) => {

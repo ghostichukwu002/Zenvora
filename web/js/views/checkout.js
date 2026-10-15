@@ -1,4 +1,5 @@
 import * as api from '../api.js';
+import { checkoutHref, shopHref } from '../sections.js';
 import { el, icon, linkButton } from '../dom.js';
 import { field, formMessage } from '../form.js';
 import { formatNaira } from '../format.js';
@@ -12,7 +13,10 @@ const FIELD_FOR_CODE = { name_invalid: 'name', phone_invalid: 'phone', address_i
 // Codes that mean the cart itself needs attention, so the way forward is back to the cart.
 const CART_CODES = new Set(['out_of_stock', 'insufficient_stock', 'cart_empty', 'product_not_found', 'area_required', 'area_not_served', 'merchant_conflict']);
 
-export async function renderCheckout() {
+let activeSection = 'shop';
+
+export async function renderCheckout({ section = 'shop' } = {}) {
+  activeSection = section;
   const user = await requireLogin();
   if (!user) return emptyView();
   document.title = 'Checkout · Shop n Delight';
@@ -23,7 +27,7 @@ export async function renderCheckout() {
     return el('div', { class: 'container section--tight' }, stateBox({
       title: 'Your cart is empty',
       body: 'Add something first, then come back to check out.',
-      actions: [linkButton({ href: '#/shop', text: 'Browse the shop' })],
+      actions: [linkButton({ href: shopHref(activeSection), text: 'Browse the shop' })],
       iconName: 'cart',
     }));
   }
@@ -115,7 +119,7 @@ export async function renderCheckout() {
       submit.textContent = label;
 
       if (err.code === 'auth_required') {
-        window.location.hash = `#/login?next=${encodeURIComponent('#/checkout')}`;
+        window.location.hash = `#/login?next=${encodeURIComponent(checkoutHref(activeSection))}`;
         return;
       }
       const key = FIELD_FOR_CODE[err.code];

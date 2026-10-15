@@ -15,7 +15,7 @@ const SEARCH_DEBOUNCE_MS = 300;
 
 // Builds the shop and search page. The URL holds the filters, so a filtered view
 // can be bookmarked, shared, and restored on reload.
-export function renderShop({ query }) {
+export function renderShop({ query, section = 'shop' }) {
   const storedArea = getArea();
   const filters = {
     q: (query.get('q') ?? '').slice(0, 100),
@@ -155,7 +155,7 @@ export function renderShop({ query }) {
 
   // Loads categories without blocking the grid. "All" still works if this fails.
   api
-    .get('/api/categories')
+    .get(`/api/categories?section=${section}`)
     .then(({ items }) => {
       for (const c of items) {
         const c2 = addChip(
@@ -212,6 +212,7 @@ export function renderShop({ query }) {
       limit: String(PAGE_SIZE),
       offset: String(nextOffset),
     });
+    params.set('section', section);
     if (filters.q) params.set('q', filters.q);
     if (filters.category) params.set('category', filters.category);
     if (filters.promo) params.set('promo', '1');
@@ -303,7 +304,7 @@ export function renderShop({ query }) {
     ? `Results for “${filters.q}”`
     : filters.category
       ? 'Shop by category'
-      : 'Shop everything';
+      : section === 'puff' ? 'Everything in Puff & Sip' : 'Shop everything';
 
   // Keep page-level state in the title so back and forward stay understandable.
   document.title = `${heading} · Shop n Delight`;

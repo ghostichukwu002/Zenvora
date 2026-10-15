@@ -28,14 +28,14 @@ export function renderPuffSip() {
       el(
         'div',
         { class: 'puff-hero__actions' },
-        linkButton({ href: '#/shop', text: 'Explore the collection' }),
-        linkButton({ href: '#/search?q=sip', text: 'Find your sip', variant: 'secondary' }),
+        linkButton({ href: '#/puff-sip/shop', text: 'Explore the collection' }),
+        linkButton({ href: '#/puff-sip/shop?q=sip', text: 'Find your sip', variant: 'secondary' }),
       ),
       el(
         'div',
         { class: 'puff-hero__note' },
         el('span', { class: 'puff-hero__note-mark', 'aria-hidden': 'true', text: '✳' }),
-        el('span', { text: 'A little something for your kind of day.' }),
+        el('span', { text: 'For adults 18 and over. A little something for your kind of day.' }),
       ),
     ),
     el(
@@ -75,7 +75,7 @@ export function renderPuffSip() {
         el('h2', { id: 'puff-collections-title' }, 'What are we in the mood for?'),
         el('p', { class: 'puff-section__lede', text: 'Start with a vibe. The collection is only a tap away.' }),
       ),
-      el('a', { class: 'puff-text-link', href: '#/shop', text: 'Browse everything ↗' }),
+      el('a', { class: 'puff-text-link', href: '#/puff-sip/shop', text: 'Browse everything ↗' }),
     ),
     el(
       'div',
@@ -84,7 +84,7 @@ export function renderPuffSip() {
         eyebrow: 'THE PUFF SIDE',
         title: 'Puff picks',
         body: 'Explore the puff side of the collection.',
-        href: '#/search?q=puff',
+        href: '#/puff-sip/shop?q=puff',
         iconName: 'box',
         tone: 'orange',
       }),
@@ -92,7 +92,7 @@ export function renderPuffSip() {
         eyebrow: 'THE SIP SIDE',
         title: 'Sip picks',
         body: 'Find something that hits the spot.',
-        href: '#/search?q=sip',
+        href: '#/puff-sip/shop?q=sip',
         iconName: 'drop',
         tone: 'navy',
       }),
@@ -100,7 +100,7 @@ export function renderPuffSip() {
         eyebrow: 'A LITTLE OF BOTH',
         title: 'Good together',
         body: 'Look for pairings and easy favourites.',
-        href: '#/search?q=combo',
+        href: '#/puff-sip/shop?q=vape',
         iconName: 'basket',
         tone: 'cream',
       }),
@@ -134,7 +134,7 @@ export function renderPuffSip() {
       el('p', { class: 'puff-section__kicker', text: 'YOUR NEXT FAVOURITE IS OUT THERE' }),
       el('h2', { text: 'Come find your thing.' }),
     ),
-    linkButton({ href: '#/shop', text: 'Browse all products' }),
+    linkButton({ href: '#/puff-sip/shop', text: 'Browse all products' }),
   );
 
   return el(

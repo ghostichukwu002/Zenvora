@@ -302,6 +302,61 @@ export function createDispatch(db, { catalogue, now = () => new Date() }) {
 
     adminRiders,
 
+    // Figures for the administrator dashboard. Days are Lagos days (UTC+1, no daylight saving).
+    // Rejected orders are left out of every money figure.
+    adminInsights() {
+      const LAGOS_OFFSET_MS = 60 * 60 * 1000;
+      const lagosDay = (date) => new Date(date.getTime() + LAGOS_OFFSET_MS).toISOString().slice(0, 10);
+      const current = now();
+      const today = lagosDay(current);
+      const sinceIso = new Date(current.getTime() - 14 * 24 * 60 * 60 * 1000).toISOString();
+
+      const byDay = new Map();
+      for (const row of db.prepare(
+        `SELECT date(created_at, '+1 hour') AS day, COUNT(*) AS orders, COALESCE(SUM(total_kobo), 0) AS revenue
+         FROM orders WHERE status != 'rejected' AND created_at >= ? GROUP BY day`,
+      ).all(sinceIso)) {
+        byDay.set(row.day, { orders: row.orders, revenueKobo: row.revenue });
+      }
+      const days = [];
+      for (let i = 13; i >= 0; i -= 1) {
+        const key = lagosDay(new Date(current.getTime() - i * 24 * 60 * 60 * 1000));
+        days.push({ date: key, ...(byDay.get(key) ?? { orders: 0, revenueKobo: 0 }) });
+      }
+
+      const sectionOfMerchant = new Map(catalogue.merchants.map((m) => [m.id, m.section ?? 'shop']));
+      const sections = { shop: { orders: 0, revenueKobo: 0 }, puff: { orders: 0, revenueKobo: 0 } };
+      for (const row of db.prepare(
+        "SELECT merchant_id, COUNT(*) AS orders, COALESCE(SUM(total_kobo), 0) AS revenue FROM orders WHERE status != 'rejected' GROUP BY merchant_id",
+      ).all()) {
+        const key = sectionOfMerchant.get(row.merchant_id) === 'puff' ? 'puff' : 'shop';
+        sections[key].orders += row.orders;
+        sections[key].revenueKobo += row.revenue;
+      }
+
+      const statuses = Object.fromEntries(
+        db.prepare('SELECT status, COUNT(*) AS n FROM orders GROUP BY status').all().map((r) => [r.status, r.n]),
+      );
+
+      const topProducts = db.prepare(
+        `SELECT oi.name AS name, SUM(oi.quantity) AS quantity, SUM(oi.line_kobo) AS revenue
+         FROM order_items oi JOIN orders o ON o.id = oi.order_id
+         WHERE o.status != 'rejected' GROUP BY oi.product_id, oi.name ORDER BY revenue DESC LIMIT 5`,
+      ).all().map((r) => ({ name: r.name, quantity: r.quantity, revenueKobo: r.revenue }));
+
+      const latest = days[days.length - 1];
+      const totals = days.reduce((acc, d) => ({ orders: acc.orders + d.orders, revenueKobo: acc.revenueKobo + d.revenueKobo }), { orders: 0, revenueKobo: 0 });
+      return {
+        today: { date: today, orders: latest.orders, revenueKobo: latest.revenueKobo },
+        last14Days: totals,
+        days,
+        sections,
+        statuses,
+        topProducts,
+        ridersOnline: db.prepare("SELECT COUNT(*) AS n FROM riders WHERE status = 'approved' AND available = 1").get().n,
+      };
+    },
+
     adminOverview() {
       const count = (sql, ...params) => db.prepare(sql).get(...params).n;
       return {

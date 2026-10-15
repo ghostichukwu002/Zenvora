@@ -4,6 +4,7 @@ import { formatNaira } from '../format.js';
 import { stateBox, toast } from '../ui.js';
 import { trustBadge } from '../components.js';
 import { storesPanel, supportPanel } from './admin-care.js';
+import { overviewPanel } from './admin-overview.js';
 import { emptyView, formatDate, requireLogin } from './guard.js';
 
 // Administrator workspace. A dispatch desk: find the orders that need a rider, assign one,
@@ -63,13 +64,14 @@ export async function renderAdmin() {
   const status = el('p', { class: 'admin-status', 'aria-live': 'polite' });
   const panel = el('div', { class: 'admin-panel', id: 'admin-panel', role: 'tabpanel', 'aria-busy': 'true' });
   const tabs = [
+    ['overview', 'Overview'],
     ['dispatch', 'Dispatch'],
     ['riders', 'Riders'],
     ['support', 'Support'],
     ['stores', 'Stores'],
     ['audit', 'Activity'],
   ];
-  let current = 'dispatch';
+  let current = 'overview';
   const tabButtons = tabs.map(([key, label]) => el('button', {
     type: 'button',
     role: 'tab',
@@ -87,7 +89,7 @@ export async function renderAdmin() {
     if (o.onTheRoad) parts.push(`${plural(o.onTheRoad, 'order')} on the road`);
     if (o.ridersAwaitingApproval) parts.push(`${plural(o.ridersAwaitingApproval, 'rider')} awaiting review`);
     status.textContent = parts.length ? `${parts.join('. ')}.` : 'Nothing needs attention right now.';
-    const riderTab = tabButtons[1];
+    const riderTab = tabButtons[2];
     riderTab.dataset.count = o.ridersAwaitingApproval ? String(o.ridersAwaitingApproval) : '';
   }
   paintStatus(overview);
@@ -110,7 +112,8 @@ export async function renderAdmin() {
   async function loadPanel(key) {
     panel.setAttribute('aria-busy', 'true');
     try {
-      if (key === 'dispatch') await dispatchPanel(panel, refreshOverview, () => loadPanel('dispatch'));
+      if (key === 'overview') await overviewPanel(panel, { overview: await api.get('/api/admin/overview'), goTo: (k) => show(k) });
+      else if (key === 'dispatch') await dispatchPanel(panel, refreshOverview, () => loadPanel('dispatch'));
       else if (key === 'riders') await ridersPanel(panel, refreshOverview, () => loadPanel('riders'));
       else if (key === 'support') await supportPanel(panel);
       else if (key === 'stores') await storesPanel(panel, refreshOverview);
@@ -122,12 +125,12 @@ export async function renderAdmin() {
     }
   }
 
-  show('dispatch');
+  show('overview');
 
   return el('div', { class: 'container section--tight admin' },
     el('header', { class: 'admin-head' },
       el('div', {},
-        el('h1', { tabindex: '-1', text: 'Operations' }, trustBadge('admin')),
+        el('h1', { tabindex: '-1', text: 'Admin dashboard' }, trustBadge('admin')),
         status,
       ),
       el('button', { type: 'button', class: 'btn btn--secondary btn--small', text: 'Refresh', onclick: () => { refreshOverview(); loadPanel(current); } }),

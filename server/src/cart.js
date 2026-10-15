@@ -167,6 +167,7 @@ export function priceCart(cart, catalogue) {
     return {
       key: item.key,
       productId: product.id,
+      section: catalogue.merchants.find((m) => m.id === product.merchantId)?.section ?? 'shop',
       name: product.name,
       variantChoice: item.variantChoice,
       quantity: item.quantity,
@@ -182,8 +183,10 @@ export function priceCart(cart, catalogue) {
     ? catalogue.merchants.find((m) => m.id === cart.merchantId)
     : null;
   const deliveryFeeKobo = merchant && cart.deliveryArea ? merchant.deliveryFeeKobo : 0;
+  const section = merchant?.section ?? 'shop';
 
   return {
+    section,
     merchantId: cart.merchantId,
     merchantName: merchant?.name ?? null,
     merchantServiceAreas: merchant?.serviceAreas ?? [],
