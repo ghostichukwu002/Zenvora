@@ -65,6 +65,7 @@ function markActiveNav(match, query) {
 async function navigate() {
   const id = ++navigationId;
   const { path, query } = currentLocation();
+  document.documentElement.dataset.section = path === '/puff-sip' ? 'puff-sip' : 'shop-n-delight';
 
   let match = null;
   let params = {};
@@ -80,7 +81,7 @@ async function navigate() {
 
   const main = document.getElementById('app');
   if (!match) {
-    document.title = 'Page not found · ZENVORA';
+    document.title = 'Page not found · Shop n Delight';
     markActiveNav({ nav: null }, query);
     setMain(
       stateBox({
@@ -96,7 +97,7 @@ async function navigate() {
 
   markActiveNav(match, query);
   const pageTitle = typeof match.title === 'function' ? match.title({ params, query }) : match.title;
-  document.title = `${pageTitle} · ZENVORA`;
+  document.title = `${pageTitle} · Shop n Delight`;
 
   // Scroll to the top only when the page itself changes, not when filters change.
   if (match.lastPath !== path) {
