@@ -15,7 +15,6 @@ import { renderHelp } from './views/help.js';
 import { renderAdmin } from './views/admin.js';
 import { renderMerchantDashboard, renderMerchantHome } from './views/merchant.js';
 import { renderRider } from './views/rider.js';
-import { renderHome } from './views/home.js';
 import { renderProduct } from './views/product.js';
 import { renderShop } from './views/shop.js';
 import { renderPuffSip } from './views/puff-sip.js';
@@ -23,9 +22,9 @@ import { renderPuffSip } from './views/puff-sip.js';
 initLoadingScreen();
 
 route('/', {
-  nav: 'home',
-  title: 'Everything you need, closer than ever',
-  render: () => renderHome(),
+  nav: 'shop',
+  title: 'Shop n Delight',
+  render: ({ query }) => renderShop({ query }),
 });
 
 route('/shop', {
