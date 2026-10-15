@@ -1,0 +1,191 @@
+/* Puff & Sip / Shop n Delight — claymorphism surface system.
+   Soft sculpted surfaces, warm ambient shadows, and tactile pressed states. */
+:root {
+  --clay-radius-card: 26px;
+  --clay-radius-control: 16px;
+  --clay-motion: 220ms cubic-bezier(.2,.75,.25,1);
+}
+html[data-section="shop-n-delight"] {
+  --clay-bg: #fff0e3;
+  --clay-surface: #fff8f1;
+  --clay-surface-hi: #ffffff;
+  --clay-edge: #f6d6bf;
+  --clay-shadow: rgba(171, 78, 24, .13);
+  --clay-shadow-deep: rgba(171, 78, 24, .09);
+  --clay-accent: #f47721;
+  --clay-accent-dark: #bd4a0b;
+}
+html[data-section="puff-sip"] {
+  --clay-bg: #edf4ff;
+  --clay-surface: #f7faff;
+  --clay-surface-hi: #ffffff;
+  --clay-edge: #d7e6fc;
+  --clay-shadow: rgba(42, 91, 158, .13);
+  --clay-shadow-deep: rgba(42, 91, 158, .08);
+  --clay-accent: #3978d4;
+  --clay-accent-dark: #2457a6;
+}
+html[data-section] body {
+  background-color: var(--clay-bg);
+}
+html[data-section] .site-header {
+  border-bottom: 1px solid rgba(255,255,255,.8);
+  box-shadow: 0 7px 22px var(--clay-shadow-deep), inset 0 -1px 0 rgba(255,255,255,.65);
+}
+html[data-section] .brand__mark {
+  border-radius: 14px;
+  filter: drop-shadow(0 4px 5px var(--clay-shadow-deep));
+  transition: transform var(--clay-motion), filter var(--clay-motion);
+}
+html[data-section] .brand:hover .brand__mark {
+  transform: translateY(-2px) rotate(-3deg);
+  filter: drop-shadow(0 7px 8px var(--clay-shadow));
+}
+html[data-section] .location-button,
+html[data-section] .header-actions .icon-button {
+  border: 1px solid rgba(255,255,255,.92);
+  border-radius: 15px;
+  box-shadow: 5px 5px 12px var(--clay-shadow-deep), -4px -4px 10px rgba(255,255,255,.8);
+  transition: transform var(--clay-motion), box-shadow var(--clay-motion), background-color var(--clay-motion);
+}
+html[data-section] .header-actions .icon-button { background: var(--clay-surface); }
+html[data-section] .location-button:active,
+html[data-section] .header-actions .icon-button:active {
+  transform: translateY(1px);
+  box-shadow: inset 3px 3px 7px var(--clay-shadow-deep), inset -3px -3px 7px rgba(255,255,255,.85);
+}
+html[data-section] .hero__panel,
+html[data-section] .puff-hero {
+  border: 1px solid rgba(255,255,255,.78);
+  border-radius: 32px;
+  box-shadow: 14px 16px 34px var(--clay-shadow), -10px -10px 28px rgba(255,255,255,.75), inset 1px 1px 0 rgba(255,255,255,.65);
+}
+html[data-section] .hero__panel {
+  background:
+    radial-gradient(circle at 18% 12%, rgba(255,255,255,.2), transparent 32%),
+    linear-gradient(145deg, var(--clay-accent) 0%, var(--clay-accent-dark) 100%);
+}
+html[data-section] .puff-hero {
+  background:
+    radial-gradient(circle at 15% 8%, #fff 0%, transparent 38%),
+    linear-gradient(140deg, var(--clay-surface-hi), var(--clay-bg));
+}
+html[data-section] .category-tile,
+html[data-section] .product-card,
+html[data-section] .product-detail__media,
+html[data-section] .product-detail__info .purchase,
+html[data-section] .cart-line,
+html[data-section] .summary,
+html[data-section] .state,
+html[data-section] .payment,
+html[data-section] .checkout-area {
+  border: 1px solid rgba(255,255,255,.94);
+  border-radius: var(--clay-radius-card);
+  background: linear-gradient(145deg, var(--clay-surface-hi), var(--clay-surface));
+  box-shadow: 9px 10px 22px var(--clay-shadow-deep), -7px -7px 20px rgba(255,255,255,.84), inset 1px 1px 0 rgba(255,255,255,.95);
+}
+html[data-section] .product-card {
+  transition: transform var(--clay-motion), box-shadow var(--clay-motion), border-color var(--clay-motion);
+}
+html[data-section] .product-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--clay-edge);
+  box-shadow: 13px 15px 27px var(--clay-shadow), -7px -7px 18px rgba(255,255,255,.9), inset 1px 1px 0 #fff;
+}
+html[data-section] .product-card__media {
+  border-radius: calc(var(--clay-radius-card) - 3px) calc(var(--clay-radius-card) - 3px) 18px 18px;
+  background: linear-gradient(145deg, var(--clay-bg), var(--clay-surface-hi));
+}
+html[data-section] .category-tile__icon,
+html[data-section] .product-card__media > svg,
+html[data-section] .cart-line__thumb {
+  border: 1px solid rgba(255,255,255,.95);
+  box-shadow: 5px 6px 12px var(--clay-shadow-deep), -4px -4px 10px rgba(255,255,255,.85);
+}
+html[data-section] .btn {
+  border-radius: var(--clay-radius-control);
+  transition: transform var(--clay-motion), box-shadow var(--clay-motion), background-color var(--clay-motion), border-color var(--clay-motion);
+}
+html[data-section] .btn--primary {
+  border: 1px solid rgba(255,255,255,.25);
+  box-shadow: 6px 7px 13px var(--clay-shadow), inset 1px 1px 0 rgba(255,255,255,.24), inset -1px -1px 0 rgba(0,0,0,.07);
+}
+html[data-section] .btn--primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 8px 10px 17px var(--clay-shadow), inset 1px 1px 0 rgba(255,255,255,.28);
+}
+html[data-section] .btn--primary:active:not(:disabled) {
+  transform: translateY(1px) scale(.985);
+  box-shadow: inset 4px 4px 8px rgba(0,0,0,.12), inset -3px -3px 7px rgba(255,255,255,.16);
+}
+html[data-section] .btn--secondary,
+html[data-section] .chip {
+  border: 1px solid rgba(255,255,255,.95);
+  background: linear-gradient(145deg, var(--clay-surface-hi), var(--clay-surface));
+  box-shadow: 4px 5px 11px var(--clay-shadow-deep), -4px -4px 10px rgba(255,255,255,.8);
+}
+html[data-section] .btn--secondary:hover:not(:disabled),
+html[data-section] .chip:hover {
+  transform: translateY(-1px);
+  border-color: var(--clay-edge);
+}
+html[data-section] .chip[aria-pressed="true"],
+html[data-section] .chip[aria-current="true"] {
+  background: var(--clay-accent);
+  border-color: var(--clay-accent);
+  color: #fff;
+  box-shadow: inset 2px 2px 5px rgba(0,0,0,.1), 3px 4px 9px var(--clay-shadow-deep);
+}
+html[data-section] .input,
+html[data-section] .select,
+html[data-section] .form textarea,
+html[data-section] .search-form {
+  border: 1px solid rgba(255,255,255,.98);
+  border-radius: var(--clay-radius-control);
+  background: linear-gradient(145deg, var(--clay-bg), var(--clay-surface-hi));
+  box-shadow: inset 4px 4px 8px var(--clay-shadow-deep), inset -4px -4px 8px rgba(255,255,255,.92);
+}
+html[data-section] .input:focus,
+html[data-section] .select:focus,
+html[data-section] .form textarea:focus {
+  border-color: var(--clay-accent);
+  box-shadow: inset 3px 3px 6px var(--clay-shadow-deep), 0 0 0 3px color-mix(in srgb, var(--clay-accent) 22%, transparent);
+}
+html[data-section] .search-form .input {
+  background: transparent;
+  box-shadow: none;
+}
+html[data-section] .site-footer {
+  border-top: 1px solid rgba(255,255,255,.18);
+}
+html[data-section] .bottom-nav {
+  border: 1px solid rgba(255,255,255,.9);
+  border-bottom: 0;
+  border-radius: 22px 22px 0 0;
+  box-shadow: 0 -7px 24px var(--clay-shadow-deep), inset 0 1px 0 rgba(255,255,255,.9);
+  backdrop-filter: blur(18px) saturate(1.2);
+}
+html[data-section] .bottom-nav a[aria-current="page"] {
+  border-radius: 14px;
+}
+html[data-section] :focus-visible {
+  outline: 2px solid var(--clay-accent);
+  outline-offset: 3px;
+}
+@media (max-width: 767px) {
+  html[data-section] .product-card { border-radius: 20px; }
+  html[data-section] .puff-hero { border-radius: 25px; }
+  html[data-section] .summary,
+  html[data-section] .state { border-radius: 22px; }
+  html[data-section] .bottom-nav { margin-inline: 8px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html[data-section] .brand__mark,
+  html[data-section] .product-card,
+  html[data-section] .btn,
+  html[data-section] .location-button,
+  html[data-section] .header-actions .icon-button {
+    transition: none !important;
+    transform: none !important;
+  }
+}
