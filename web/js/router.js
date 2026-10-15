@@ -73,12 +73,16 @@ async function navigate() {
   const brandLogo = isPuffSip
     ? 'https://kommodo.ai/i/e6xpOGN3SUDwzxP7tZd7'
     : 'https://kommodo.ai/i/3SX09vfHWtlv9mt8rilD';
+  const brandTagline = isPuffSip ? 'Little treats. Big mood.' : 'Everyday shopping, with a little extra delight.'
   document.querySelectorAll('[data-brand-logo]').forEach((logo) => {
     logo.src = brandLogo;
     logo.alt = brandName;
   });
   document.querySelectorAll('[data-brand-name]').forEach((name) => {
     name.textContent = brandName;
+  });
+  document.querySelectorAll('[data-brand-tagline]').forEach((tagline) => {
+    tagline.textContent = brandTagline;
   });
 
   let match = null;
