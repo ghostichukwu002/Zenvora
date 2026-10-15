@@ -3,10 +3,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="description" content="ZENVORA: food, groceries, fashion, electronics and everyday essentials from stores near you in Nigeria." />
-    <meta name="theme-color" content="#241044" />
-    <title>ZENVORA — Everything you need, closer than ever</title>
-    <link rel="icon" href="assets/zenvora-mark.svg" type="image/svg+xml" />
+    <meta name="description" content="Shop n Delight brings everyday shopping together, with a dedicated Puff & Sip collection." />
+    <meta name="theme-color" content="#12243a" />
+    <title>Shop n Delight — Everyday shopping, made easier</title>
+    <link rel="icon" href="assets/shop-n-delight-mark.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="css/tokens.css" />
     <link rel="stylesheet" href="css/app.css" />
     <link rel="stylesheet" href="css/components.css" />
@@ -17,16 +17,17 @@
     <link rel="stylesheet" href="css/storefront.css" />
     <link rel="stylesheet" href="css/signature.css" />
     <link rel="stylesheet" href="css/account-home.css" />
+    <link rel="stylesheet" href="css/puff-sip.css" />
     <script type="module" src="js/app.js"></script>
   </head>
   <body>
-    <div class="boot-screen" id="boot-screen" role="status" aria-label="Loading ZENVORA">
+    <div class="boot-screen" id="boot-screen" role="status" aria-label="Loading Shop n Delight">
       <div class="boot-screen__content">
-        <div class="boot-screen__mark-wrap"><img class="boot-screen__mark" src="assets/zenvora-mark.svg" alt="" width="56" height="56" /></div>
-        <p class="boot-screen__wordmark">ZENVORA</p>
-        <p class="boot-screen__tagline">Good things are on their way.</p>
+        <div class="boot-screen__mark-wrap"><img class="boot-screen__mark" src="assets/shop-n-delight-mark.svg" alt="" width="56" height="56" /></div>
+        <p class="boot-screen__wordmark">SHOP N DELIGHT</p>
+        <p class="boot-screen__tagline">Good finds, close at hand.</p>
         <div class="boot-screen__loader" aria-hidden="true"><span></span></div>
-        <p class="boot-screen__hint">Made for your everyday</p>
+        <p class="boot-screen__hint">A little more delight in every order</p>
       </div>
     </div>
     <!-- Icon sprite. Referenced with <use href="#i-…">. Styled through the .icon class. -->
@@ -62,17 +63,15 @@
 
     <header class="site-header">
       <div class="container site-header__inner">
-        <a class="brand" href="#/" aria-label="ZENVORA home">
-          <img class="brand__mark" src="assets/zenvora-mark.svg" alt="" width="32" height="32" />
-          <span class="wordmark">ZENVORA</span>
+        <a class="brand" href="#/" aria-label="Shop n Delight home">
+          <img class="brand__mark" src="assets/shop-n-delight-mark.svg" alt="" width="32" height="32" />
+          <span class="wordmark">Shop n Delight</span>
         </a>
 
         <nav class="site-nav" aria-label="Main">
           <a href="#/" data-nav="home">Home</a>
           <a href="#/shop" data-nav="shop">Shop</a>
-          <a href="#/shop?category=food" data-nav="shop">Food</a>
-          <a href="#/shop?category=groceries" data-nav="shop">Groceries</a>
-          <a href="#/shop?category=electronics" data-nav="shop">Electronics</a>
+          <a href="#/puff-sip" data-nav="puff-sip">Puff &amp; Sip</a>
         </nav>
 
         <div class="header-actions">
@@ -102,8 +101,8 @@
       <div class="container">
         <div class="site-footer__grid">
           <div>
-            <span class="wordmark">ZENVORA</span>
-            <p>Shopping and delivery across Nigeria, one cart at a time.</p>
+            <span class="wordmark">Shop n Delight</span>
+            <p>Everyday shopping, with a little extra delight.</p>
           </div>
           <div>
             <h2>Shop</h2>
@@ -111,6 +110,7 @@
               <li><a href="#/shop?category=food">Food</a></li>
               <li><a href="#/shop?category=groceries">Groceries</a></li>
               <li><a href="#/shop?category=electronics">Electronics</a></li>
+              <li><a href="#/puff-sip">Puff &amp; Sip</a></li>
             </ul>
           </div>
           <div>
