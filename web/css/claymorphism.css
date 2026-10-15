@@ -189,3 +189,75 @@ html[data-section] :focus-visible {
     transform: none !important;
   }
 }
+
+/* Brand blocks. Puff & Sip is blue and Shop n Delight is orange, with white text on the brand surfaces.
+   Gradients end on the deeper shade so white body text keeps at least 4.5:1 contrast. */
+html[data-section="puff-sip"] .site-header {
+  background: linear-gradient(135deg, #2f6fd6 0%, #1f4f9e 100%);
+  border-bottom-color: rgba(255, 255, 255, .18);
+  box-shadow: 0 8px 28px rgba(31, 79, 158, .24);
+}
+html[data-section="puff-sip"] .brand,
+html[data-section="puff-sip"] .site-nav a,
+html[data-section="puff-sip"] .site-nav a:hover,
+html[data-section="puff-sip"] .site-header .icon-button { color: #fff; }
+html[data-section="puff-sip"] .site-nav a[aria-current="page"] { color: #fff; border-bottom-color: #fff; }
+html[data-section="puff-sip"] .site-header .icon-button:hover { color: #1f4f9e; background: rgba(255, 255, 255, .22); }
+html[data-section="puff-sip"] .location-button { color: #1f4f9e; background: #f2f8ff; border-color: rgba(31, 79, 158, .15); }
+html[data-section="puff-sip"] .site-footer {
+  background: linear-gradient(135deg, #2f6fd6 0%, #1f4f9e 100%);
+  color: #fff;
+}
+html[data-section="puff-sip"] .site-footer h2,
+html[data-section="puff-sip"] .site-footer .wordmark { color: #fff; }
+html[data-section="puff-sip"] .site-footer a:hover { color: #d6e8ff; }
+
+html[data-section="puff-sip"] .puff-topline { background: #1f4f9e; }
+html[data-section="puff-sip"] .puff-hero {
+  background:
+    radial-gradient(circle at 12% 0%, rgba(255, 255, 255, .18), transparent 42%),
+    linear-gradient(132deg, #2f6fd6 0%, #2457a6 52%, #1f4f9e 100%);
+  border-color: rgba(255, 255, 255, .28);
+  box-shadow: 0 24px 68px rgba(31, 79, 158, .3), inset 0 1px 0 rgba(255, 255, 255, .28);
+  color: #fff;
+}
+html[data-section="puff-sip"] .puff-hero .puff-eyebrow,
+html[data-section="puff-sip"] .puff-hero .puff-section__kicker { color: #fff; }
+html[data-section="puff-sip"] .puff-hero .puff-eyebrow__dot { background: #fff; box-shadow: 0 0 0 5px rgba(255, 255, 255, .2); }
+html[data-section="puff-sip"] .puff-hero h1 { color: #fff; }
+html[data-section="puff-sip"] .puff-hero h1 span { color: #d6e8ff; }
+html[data-section="puff-sip"] .puff-hero__lede,
+html[data-section="puff-sip"] .puff-hero__note { color: #e8f1ff; }
+html[data-section="puff-sip"] .puff-hero__note-mark { color: #1f4f9e; background: #fff; }
+html[data-section="puff-sip"] .puff-hero .btn--primary { color: #1f4f9e; background: #fff; box-shadow: 0 9px 22px rgba(12, 35, 76, .2); }
+html[data-section="puff-sip"] .puff-hero .btn--primary:hover:not(:disabled) { background: #f2f8ff; }
+html[data-section="puff-sip"] .puff-hero .btn--secondary { color: #fff; background: rgba(255, 255, 255, .14); border-color: rgba(255, 255, 255, .42); }
+html[data-section="puff-sip"] .puff-hero .btn--secondary:hover:not(:disabled) { background: rgba(255, 255, 255, .24); border-color: #fff; }
+
+html[data-section="puff-sip"] .puff-closing {
+  background: linear-gradient(135deg, #2f6fd6 0%, #1f4f9e 100%);
+  color: #fff;
+}
+html[data-section="puff-sip"] .puff-closing__asterisk { color: #1f4f9e; background: #fff; }
+
+html[data-section="shop-n-delight"] .site-footer {
+  background: linear-gradient(135deg, #d9570d 0%, #a83d06 100%);
+  color: #fff;
+}
+
+/* Brand logos sit on a white chip so they read on the coloured headers and footers. */
+html[data-section] .brand__mark,
+html[data-section] .footer-brand__logo,
+html[data-section] .boot-screen__mark {
+  background: #fff;
+  border-radius: 12px;
+  object-fit: contain;
+  padding: 3px;
+  box-sizing: border-box;
+}
+
+/* Header icon buttons sit on white chips, so their icons take the brand's deep shade. */
+html[data-section="puff-sip"] .site-header .icon-button,
+html[data-section="puff-sip"] .site-header .icon-button:hover { color: #1f4f9e; }
+html[data-section="shop-n-delight"] .site-header .icon-button,
+html[data-section="shop-n-delight"] .site-header .icon-button:hover { color: #7d2e08; }
