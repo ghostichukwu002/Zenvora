@@ -1,27 +1,24 @@
-/* ZENVORA design tokens.
-   Brand values come from the brief. Two refinements for accessibility:
-   - --emerald-700 is the button fill. White text on #059669 is only ~3.8:1,
-     which fails WCAG AA for normal text. #047857 gives ~5.5:1.
-   - Text colours were checked against cream and white backgrounds (AA, 4.5:1+). */
+/* Shop n Delight shared design tokens.
+   Orange is the primary brand colour; Puff & Sip overrides these with its own blue palette. */
 
 :root {
-  /* Brand — ZENVORA signature violet palette */
-  --emerald-600: #8b5cf6; /* vivid violet accent */
-  --emerald-700: #6d28d9; /* accessible primary buttons, links and active states */
-  --emerald-800: #5b21b6; /* hover and pressed states */
-  --forest-900: #241044; /* deep aubergine for premium contrast */
-  --forest-800: #38205e;
-  --mint-100: #ede9fe; /* lavender accent surfaces */
-  --mint-50: #f5f3ff;
+  /* Brand — Shop n Delight orange palette */
+  --emerald-600: #f47721; /* primary orange accent */
+  --emerald-700: #c94f0b; /* accessible orange buttons, links and active states */
+  --emerald-800: #a83d06; /* hover and pressed states */
+  --forest-900: #2a1c16; /* warm dark contrast */
+  --forest-800: #493025;
+  --mint-100: #ffeadb; /* soft orange accent surface */
+  --mint-50: #fff6ef;
 
   /* Neutrals */
-  --cream-50: #fbfaff; /* cool porcelain page background */
+  --cream-50: #fffaf5; /* warm porcelain page background */
   --white: #ffffff;
-  --ink-900: #211a2e; /* primary text */
-  --ink-600: #6f687b; /* secondary text */
-  --ink-500: #625a70; /* tertiary text, still AA on cream */
-  --border: #ece7f4; /* subtle lilac border */
-  --border-strong: #d5cce4;
+  --ink-900: #251d18; /* primary text */
+  --ink-600: #6d625a; /* secondary text */
+  --ink-500: #62564e; /* tertiary text, still AA on cream */
+  --border: #f0e4da; /* subtle warm border */
+  --border-strong: #ddc9b9;
 
   /* Status */
   --danger-700: #b42318;
@@ -52,8 +49,8 @@
   --radius-pill: 999px;
 
   /* Elevation: restrained, per the brief */
-  --shadow-sm: 0 1px 2px rgba(55, 28, 91, 0.07);
-  --shadow-md: 0 4px 16px rgba(55, 28, 91, 0.11);
+  --shadow-sm: 0 1px 2px rgba(92, 49, 20, 0.07);
+  --shadow-md: 0 4px 16px rgba(92, 49, 20, 0.11);
 
   /* Motion: ordinary interface transitions sit in the 180–320ms range */
   --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
@@ -64,5 +61,5 @@
   /* Layout */
   --content-max: 1200px;
   --header-h: 64px;
-  --focus-ring: 0 0 0 3px rgba(109, 40, 217, 0.35);
+  --focus-ring: 0 0 0 3px rgba(201, 79, 11, 0.35);
 }
