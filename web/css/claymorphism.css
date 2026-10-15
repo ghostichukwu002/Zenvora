@@ -6,23 +6,23 @@
   --clay-motion: 220ms cubic-bezier(.2,.75,.25,1);
 }
 html[data-section="shop-n-delight"] {
-  --clay-bg: #fff0e3;
-  --clay-surface: #fff8f1;
+  --clay-bg: #fff6ee;
+  --clay-surface: #fffbf7;
   --clay-surface-hi: #ffffff;
-  --clay-edge: #f6d6bf;
-  --clay-shadow: rgba(171, 78, 24, .13);
+  --clay-edge: #fbdcc6;
+  --clay-shadow: rgba(244, 119, 33, .16);
   --clay-shadow-deep: rgba(171, 78, 24, .09);
   --clay-accent: #f47721;
   --clay-accent-dark: #bd4a0b;
 }
 html[data-section="puff-sip"] {
-  --clay-bg: #edf4ff;
-  --clay-surface: #f7faff;
+  --clay-bg: #f2f8ff;
+  --clay-surface: #fbfdff;
   --clay-surface-hi: #ffffff;
-  --clay-edge: #d7e6fc;
-  --clay-shadow: rgba(42, 91, 158, .13);
-  --clay-shadow-deep: rgba(42, 91, 158, .08);
-  --clay-accent: #3978d4;
+  --clay-edge: #cfe2fc;
+  --clay-shadow: rgba(42, 111, 224, .14);
+  --clay-shadow-deep: rgba(42, 111, 224, .08);
+  --clay-accent: #2a6fe0;
   --clay-accent-dark: #2457a6;
 }
 html[data-section] body {
