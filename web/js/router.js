@@ -118,6 +118,11 @@ function showBrandEntry({ brandName, brandLogo, section, tagline }) {
   window.setTimeout(() => overlay.remove(), 1040);
 }
 
+async function navigate() {
+  const id = ++navigationId;
+  const { path, query } = currentLocation();
+  updateBrand(path, query);
+
   let match = null;
   let params = {};
   for (const r of routes) {
