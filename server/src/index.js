@@ -53,6 +53,8 @@ const server = createServer(
     allowedOrigins: (process.env.ZENVORA_ALLOWED_ORIGINS || '').split(',').map((o) => o.trim()).filter(Boolean),
     // Comma-separated account emails that are made administrators. Set on the host, never in the repo.
     adminEmails: (process.env.ZENVORA_ADMIN_EMAILS || '').split(',').map((e) => e.trim().toLowerCase()).filter(Boolean),
+    // Comma-separated accounts granted catalogue-only moderator access.
+    moderatorEmails: (process.env.ZENVORA_MODERATOR_EMAILS || '').split(',').map((e) => e.trim().toLowerCase()).filter(Boolean),
   }),
 );
 
