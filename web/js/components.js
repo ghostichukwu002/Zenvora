@@ -102,7 +102,7 @@ export function productCard(product, { reveal = true } = {}) {
     'div',
     { class: 'product-card__media' },
     imageUrl
-      ? el('img', { src: imageUrl, alt: product.name, loading: 'lazy', decoding: 'async', onerror: (event) => { event.currentTarget.replaceWith(icon(categoryGlyph(product.category.id), 'icon')); } })
+      ? el('img', { src: imageUrl, alt: (Array.isArray(product.images) && product.images[0] && typeof product.images[0] === 'object' && product.images[0].alt) || product.name, loading: 'lazy', decoding: 'async', onerror: (event) => { event.currentTarget.replaceWith(icon(categoryGlyph(product.category.id), 'icon')); } })
       : icon(categoryGlyph(product.category.id), 'icon'),
     onOffer ? el('span', { class: 'product-card__badge', text: 'Offer' }) : null,
   );
