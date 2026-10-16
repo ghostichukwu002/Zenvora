@@ -68,7 +68,7 @@ let previousStore = null;
 
 function updateBrand(path, query) {
   const next = query.get('next') || '';
-  const isPuffSip = isPuffPath(path) || (path.startsWith('/login') || path.startsWith('/register')) && next.includes('/puff-sip');
+  const isPuffSip = isPuffPath(path) || query.get('section') === 'puff' || next.includes('/puff-sip') || next.includes('section=puff');
   const section = isPuffSip ? 'puff-sip' : 'shop-n-delight';
   const brandName = isPuffSip ? 'Puff & Sip' : 'Shop n Delight';
   const brandLogo = isPuffSip ? 'assets/puff-sip-logo.jpg' : 'assets/shop-n-delight-logo.png';
