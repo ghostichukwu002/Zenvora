@@ -31,6 +31,17 @@ const SCHEMA = `
     used_at    TEXT
   );
 
+  CREATE TABLE IF NOT EXISTS product_overrides (
+    product_id TEXT PRIMARY KEY,
+    name TEXT NOT NULL,
+    description TEXT NOT NULL,
+    stock INTEGER,
+    price_kobo INTEGER NOT NULL,
+    promo_price_kobo INTEGER,
+    updated_by TEXT NOT NULL,
+    updated_at TEXT NOT NULL
+  );
+
   CREATE TABLE IF NOT EXISTS orders (
     id                 TEXT PRIMARY KEY,
     user_id            TEXT NOT NULL REFERENCES users(id),
