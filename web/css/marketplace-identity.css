@@ -369,3 +369,103 @@ html[data-section] body:has(.cart) .btn--primary {
   background: var(--clay-primary);
   border-color: var(--clay-primary);
 }
+
+
+/* Account area: match the white-clay admin workspace with high-contrast ink. */
+html[data-section] body:has(.account-page) {
+  color: #171717;
+  background: #f7f8fa;
+  background-attachment: initial;
+}
+html[data-section] body:has(.account-page) #app,
+html[data-section] body:has(.account-page) #app h1,
+html[data-section] body:has(.account-page) #app h2,
+html[data-section] body:has(.account-page) #app h3,
+html[data-section] body:has(.account-page) #app p,
+html[data-section] body:has(.account-page) #app strong,
+html[data-section] body:has(.account-page) #app label,
+html[data-section] body:has(.account-page) #app .muted,
+html[data-section] body:has(.account-page) #app .account-email,
+html[data-section] body:has(.account-page) #app .account-kicker,
+html[data-section] body:has(.account-page) #app .account-link__copy small,
+html[data-section] body:has(.account-page) #app .account-link__arrow,
+html[data-section] body:has(.account-page) #app .account-panel__link { color: #171717; }
+html[data-section] body:has(.account-page) .site-header,
+html[data-section] body:has(.account-page) .site-footer,
+html[data-section] body:has(.account-page) .bottom-nav {
+  color: #171717;
+  background: #fff;
+  border-color: #e7e7e7;
+  box-shadow: 5px 5px 12px rgba(20,20,20,.045), -5px -5px 12px rgba(255,255,255,.95);
+}
+html[data-section] body:has(.account-page) .site-header .brand,
+html[data-section] body:has(.account-page) .site-nav a,
+html[data-section] body:has(.account-page) .site-footer *,
+html[data-section] body:has(.account-page) .bottom-nav a,
+html[data-section] body:has(.account-page) .bottom-nav a[aria-current="page"] { color: #171717; }
+html[data-section] body:has(.account-page) .account-hero,
+html[data-section] body:has(.account-page) .account-link,
+html[data-section] body:has(.account-page) .account-panel,
+html[data-section] body:has(.account-page) .account-panel .state,
+html[data-section] body:has(.account-page) .account-panel .order-row {
+  color: #171717;
+  background: #fff;
+  border: 1px solid #e9e9e9;
+  box-shadow: 7px 7px 16px rgba(20,20,20,.055), -6px -6px 15px rgba(255,255,255,.98);
+}
+html[data-section] body:has(.account-page) .account-hero {
+  background: #fff;
+}
+html[data-section] body:has(.account-page) .account-avatar {
+  color: #171717;
+  background: #f4f4f4;
+  border: 1px solid #e5e5e5;
+  box-shadow: 4px 4px 9px rgba(0,0,0,.07), -4px -4px 9px #fff;
+}
+html[data-section] body:has(.account-page) .account-link:hover {
+  background: #fafafa;
+  border-color: #d2d2d2;
+  box-shadow: 9px 9px 18px rgba(20,20,20,.075), -6px -6px 15px #fff;
+}
+html[data-section] body:has(.account-page) .account-link__icon {
+  color: #171717;
+  background: #f2f2f2;
+  box-shadow: inset 2px 2px 4px rgba(0,0,0,.035), inset -2px -2px 4px #fff;
+}
+html[data-section] body:has(.account-page) .account-link--admin {
+  background: #fff;
+  border-color: #dedede;
+}
+html[data-section] body:has(.account-page) .account-panel .state {
+  background: #fff;
+}
+html[data-section] body:has(.account-page) .account-panel input,
+html[data-section] body:has(.account-page) .account-panel select,
+html[data-section] body:has(.account-page) .account-panel textarea,
+html[data-section] body:has(.account-page) .account-panel .input {
+  color: #171717;
+  background: #fff;
+  border-color: #dcdcdc;
+  box-shadow: inset 2px 2px 5px rgba(0,0,0,.035), inset -2px -2px 5px #fff;
+}
+html[data-section] body:has(.account-page) .account-panel .btn--primary {
+  color: #fff;
+  background: #171717;
+  border-color: #171717;
+  box-shadow: 4px 4px 9px rgba(0,0,0,.12), -3px -3px 7px #fff;
+}
+html[data-section] body:has(.account-page) .account-panel .btn--secondary,
+html[data-section] body:has(.account-page) .account-hero__actions .btn {
+  color: #171717;
+  background: #fff;
+  border: 1px solid #dedede;
+  box-shadow: 4px 4px 9px rgba(0,0,0,.06), -3px -3px 7px #fff;
+}
+html[data-section] body:has(.account-page) .account-page :focus-visible {
+  outline: 3px solid rgba(244,119,33,.55);
+  outline-offset: 3px;
+}
+@media (prefers-reduced-motion: reduce) {
+  html[data-section] body:has(.account-page) .account-link { transition: none; }
+  html[data-section] body:has(.account-page) .account-link:hover { transform: none; }
+}
