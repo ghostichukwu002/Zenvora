@@ -105,8 +105,9 @@ export function createRateLimiter({ windowMs, max, now = () => Date.now() }) {
   };
 }
 
-export function createAuth(db, { now = () => new Date(), sendResetEmail, adminEmails = [] } = {}) {
-  const admins = new Set(adminEmails);
+export function createAuth(db, { now = () => new Date(), sendResetEmail, adminEmails = [], moderatorEmails = [] } = {}) {
+  const admins = new Set(adminEmails.map((email) => email.trim().toLowerCase()));
+  const moderators = new Set(moderatorEmails.map((email) => email.trim().toLowerCase()));
   const iso = () => now().toISOString();
 
   function createSession(userId) {
