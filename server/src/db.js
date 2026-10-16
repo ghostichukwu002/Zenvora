@@ -42,6 +42,23 @@ const SCHEMA = `
     updated_at TEXT NOT NULL
   );
 
+  CREATE TABLE IF NOT EXISTS moderator_products (
+    id TEXT PRIMARY KEY,
+    merchant_id TEXT NOT NULL,
+    category TEXT NOT NULL,
+    name TEXT NOT NULL,
+    description TEXT NOT NULL,
+    brand TEXT NOT NULL DEFAULT '',
+    price_kobo INTEGER NOT NULL,
+    promo_price_kobo INTEGER,
+    stock INTEGER,
+    specifications_json TEXT NOT NULL DEFAULT '{}',
+    images_json TEXT NOT NULL DEFAULT '[]',
+    variants_json TEXT NOT NULL DEFAULT '[]',
+    added_at TEXT NOT NULL,
+    created_by TEXT NOT NULL
+  );
+
   CREATE TABLE IF NOT EXISTS orders (
     id                 TEXT PRIMARY KEY,
     user_id            TEXT NOT NULL REFERENCES users(id),
