@@ -307,3 +307,65 @@ html[data-section] body:has(.checkout) .btn--primary {
   background: var(--clay-primary);
   border-color: var(--clay-primary);
 }
+
+
+/* The cart uses the same clean white surface as checkout. */
+html[data-section] body:has(.cart) {
+  color: #202534;
+  background: #fff;
+  background-attachment: initial;
+}
+html[data-section] body:has(.cart) #app,
+html[data-section] body:has(.cart) #app h1,
+html[data-section] body:has(.cart) #app h2,
+html[data-section] body:has(.cart) #app h3,
+html[data-section] body:has(.cart) #app p,
+html[data-section] body:has(.cart) #app label,
+html[data-section] body:has(.cart) #app .muted,
+html[data-section] body:has(.cart) #app .breadcrumb,
+html[data-section] body:has(.cart) #app .breadcrumb a {
+  color: #202534;
+}
+html[data-section] body:has(.cart) .site-header,
+html[data-section] body:has(.cart) .site-footer,
+html[data-section] body:has(.cart) .bottom-nav {
+  color: #202534;
+  background: #fff;
+  border-color: #ececf1;
+  box-shadow: 0 3px 16px rgba(25,30,50,.04);
+}
+html[data-section] body:has(.cart) .site-header .brand,
+html[data-section] body:has(.cart) .site-header .site-nav a,
+html[data-section] body:has(.cart) .site-footer h2,
+html[data-section] body:has(.cart) .site-footer p,
+html[data-section] body:has(.cart) .site-footer a {
+  color: #202534;
+}
+html[data-section] body:has(.cart) .cart-line,
+html[data-section] body:has(.cart) .summary,
+html[data-section] body:has(.cart) .state {
+  color: #202534;
+  background: #fff;
+  border: 1px solid #e8eaf0;
+  border-radius: 18px;
+  box-shadow: 0 10px 28px rgba(25,30,50,.06);
+}
+html[data-section] body:has(.cart) .cart-line__name,
+html[data-section] body:has(.cart) .cart-line__total,
+html[data-section] body:has(.cart) .summary__row,
+html[data-section] body:has(.cart) .summary__note {
+  color: #202534;
+}
+html[data-section] body:has(.cart) .input,
+html[data-section] body:has(.cart) .select,
+html[data-section] body:has(.cart) .form textarea {
+  color: #202534;
+  background: #fff;
+  border-color: #d9dde6;
+  box-shadow: none;
+}
+html[data-section] body:has(.cart) .btn--primary {
+  color: #fff;
+  background: var(--clay-primary);
+  border-color: var(--clay-primary);
+}
