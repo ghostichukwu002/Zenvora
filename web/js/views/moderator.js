@@ -1,6 +1,5 @@
 import * as api from '../api.js';
 import { el, linkButton } from '../dom.js';
-import { formatNaira } from '../format.js';
 import { ensureUser } from '../state.js';
 import { stateBox } from '../ui.js';
 
