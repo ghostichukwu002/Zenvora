@@ -1,3 +1,4 @@
+import { randomUUID } from 'node:crypto';
 import { AUTH_COOKIE, createAuth, createRateLimiter, publicUser } from './auth.js';
 import {
   addItem,
@@ -302,6 +303,71 @@ export function createApp({
   router.patch('/api/auth/profile', (ctx) => {
     const user = requireUser(ctx);
     return { status: 200, body: { user: auth.updateProfile(user.id, ctx.body) } };
+  });
+
+  // Customer tools are stored server-side and scoped to the authenticated account.
+  router.get('/api/account/wishlist', (ctx) => {
+    const user = requireUser(ctx);
+    const rows = db.prepare('SELECT product_id, created_at FROM wishlists WHERE user_id = ? ORDER BY created_at DESC').all(user.id);
+    const items = rows.map((row) => catalogue.products.find((p) => p.id === row.product_id))
+      .filter(Boolean).map((product) => serializeProduct(product, catalogue));
+    return { status: 200, body: { items } };
+  });
+
+  router.post('/api/account/wishlist/:productId', (ctx) => {
+    const user = requireUser(ctx);
+    const product = catalogue.products.find((p) => p.id === ctx.params.productId);
+    if (!product) throw new CartError('product_not_found', 'That product is no longer available.', 404);
+    db.prepare('INSERT OR IGNORE INTO wishlists (user_id, product_id, created_at) VALUES (?, ?, ?)')
+      .run(user.id, product.id, new Date().toISOString());
+    return { status: 201, body: { ok: true, productId: product.id } };
+  });
+
+  router.delete('/api/account/wishlist/:productId', (ctx) => {
+    const user = requireUser(ctx);
+    db.prepare('DELETE FROM wishlists WHERE user_id = ? AND product_id = ?').run(user.id, ctx.params.productId);
+    return { status: 200, body: { ok: true } };
+  });
+
+  router.get('/api/account/addresses', (ctx) => {
+    const user = requireUser(ctx);
+    const items = db.prepare('SELECT id, label, recipient_name AS recipientName, phone, address, area, city, state FROM saved_addresses WHERE user_id = ? ORDER BY created_at DESC')
+      .all(user.id);
+    return { status: 200, body: { items } };
+  });
+
+  router.post('/api/account/addresses', (ctx) => {
+    const user = requireUser(ctx);
+    const body = ctx.body ?? {};
+    const clean = (value, min, max, field) => {
+      const result = typeof value === 'string' ? value.trim().replace(/\\s+/g, ' ') : '';
+      if (result.length < min || result.length > max) {
+        throw new HttpError(422, 'address_invalid', `Check the ${field} and try again.`);
+      }
+      return result;
+    };
+    const current = db.prepare('SELECT COUNT(*) AS count FROM saved_addresses WHERE user_id = ?').get(user.id).count;
+    if (current >= 10) throw new HttpError(409, 'address_limit', 'You can save up to 10 delivery addresses.');
+    const row = {
+      id: randomUUID(),
+      label: clean(body.label || 'Home', 1, 40, 'label'),
+      recipientName: clean(body.recipientName, 2, 100, 'recipient name'),
+      phone: clean(body.phone, 7, 24, 'phone number'),
+      address: clean(body.address, 5, 300, 'street address'),
+      area: clean(body.area, 2, 100, 'delivery area'),
+      city: clean(body.city, 2, 100, 'city'),
+      state: clean(body.state, 2, 100, 'state'),
+      createdAt: new Date().toISOString(),
+    };
+    db.prepare('INSERT INTO saved_addresses (id, user_id, label, recipient_name, phone, address, area, city, state, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')
+      .run(row.id, user.id, row.label, row.recipientName, row.phone, row.address, row.area, row.city, row.state, row.createdAt);
+    return { status: 201, body: { address: { id: row.id, label: row.label, recipientName: row.recipientName, phone: row.phone, address: row.address, area: row.area, city: row.city, state: row.state } } };
+  });
+
+  router.delete('/api/account/addresses/:id', (ctx) => {
+    const user = requireUser(ctx);
+    db.prepare('DELETE FROM saved_addresses WHERE id = ? AND user_id = ?').run(ctx.params.id, user.id);
+    return { status: 200, body: { ok: true } };
   });
 
   // Same response whether or not the email has an account, so it cannot be used to find accounts.
