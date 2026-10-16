@@ -61,7 +61,7 @@ route('/register', { nav: 'account', title: 'Create account', render: (ctx) => r
 route('/forgot-password', { nav: 'account', title: 'Reset password', render: () => renderForgot() });
 route('/reset-password', { nav: 'account', title: 'New password', render: (ctx) => renderReset(ctx) });
 route('/account', { nav: 'account', title: 'Your account', render: () => renderAccount() });
-route('/checkout', { nav: 'cart', title: 'Checkout', render: () => renderCheckout({ section: 'shop' }) });
+route('/checkout', { nav: 'cart', title: 'Checkout', render: ({ query }) => renderCheckout({ section: query.get('section') === 'puff' ? 'puff' : 'shop' }) });
 route('/puff-sip/shop', { nav: 'puff-sip', title: 'Puff & Sip shop', render: ({ query }) => renderShop({ query, section: 'puff' }) });
 route('/puff-sip/product/:id', { nav: 'puff-sip', title: 'Product', render: (ctx) => renderProduct(ctx) });
 route('/puff-sip/checkout', { nav: 'cart', title: 'Checkout', render: () => renderCheckout({ section: 'puff' }) });
