@@ -153,7 +153,7 @@ function cartView(cart) {
   if (!cart.lines.length) {
     return el(
       'div',
-      { class: 'container section--tight' },
+      { class: 'container section--tight cart-page' },
       el('h1', { tabindex: '-1', text: 'Your cart' }),
       stateBox({
         title: 'Your cart is empty',
@@ -173,7 +173,7 @@ function cartView(cart) {
 
   return el(
     'div',
-    { class: 'container' },
+    { class: 'container cart-page' },
     el(
       'nav',
       { class: 'breadcrumb', 'aria-label': 'Breadcrumb' },
