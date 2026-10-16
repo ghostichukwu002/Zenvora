@@ -31,16 +31,29 @@ export function renderAreaLabel() {
 export async function openAreaDialog() {
   const dialog = document.getElementById('area-dialog');
   const select = document.getElementById('area-select');
+  const stateSelect = document.getElementById('area-state');
+  const customInput = document.getElementById('area-custom');
   select.replaceChildren(el('option', { value: '', text: 'Loading areas…' }));
   if (typeof dialog.showModal === 'function') dialog.showModal();
   else dialog.setAttribute('open', '');
 
   try {
     const items = await loadAreas();
-    select.replaceChildren(
-      el('option', { value: '', text: 'Select an area', disabled: true }),
-      ...items.map((a) => el('option', { value: a.name, text: `${a.name}, ${a.state}` })),
-    );
+    const renderAreaOptions = () => {
+      const state = stateSelect.value;
+      const filtered = state ? items.filter((a) => a.state === state) : items;
+      select.replaceChildren(
+        el('option', { value: '', text: 'Choose a listed delivery area' }),
+        ...filtered.map((a) => el('option', { value: a.name, text: `${a.name}, ${a.state}` })),
+      );
+      if (filtered.some((a) => a.name === getArea())) select.value = getArea();
+    };
+    renderAreaOptions();
+    stateSelect.onchange = renderAreaOptions;
+    customInput.value = '';
+    const current = items.find((a) => a.name === getArea());
+    if (current) stateSelect.value = current.state;
+    renderAreaOptions();
     select.value = getArea() ?? '';
     select.focus();
   } catch (err) {
@@ -58,6 +71,7 @@ function closeAreaDialog() {
 export function initAreaDialog(onChanged) {
   const form = document.getElementById('area-form');
   const select = document.getElementById('area-select');
+  const customInput = document.getElementById('area-custom');
   const location = document.getElementById('location-button');
 
   location.addEventListener('click', openAreaDialog);
@@ -65,11 +79,16 @@ export function initAreaDialog(onChanged) {
 
   form.addEventListener('submit', (event) => {
     event.preventDefault();
-    const chosen = select.value;
-    if (!chosen) return;
+    const typedLocation = customInput.value.trim();
+    const chosen = typedLocation || select.value;
+    if (!chosen) {
+      toast('Choose a listed delivery area or type your location.', { tone: 'error' });
+      (customInput.value ? select : customInput).focus();
+      return;
+    }
     setArea(chosen);
     closeAreaDialog();
-    toast(`Showing stores that deliver to ${chosen}`);
+    toast(`Showing stores for ${chosen}`);
   });
 
   // Keep the header label in step with the stored area, and refresh the page when it changes.
