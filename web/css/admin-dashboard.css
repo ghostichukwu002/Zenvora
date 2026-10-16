@@ -163,3 +163,98 @@ html[data-section] body:has(.admin) .admin-head .btn:hover { background: rgba(25
   .dash-status { grid-template-columns: minmax(0, 1fr) auto; }
   .dash-status .dash-bar { grid-column: 1 / -1; grid-row: 2; }
 }
+
+
+/* White clay admin workspace: tactile, calm, and high-contrast. */
+html[data-section] body:has(.admin) {
+  background: #f7f8fa;
+  color: #171717;
+}
+html[data-section] body:has(.admin) .site-header,
+html[data-section] body:has(.admin) .site-footer,
+html[data-section] body:has(.admin) .bottom-nav {
+  background: #fff;
+  color: #171717;
+  border-color: #e7e7e7;
+  box-shadow: 5px 5px 12px rgba(20, 20, 20, .045), -5px -5px 12px rgba(255, 255, 255, .95);
+}
+html[data-section] body:has(.admin) .site-header .brand,
+html[data-section] body:has(.admin) .site-nav a,
+html[data-section] body:has(.admin) .site-footer *,
+html[data-section] body:has(.admin) .admin h1,
+html[data-section] body:has(.admin) .admin h2,
+html[data-section] body:has(.admin) .admin h3,
+html[data-section] body:has(.admin) .admin p,
+html[data-section] body:has(.admin) .admin label,
+html[data-section] body:has(.admin) .admin strong,
+html[data-section] body:has(.admin) .admin span,
+html[data-section] body:has(.admin) .admin td,
+html[data-section] body:has(.admin) .admin th { color: #171717; }
+html[data-section] body:has(.admin) .site-footer .muted { color: #666 !important; }
+
+.admin { color: #171717; }
+.admin-head {
+  background: #fff;
+  color: #171717;
+  border: 1px solid #ededed;
+  box-shadow: 8px 8px 18px rgba(20, 20, 20, .07), -7px -7px 18px rgba(255, 255, 255, .98);
+}
+.admin-head h1,
+html[data-section] body:has(.admin) .admin-head h1,
+.admin-status { color: #171717; }
+html[data-section] body:has(.admin) .admin-head .trust-badge {
+  background: #f4f4f4;
+  color: #171717;
+  border-color: #e3e3e3;
+}
+html[data-section] body:has(.admin) .admin-head .btn {
+  background: #fff;
+  color: #171717;
+  border: 1px solid #dedede;
+  box-shadow: 3px 3px 7px rgba(0,0,0,.07), -3px -3px 7px #fff;
+}
+html[data-section] body:has(.admin) .admin-head .btn:hover { background: #f5f5f5; }
+
+.admin-tabs,
+.dash-kpi,
+.dash-card {
+  background: #fff;
+  border: 1px solid #e9e9e9;
+  box-shadow: 5px 5px 12px rgba(20,20,20,.045), -5px -5px 12px rgba(255,255,255,.95);
+}
+.admin-tabs [role="tab"] { color: #333; }
+.admin-tabs [role="tab"][aria-selected="true"] {
+  background: #171717;
+  color: #fff;
+  box-shadow: 3px 3px 7px rgba(0,0,0,.12), -2px -2px 5px rgba(255,255,255,.08);
+}
+.admin-tabs [role="tab"]:hover:not([aria-selected="true"]) { background: #f2f2f2; }
+.dash-kpi { border-top: 3px solid var(--kpi, #f47721); }
+.dash-kpi__label,
+.dash-kpi__hint { color: #666; }
+.dash-kpi__value,
+.dash-card__head h2 { color: #171717; }
+.dash-card--attention { background: #fff; border-color: #e9e9e9; }
+.dash-chart__bar { fill: #d9d9d9; }
+.dash-chart__bar.is-today { fill: #f47721; }
+
+html[data-section] body:has(.admin) .admin input,
+html[data-section] body:has(.admin) .admin select,
+html[data-section] body:has(.admin) .admin textarea {
+  background: #fff;
+  color: #171717;
+  border: 1px solid #dcdcdc;
+  box-shadow: inset 2px 2px 5px rgba(0,0,0,.035), inset -2px -2px 5px #fff;
+}
+html[data-section] body:has(.admin) .admin button:not(.admin-tabs [role="tab"]),
+html[data-section] body:has(.admin) .admin .btn {
+  color: #171717;
+}
+html[data-section] body:has(.admin) .admin :focus-visible {
+  outline: 3px solid rgba(244,119,33,.55);
+  outline-offset: 3px;
+}
+@media (max-width: 760px) {
+  .admin-head { padding: 20px; border-radius: 20px; }
+  .dash-card, .dash-kpi { box-shadow: 4px 4px 9px rgba(20,20,20,.045), -4px -4px 9px rgba(255,255,255,.95); }
+}
