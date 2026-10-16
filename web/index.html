@@ -25,6 +25,7 @@
     <link rel="stylesheet" href="css/checkout.css" />
     <link rel="stylesheet" href="css/flat.css" />
     <link rel="stylesheet" href="css/marketplace-identity.css" />
+    <link rel="stylesheet" href="css/theme-toggle.css" />
     <script type="module" src="js/app.js"></script>
   </head>
   <body>
@@ -84,6 +85,10 @@
           <button type="button" class="location-button" id="location-button" aria-haspopup="dialog" aria-controls="area-dialog">
             <svg class="icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="#i-pin"/></svg>
             <span class="location-button__text" id="location-text">Choose area</span>
+          </button>
+          <button type="button" class="theme-toggle" id="theme-toggle" role="switch" aria-checked="false" aria-label="Dark mode" title="Switch to dark mode">
+            <span class="theme-toggle__glyph" aria-hidden="true">☾</span>
+            <span class="theme-toggle__track" aria-hidden="true"><span class="theme-toggle__thumb"></span></span>
           </button>
           <a class="icon-button" href="#/search" aria-label="Search" data-nav="search">
             <svg aria-hidden="true" focusable="false"><use href="#i-search"/></svg>
