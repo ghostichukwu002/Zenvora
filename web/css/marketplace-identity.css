@@ -214,3 +214,22 @@ html[data-section] .boot-screen[data-brand="puff-sip"] { background: linear-grad
 @media (prefers-reduced-motion: reduce) {
   .brand-entry-screen, .brand-entry-screen::before, .brand-entry-screen::after, .brand-entry-screen__logo, .brand-entry-screen__name, .brand-entry-screen__tagline { animation: none !important; transition: none !important; }
 }
+
+/* The first-load logo animation follows the active marketplace palette. */
+html[data-section="shop-n-delight"] .boot-screen[data-brand="shop-n-delight"] {
+  background: radial-gradient(circle at 50% 38%, rgba(255,255,255,.17), transparent 40%), linear-gradient(145deg, #f47721, #b94308);
+}
+html[data-section="puff-sip"] .boot-screen[data-brand="puff-sip"] {
+  background: radial-gradient(circle at 50% 38%, rgba(255,255,255,.17), transparent 40%), linear-gradient(145deg, #3978d4, #1f4f9e);
+}
+html[data-section] .boot-screen__wordmark { color: #fff; }
+html[data-section] .boot-screen__tagline,
+html[data-section] .boot-screen__hint { color: rgba(255,255,255,.88); }
+html[data-section] .boot-screen__mark-wrap::before { background: rgba(255,255,255,.96); box-shadow: 0 18px 48px rgba(0,0,0,.17), inset 0 1px 0 #fff; }
+html[data-section] .boot-screen__loader { background: rgba(255,255,255,.3); }
+html[data-section] .boot-screen__loader span { background: #fff; }
+html[data-section] .price,
+html[data-section] .availability,
+html[data-section] .product-detail__price,
+html[data-section] .product-detail__info .product-detail__merchant { color: #fff; }
+html[data-section] .field-error { color: #fff0e9; }
