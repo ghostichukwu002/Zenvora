@@ -134,19 +134,9 @@ export function renderShop({ query, section = 'shop' }) {
     },
   );
 
-  const areaName = filters.area || storedArea;
-  // Shop n Delight keeps the quick-filter row uncluttered; delivery area
-  // remains applied in the product query when a saved area is present.
-  const areaChip = section === 'shop' ? null : areaName
-    ? addChip(
-        `Deliver to ${areaName}`,
-        () => Boolean(filters.area),
-        () => {
-          filters.area = filters.area ? '' : (storedArea ?? '');
-          commit();
-        },
-      )
-    : null;
+  // Keep delivery-location labels off both storefronts' quick-filter row.
+  // A saved delivery area can still be used by the product query when applicable.
+  const areaChip = null;
 
   const quickRow = el(
     'div',
