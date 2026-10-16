@@ -148,6 +148,7 @@ export function createApp({
   allowedOrigins = [],
   // Emails that become administrators: at registration, and for existing accounts at startup.
   adminEmails = [],
+  moderatorEmails = [],
 }) {
   const allowed = new Set(allowedOrigins);
   const router = createRouter();
@@ -162,6 +163,16 @@ export function createApp({
         .run('system', 'account.role_changed', email, JSON.stringify({ role: 'admin', via: 'ZENVORA_ADMIN_EMAILS' }), new Date().toISOString());
     }
   }
+  // Existing accounts listed in ZENVORA_MODERATOR_EMAILS receive catalogue-only access.
+  // Admins stay admins; removing an email from this list never silently demotes an account.
+  for (const email of moderatorEmails) {
+    const changed = db.prepare("UPDATE users SET role = 'moderator' WHERE email = ? AND role = 'customer'").run(email).changes;
+    if (changed) {
+      db.prepare('INSERT INTO audit_log (actor_user_id, action, target, detail_json, created_at) VALUES (?, ?, ?, ?, ?)')
+        .run('system', 'account.role_changed', email, JSON.stringify({ role: 'moderator', via: 'ZENVORA_MODERATOR_EMAILS' }), new Date().toISOString());
+    }
+  }
+
   // Persisted catalogue edits survive restarts and are applied before public product routes run.
   const savedOverrides = db.prepare('SELECT product_id, name, description, stock, price_kobo, promo_price_kobo FROM product_overrides').all();
   for (const saved of savedOverrides) {
