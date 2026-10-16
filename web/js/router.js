@@ -62,31 +62,61 @@ function markActiveNav(match, query) {
   }
 }
 
-// Puff & Sip owns its whole path tree: its landing page, shop, product and checkout.
+// Puff & Sip keeps its identity across its shop, product and checkout routes.
 const isPuffPath = (p) => p === '/puff-sip' || p.startsWith('/puff-sip/');
+let previousStore = null;
 
-async function navigate() {
-  const id = ++navigationId;
-  const { path, query } = currentLocation();
-  // Only the Puff & Sip landing page carries the Puff theme. Its shop, product and checkout pages
-  // use the same catalog styling as Shop n Delight.
-  document.documentElement.dataset.section = path === '/puff-sip' ? 'puff-sip' : 'shop-n-delight';
-
-  // Keep the active storefront's original brand identity in the shared shell.
-  const isPuffSip = isPuffPath(path);
+function updateBrand(path, query) {
+  const next = query.get('next') || '';
+  const isPuffSip = isPuffPath(path) || (path.startsWith('/login') || path.startsWith('/register')) && next.includes('/puff-sip');
+  const section = isPuffSip ? 'puff-sip' : 'shop-n-delight';
   const brandName = isPuffSip ? 'Puff & Sip' : 'Shop n Delight';
   const brandLogo = isPuffSip ? 'assets/puff-sip-logo.jpg' : 'assets/shop-n-delight-logo.png';
-  const brandTagline = isPuffSip ? 'Little treats. Big mood.' : 'Everyday shopping, with a little extra delight.'
+  const tagline = isPuffSip ? 'Little treats. Big mood.' : 'Everyday shopping, with a little extra delight.';
+  document.documentElement.dataset.section = section;
+  document.documentElement.dataset.brand = isPuffSip ? 'puff-sip' : 'shop-n-delight';
   document.querySelectorAll('[data-brand-logo]').forEach((logo) => {
     logo.src = brandLogo;
     logo.alt = brandName;
   });
-  document.querySelectorAll('[data-brand-name]').forEach((name) => {
-    name.textContent = brandName;
-  });
-  document.querySelectorAll('[data-brand-tagline]').forEach((tagline) => {
-    tagline.textContent = brandTagline;
-  });
+  document.querySelectorAll('[data-brand-name]').forEach((name) => { name.textContent = brandName; });
+  document.querySelectorAll('[data-brand-tagline]').forEach((node) => { node.textContent = tagline; });
+  const boot = document.getElementById('boot-screen');
+  if (boot) {
+    boot.dataset.brand = isPuffSip ? 'puff-sip' : 'shop-n-delight';
+    boot.setAttribute('aria-label', `Loading ${brandName}`);
+  }
+  const isStoreEntry = path === '/' || path === '/shop' || path === '/puff-sip' || path === '/puff-sip/shop';
+  const currentStore = isPuffSip ? 'puff-sip' : 'shop-n-delight';
+  if (isStoreEntry && previousStore && previousStore !== currentStore) {
+    showBrandEntry({ brandName, brandLogo, section: currentStore, tagline });
+  }
+  if (isStoreEntry) previousStore = currentStore;
+}
+
+function showBrandEntry({ brandName, brandLogo, section, tagline }) {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  document.querySelector('.brand-entry-screen')?.remove();
+  const overlay = document.createElement('div');
+  overlay.className = 'brand-entry-screen';
+  overlay.dataset.brand = section;
+  overlay.setAttribute('role', 'status');
+  overlay.setAttribute('aria-label', `Entering ${brandName}`);
+  const mark = document.createElement('img');
+  mark.className = 'brand-entry-screen__logo';
+  mark.src = brandLogo;
+  mark.alt = '';
+  const title = document.createElement('strong');
+  title.className = 'brand-entry-screen__name';
+  title.textContent = brandName;
+  const subtitle = document.createElement('span');
+  subtitle.className = 'brand-entry-screen__tagline';
+  subtitle.textContent = tagline;
+  overlay.append(mark, title, subtitle);
+  document.body.append(overlay);
+  window.setTimeout(() => overlay.classList.add('is-leaving'), 660);
+  window.setTimeout(() => overlay.remove(), 1040);
+}
 
   let match = null;
   let params = {};
