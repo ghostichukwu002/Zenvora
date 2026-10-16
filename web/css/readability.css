@@ -28,3 +28,175 @@ html[data-section] .product-card h2 a,
 html[data-section] .product-card h3,
 html[data-section] .product-card h3 a { color: #fff; }
 html[data-section] .product-card .price--was { color: rgba(255, 255, 255, .82); }
+
+
+/* Theme contrast contract: keep body copy bright in dark mode and ink-dark on light surfaces.
+   This file loads last intentionally so storefront-specific legacy colors cannot hide text. */
+html[data-theme="dark"] body,
+html[data-theme="dark"] #app,
+html[data-theme="dark"] #app h1,
+html[data-theme="dark"] #app h2,
+html[data-theme="dark"] #app h3,
+html[data-theme="dark"] #app p,
+html[data-theme="dark"] #app label,
+html[data-theme="dark"] #app strong,
+html[data-theme="dark"] #app small,
+html[data-theme="dark"] #app li,
+html[data-theme="dark"] #app dt,
+html[data-theme="dark"] #app dd,
+html[data-theme="dark"] #app .muted,
+html[data-theme="dark"] #app .results-meta,
+html[data-theme="dark"] #app .breadcrumb,
+html[data-theme="dark"] #app .breadcrumb a,
+html[data-theme="dark"] #app .section__head p,
+html[data-theme="dark"] #app .product-detail__info p,
+html[data-theme="dark"] #app .product-detail__info .muted,
+html[data-theme="dark"] #app .product-detail__merchant,
+html[data-theme="dark"] #app .product-detail__merchant strong,
+html[data-theme="dark"] #app .product-detail__info .availability {
+  color: #f4f7fc;
+}
+html[data-theme="dark"] #app a:not(.btn):not(.icon-button),
+html[data-theme="dark"] #app .text-link { color: #a9ccff; }
+html[data-theme="dark"] #app .product-card,
+html[data-theme="dark"] #app .category-tile,
+html[data-theme="dark"] #app .summary,
+html[data-theme="dark"] #app .cart-line,
+html[data-theme="dark"] #app .product-detail__info .purchase,
+html[data-theme="dark"] #app .state,
+html[data-theme="dark"] #app .payment,
+html[data-theme="dark"] #app .checkout-area,
+html[data-theme="dark"] #app .order-block,
+html[data-theme="dark"] #app .job-card,
+html[data-theme="dark"] #app .auth__card,
+html[data-theme="dark"] #app .account-hero,
+html[data-theme="dark"] #app .account-link,
+html[data-theme="dark"] #app .account-panel,
+html[data-theme="dark"] #app .account-panel .order-row {
+  color: #f4f7fc;
+  background-color: #1b2029;
+  border-color: #3a4351;
+}
+html[data-theme="dark"] #app .product-card h2,
+html[data-theme="dark"] #app .product-card h2 a,
+html[data-theme="dark"] #app .product-card h3,
+html[data-theme="dark"] #app .product-card h3 a,
+html[data-theme="dark"] #app .product-card .price--was,
+html[data-theme="dark"] #app .product-card .price,
+html[data-theme="dark"] #app .product-card .muted,
+html[data-theme="dark"] #app .product-card__name,
+html[data-theme="dark"] #app .product-card__merchant,
+html[data-theme="dark"] #app .product-card__meta,
+html[data-theme="dark"] #app .product-card__footer,
+html[data-theme="dark"] #app .cart-line__name,
+html[data-theme="dark"] #app .cart-line__total,
+html[data-theme="dark"] #app .summary__row,
+html[data-theme="dark"] #app .summary__note,
+html[data-theme="dark"] #app .payment legend,
+html[data-theme="dark"] #app .payment__option,
+html[data-theme="dark"] #app .state h2,
+html[data-theme="dark"] #app .state p,
+html[data-theme="dark"] #app .form label,
+html[data-theme="dark"] #app .field label { color: #f4f7fc; }
+html[data-theme="dark"] #app input,
+html[data-theme="dark"] #app select,
+html[data-theme="dark"] #app textarea,
+html[data-theme="dark"] #app .input,
+html[data-theme="dark"] #app .select,
+html[data-theme="dark"] #app .search-form {
+  color: #f8fafc;
+  background-color: #12161d;
+  border-color: #465161;
+  caret-color: #fff;
+}
+html[data-theme="dark"] #app input::placeholder,
+html[data-theme="dark"] #app textarea::placeholder,
+html[data-theme="dark"] #app .input::placeholder { color: #b8c2d1; opacity: 1; }
+html[data-theme="dark"] #app input:focus,
+html[data-theme="dark"] #app select:focus,
+html[data-theme="dark"] #app textarea:focus,
+html[data-theme="dark"] #app .input:focus,
+html[data-theme="dark"] #app .select:focus {
+  border-color: #a9ccff;
+  outline: 2px solid rgba(169,204,255,.55);
+  outline-offset: 1px;
+}
+html[data-theme="dark"] #app .btn--secondary,
+html[data-theme="dark"] #app .chip,
+html[data-theme="dark"] #app .stepper,
+html[data-theme="dark"] #app .stepper button {
+  color: #f4f7fc;
+  background-color: #252d38;
+  border-color: #465161;
+}
+html[data-theme="dark"] #app .btn--primary { color: #fff; }
+html[data-theme="dark"] .site-header,
+html[data-theme="dark"] .site-header .brand,
+html[data-theme="dark"] .site-header .site-nav a,
+html[data-theme="dark"] .site-footer,
+html[data-theme="dark"] .site-footer h2,
+html[data-theme="dark"] .site-footer p,
+html[data-theme="dark"] .site-footer a,
+html[data-theme="dark"] .site-footer .muted,
+html[data-theme="dark"] .bottom-nav,
+html[data-theme="dark"] .bottom-nav a {
+  color: #f4f7fc;
+}
+html[data-theme="dark"] .site-header,
+html[data-theme="dark"] .site-footer,
+html[data-theme="dark"] .bottom-nav {
+  background: #191d25;
+  border-color: #353d49;
+}
+html[data-theme="dark"] .site-header .icon-button,
+html[data-theme="dark"] .location-button {
+  color: #f4f7fc;
+  background: #252d38;
+  border-color: #465161;
+}
+html[data-theme="dark"] body:has(.admin) { color: #f4f7fc; background: #11141a; }
+html[data-theme="dark"] body:has(.admin) .admin,
+html[data-theme="dark"] body:has(.admin) .admin h2,
+html[data-theme="dark"] body:has(.admin) .admin h3,
+html[data-theme="dark"] body:has(.admin) .admin p,
+html[data-theme="dark"] body:has(.admin) .admin label { color: #f4f7fc; }
+html[data-theme="dark"] body:has(.admin) .admin-tabs,
+html[data-theme="dark"] body:has(.admin) .admin-panel,
+html[data-theme="dark"] body:has(.admin) .admin-card,
+html[data-theme="dark"] body:has(.admin) .admin-table-wrap {
+  color: #f4f7fc;
+  background: #1b2029;
+  border-color: #3a4351;
+}
+html[data-theme="dark"] body:has(.admin) .admin-head h1,
+html[data-theme="dark"] body:has(.admin) .admin-head p { color: #fff; }
+html[data-theme="dark"] body:has(.admin) .admin input,
+html[data-theme="dark"] body:has(.admin) .admin select,
+html[data-theme="dark"] body:has(.admin) .admin textarea {
+  color: #f8fafc;
+  background: #12161d;
+  border-color: #465161;
+}
+html[data-theme="dark"] .dialog,
+html[data-theme="dark"] .dialog h2,
+html[data-theme="dark"] .dialog p,
+html[data-theme="dark"] .dialog label { color: #f4f7fc; background-color: #1b2029; }
+html[data-theme="dark"] .dialog input,
+html[data-theme="dark"] .dialog select,
+html[data-theme="dark"] .dialog textarea { color: #f8fafc; background: #12161d; border-color: #465161; }
+
+/* In light mode, form controls always use dark ink on pale surfaces—even on brand pages. */
+html:not([data-theme="dark"]) #app input,
+html:not([data-theme="dark"]) #app select,
+html:not([data-theme="dark"]) #app textarea,
+html:not([data-theme="dark"]) #app .input,
+html:not([data-theme="dark"]) #app .select {
+  color: #1b2430;
+  background-color: #fff;
+  border-color: #cbd2dc;
+}
+html:not([data-theme="dark"]) #app input::placeholder,
+html:not([data-theme="dark"]) #app textarea::placeholder,
+html:not([data-theme="dark"]) #app .input::placeholder { color: #596579; opacity: 1; }
+html:not([data-theme="dark"]) #app .stepper,
+html:not([data-theme="dark"]) #app .stepper * { color: #1b2430; }
