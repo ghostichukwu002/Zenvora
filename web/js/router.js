@@ -132,7 +132,7 @@ function showBrandEntry({ brandName, brandLogo, section, tagline }) {
 
   const main = document.getElementById('app');
   if (!match) {
-    document.title = 'Page not found · Shop n Delight';
+    document.title = `Page not found · ${document.documentElement.dataset.brand === 'puff-sip' ? 'Puff & Sip' : 'Shop n Delight'}`;
     markActiveNav({ nav: null }, query);
     setMain(
       stateBox({
@@ -148,7 +148,8 @@ function showBrandEntry({ brandName, brandLogo, section, tagline }) {
 
   markActiveNav(match, query);
   const pageTitle = typeof match.title === 'function' ? match.title({ params, query }) : match.title;
-  document.title = `${pageTitle} · Shop n Delight`;
+  const brandLabel = document.documentElement.dataset.brand === 'puff-sip' ? 'Puff & Sip' : 'Shop n Delight';
+  document.title = `${pageTitle} · ${brandLabel}`;
 
   // Scroll to the top only when the page itself changes, not when filters change.
   if (match.lastPath !== path) {
@@ -163,6 +164,7 @@ function showBrandEntry({ brandName, brandLogo, section, tagline }) {
     void main.offsetWidth; // restart the entrance transition
     main.classList.add('view-enter');
     setMain(node);
+    document.title = `${pageTitle} · ${brandLabel}`;
     observeReveals(main);
     focusMain();
   } catch (err) {
