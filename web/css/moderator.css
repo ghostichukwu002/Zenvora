@@ -93,6 +93,9 @@
   .moderator-heading { flex-direction:column; }
   .moderator-user { align-self:flex-start; }
   .moderator-stores { grid-template-columns:1fr; }
+  .moderator-photo-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .moderator-create__heading { padding:16px; }
+  .moderator-create__badge { display:none; }
   .moderator-store { padding:14px; }
   .moderator-toolbar { flex-wrap:wrap; }
   .moderator-search-wrap { flex-basis:100%; }
