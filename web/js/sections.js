@@ -15,5 +15,6 @@ export function shopHref(section = 'shop') {
 }
 
 export function checkoutHref(section = 'shop') {
-  return section === 'puff' ? '#/puff-sip/checkout' : '#/checkout';
+  // Both marketplaces use the same checkout screen; section only guides the return link.
+  return section === 'puff' ? '#/checkout?section=puff' : '#/checkout';
 }
