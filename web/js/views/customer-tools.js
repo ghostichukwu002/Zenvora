@@ -97,8 +97,36 @@ export function customerToolsPanel() {
     } finally { addressList.removeAttribute('aria-busy'); }
   }
 
+  const recentList = el('div', { 'aria-busy': 'true' }, el('p', { class: 'muted', text: 'Loading recent products…' }));
+  async function loadRecentlyViewed() {
+    try {
+      const ids = JSON.parse(localStorage.getItem('zenvora-recently-viewed') || '[]');
+      const products = await Promise.all(ids.slice(0, 8).map(async (id) => {
+        try { return await api.get('/api/products/' + encodeURIComponent(id)); } catch { return null; }
+      }));
+      const items = products.filter(Boolean);
+      recentList.replaceChildren();
+      if (!items.length) {
+        recentList.append(el('p', { class: 'muted', text: 'Products you open will appear here for quick access on this device.' }));
+      } else {
+        recentList.append(el('ul', { class: 'saved-tool-list' }, items.map((product) =>
+          el('li', { class: 'saved-tool-row' },
+            el('a', { href: productHref(product.id, product.merchant.section), class: 'saved-tool-row__copy' },
+              el('strong', { text: product.name }),
+              el('small', { class: 'muted', text: product.merchant.name }),
+              el('span', { class: 'price', text: formatNaira(product.effectivePriceKobo) }),
+            ),
+          ),
+        )));
+      }
+    } catch {
+      recentList.replaceChildren(el('p', { class: 'muted', text: 'Recent products are unavailable in this browser.' }));
+    } finally { recentList.removeAttribute('aria-busy'); }
+  }
+
   loadWishlist();
   loadAddresses();
+  loadRecentlyViewed();
   return el('div', { class: 'customer-tools-grid' },
     el('section', { class: 'account-panel', 'aria-labelledby': 'wishlist-title' },
       el('div', { class: 'account-panel__head' }, el('div', {}, el('p', { class: 'account-kicker', text: 'SAVE FOR LATER' }), el('h2', { id: 'wishlist-title', text: 'Your wishlist' }))),
@@ -106,5 +134,8 @@ export function customerToolsPanel() {
     el('section', { class: 'account-panel', 'aria-labelledby': 'addresses-title' },
       el('div', { class: 'account-panel__head' }, el('div', {}, el('p', { class: 'account-kicker', text: 'FASTER CHECKOUT' }), el('h2', { id: 'addresses-title', text: 'Saved addresses' }))),
       addressList, message, addressForm),
+    el('section', { class: 'account-panel', 'aria-labelledby': 'recent-title' },
+      el('div', { class: 'account-panel__head' }, el('div', {}, el('p', { class: 'account-kicker', text: 'PICK UP WHERE YOU LEFT OFF' }), el('h2', { id: 'recent-title', text: 'Recently viewed' }))),
+      recentList),
   );
 }
