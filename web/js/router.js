@@ -81,6 +81,11 @@ function updateBrand(path, query) {
   });
   document.querySelectorAll('[data-brand-name]').forEach((name) => { name.textContent = brandName; });
   document.querySelectorAll('[data-brand-tagline]').forEach((node) => { node.textContent = tagline; });
+  // The header search must stay inside the storefront currently being browsed.
+  document.querySelectorAll('[data-nav="search"]').forEach((link) => {
+    link.setAttribute('href', isPuffSip ? '#/puff-sip/shop' : '#/search');
+    link.setAttribute('aria-label', isPuffSip ? 'Search Puff & Sip' : 'Search Shop n Delight');
+  });
   const boot = document.getElementById('boot-screen');
   if (boot) {
     boot.dataset.brand = isPuffSip ? 'puff-sip' : 'shop-n-delight';
