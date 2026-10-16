@@ -66,6 +66,27 @@ export async function renderCheckout({ section = 'shop' } = {}) {
     notes: field({ name: 'notes', label: 'Note for the rider', required: false, maxlength: 300, rows: 2 }),
   };
 
+  const savedAddressSelect = el('select', { class: 'select', 'aria-label': 'Use a saved delivery address', onchange: async (event) => {
+    const id = event.target.value;
+    if (!id) return;
+    try {
+      const { items } = await api.get('/api/account/addresses');
+      const address = items.find((item) => item.id === id);
+      if (!address) return;
+      fields.name.input.value = address.recipientName;
+      fields.phone.input.value = address.phone;
+      fields.address.input.value = address.address;
+      if (address.area !== cart.deliveryArea) {
+        message.show(`This saved address is in ${address.area}; your cart is set to ${cart.deliveryArea}. Please confirm the delivery address matches the selected area.`);
+      } else {
+        message.show('');
+      }
+    } catch (err) { message.show(err.message); }
+  } }, el('option', { value: '', text: 'Choose a saved address (optional)' }));
+  api.get('/api/account/addresses').then(({ items }) => {
+    for (const address of items) savedAddressSelect.append(el('option', { value: address.id, text: `${address.label} · ${address.address}` }));
+  }).catch(() => { /* Manual address entry remains available if saved addresses cannot load. */ });
+
   const message = formMessage();
   const submit = el('button', { type: 'submit', class: 'btn btn--primary btn--block', text: `Place order · ${formatNaira(cart.totalKobo)}` });
   const label = submit.textContent;
@@ -73,6 +94,7 @@ export async function renderCheckout({ section = 'shop' } = {}) {
     'form',
     { class: 'form', novalidate: true, 'aria-labelledby': 'checkout-title' },
     el('div', { class: 'checkout-area' }, icon('pin'), el('span', {}, 'Delivering to ', el('strong', { text: `${cart.deliveryArea}` }), ` · ${cart.merchantName}`)),
+    el('div', { class: 'field' }, el('label', { text: 'Saved address' }), savedAddressSelect),
     fields.name.node,
     fields.phone.node,
     fields.address.node,

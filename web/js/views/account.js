@@ -6,6 +6,7 @@ import { trustBadge } from '../components.js';
 import { loadCart, setUser } from '../state.js';
 import { stateBox, toast } from '../ui.js';
 import { emptyView, formatDate, ORDER_STATUS_LABEL, requireLogin } from './guard.js';
+import { customerToolsPanel } from './customer-tools.js';
 
 export async function renderAccount() {
   const user = await requireLogin();
@@ -108,6 +109,7 @@ export async function renderAccount() {
       el('section', { class: 'account-panel account-panel--orders', 'aria-labelledby': 'orders-title' }, el('div', { class: 'account-panel__head' }, el('div', {}, el('p', { class: 'account-kicker', text: 'YOUR ACTIVITY' }), el('h2', { id: 'orders-title', text: 'Your orders' })), el('a', { class: 'account-panel__link', href: '#/shop', text: 'Shop now ↗' })), ordersBox),
       el('section', { class: 'account-panel account-panel--profile', 'aria-labelledby': 'profile-title' }, el('div', { class: 'account-panel__head' }, el('div', {}, el('p', { class: 'account-kicker', text: 'YOUR DETAILS' }), el('h2', { id: 'profile-title', text: 'Profile' }))), form),
     ),
+    customerToolsPanel(),
   );
 }
 

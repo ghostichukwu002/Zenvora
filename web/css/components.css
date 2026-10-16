@@ -2075,3 +2075,57 @@ textarea.input {
 .care-filter { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 14px; }
 .care-filter .select { max-width: 200px; }
 .stores-table .badge { white-space: nowrap; }
+
+
+/* Customer shopping tools: compact, tactile controls that work in both themes. */
+.product-card__media { position: relative; }
+.product-card__wishlist {
+  position: absolute;
+  z-index: 2;
+  top: .75rem;
+  right: .75rem;
+  display: grid;
+  place-items: center;
+  width: 2.55rem;
+  height: 2.55rem;
+  border: 1px solid rgba(20, 24, 32, .12);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .94);
+  color: #242631;
+  font-size: 1.4rem;
+  line-height: 1;
+  box-shadow: 0 5px 16px rgba(20, 24, 32, .12);
+  cursor: pointer;
+  transition: transform .18s ease, background .18s ease, color .18s ease;
+}
+.product-card__wishlist:hover { transform: translateY(-2px) scale(1.04); }
+.product-card__wishlist[data-saved="true"] { color: #d83c51; background: #fff0f2; }
+.product-card__wishlist:disabled { opacity: .65; cursor: wait; }
+.customer-tools-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+.saved-tool-list { list-style: none; margin: 0; padding: 0; display: grid; gap: .75rem; }
+.saved-tool-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: .9rem;
+  border: 1px solid var(--zen-border, #e6e4df);
+  border-radius: 1rem;
+  background: var(--zen-surface, #fff);
+}
+.saved-tool-row__copy { min-width: 0; display: grid; gap: .25rem; color: inherit; text-decoration: none; }
+.saved-tool-row__copy strong { overflow-wrap: anywhere; }
+.saved-tool-row__copy small { overflow-wrap: anywhere; }
+.saved-address-form { margin-top: 1rem; }
+@media (max-width: 720px) {
+  .customer-tools-grid { grid-template-columns: minmax(0, 1fr); }
+  .saved-tool-row { align-items: flex-start; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .product-card__wishlist { transition: none; }
+}

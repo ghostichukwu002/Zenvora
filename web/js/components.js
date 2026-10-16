@@ -98,9 +98,47 @@ export function productCard(product, { reveal = true } = {}) {
   }
 
   const imageUrl = productImageUrl(product);
+  const wishlistButton = el('button', {
+    type: 'button',
+    class: 'product-card__wishlist',
+    'aria-label': `Save ${product.name} to wishlist`,
+    title: 'Save for later',
+    text: '♡',
+    onclick: async (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      const button = event.currentTarget;
+      if (button.dataset.busy === 'true') return;
+      button.dataset.busy = 'true';
+      button.disabled = true;
+      try {
+        if (button.dataset.saved === 'true') {
+          await api.del('/api/account/wishlist/' + encodeURIComponent(product.id));
+          button.dataset.saved = 'false';
+          button.textContent = '♡';
+          button.setAttribute('aria-label', `Save ${product.name} to wishlist`);
+          toast('Removed from wishlist');
+        } else {
+          await api.post('/api/account/wishlist/' + encodeURIComponent(product.id), {});
+          button.dataset.saved = 'true';
+          button.textContent = '♥';
+          button.setAttribute('aria-label', `Remove ${product.name} from wishlist`);
+          toast('Saved to your wishlist');
+        }
+      } catch (err) {
+        if (err.code === 'auth_required') {
+          window.location.hash = `#/login?next=${encodeURIComponent(window.location.hash.slice(1) || '/')}`;
+        } else toast(err.message, { tone: 'error' });
+      } finally {
+        button.disabled = false;
+        button.dataset.busy = 'false';
+      }
+    },
+  });
   const media = el(
     'div',
     { class: 'product-card__media' },
+    wishlistButton,
     imageUrl
       ? el('img', { src: imageUrl, alt: product.name, loading: 'lazy', decoding: 'async', onerror: (event) => { event.currentTarget.replaceWith(icon(categoryGlyph(product.category.id), 'icon')); } })
       : icon(categoryGlyph(product.category.id), 'icon'),

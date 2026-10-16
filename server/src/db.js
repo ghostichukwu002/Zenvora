@@ -31,6 +31,37 @@ const SCHEMA = `
     used_at    TEXT
   );
 
+  CREATE TABLE IF NOT EXISTS saved_addresses (
+    id TEXT PRIMARY KEY,
+    user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    label TEXT NOT NULL,
+    recipient_name TEXT NOT NULL,
+    phone TEXT NOT NULL,
+    address TEXT NOT NULL,
+    area TEXT NOT NULL,
+    city TEXT NOT NULL,
+    state TEXT NOT NULL,
+    created_at TEXT NOT NULL
+  );
+
+  CREATE TABLE IF NOT EXISTS wishlists (
+    user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    product_id TEXT NOT NULL,
+    created_at TEXT NOT NULL,
+    PRIMARY KEY (user_id, product_id)
+  );
+
+  CREATE TABLE IF NOT EXISTS product_overrides (
+    product_id TEXT PRIMARY KEY,
+    name TEXT NOT NULL,
+    description TEXT NOT NULL,
+    stock INTEGER,
+    price_kobo INTEGER NOT NULL,
+    promo_price_kobo INTEGER,
+    updated_by TEXT NOT NULL,
+    updated_at TEXT NOT NULL
+  );
+
   CREATE TABLE IF NOT EXISTS orders (
     id                 TEXT PRIMARY KEY,
     user_id            TEXT NOT NULL REFERENCES users(id),
