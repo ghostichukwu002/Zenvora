@@ -55,6 +55,11 @@ const server = createServer(
     adminEmails: (process.env.ZENVORA_ADMIN_EMAILS || '').split(',').map((e) => e.trim().toLowerCase()).filter(Boolean),
     // Comma-separated accounts granted catalogue-only moderator access.
     moderatorEmails: (process.env.ZENVORA_MODERATOR_EMAILS || '').split(',').map((e) => e.trim().toLowerCase()).filter(Boolean),
+    cloudinary: {
+      cloudName: process.env.CLOUDINARY_CLOUD_NAME || '',
+      apiKey: process.env.CLOUDINARY_API_KEY || '',
+      apiSecret: process.env.CLOUDINARY_API_SECRET || '',
+    },
   }),
 );
 
