@@ -53,6 +53,10 @@ export async function renderProduct({ params }) {
 
 function productView(product) {
   const area = getArea();
+  const productImages = (Array.isArray(product.images) ? product.images : [])
+    .map((image) => typeof image === 'string' ? { url: image, alt: product.name } : image)
+    .filter((image) => image && typeof image.url === 'string' && image.url);
+  let selectedImageIndex = 0;
   const choices = {};
   const quantityOutput = el('output', { 'aria-live': 'polite', text: '1' });
   let quantity = 1;
@@ -200,9 +204,24 @@ function productView(product) {
       el(
         'div',
         { class: 'product-detail__media' },
-        productImageUrl(product)
-          ? el('img', { src: productImageUrl(product), alt: product.name, fetchpriority: 'high', decoding: 'async', onerror: (event) => { event.currentTarget.replaceWith(icon(categoryGlyph(product.category.id))); } })
-          : icon(categoryGlyph(product.category.id)),
+        productImages.length
+          ? el('div', { class: 'product-gallery' },
+              el('img', { class: 'product-gallery__main', src: productImages[0].url, alt: productImages[0].alt || product.name, fetchpriority: 'high', decoding: 'async', onerror: (event) => { event.currentTarget.replaceWith(icon(categoryGlyph(product.category.id))); } }),
+              productImages.length > 1 ? el('div', { class: 'product-gallery__thumbs', role: 'group', 'aria-label': 'Product photos' },
+                productImages.map((image, index) => el('button', { type: 'button', class: `product-gallery__thumb ${index === selectedImageIndex ? 'is-active' : ''}`, 'aria-label': `View photo ${index + 1}`, 'aria-pressed': String(index === selectedImageIndex), onclick: (event) => {
+                  selectedImageIndex = index;
+                  const main = event.currentTarget.closest('.product-gallery').querySelector('.product-gallery__main');
+                  main.src = image.url;
+                  main.alt = image.alt || product.name;
+                  event.currentTarget.parentElement.querySelectorAll('button').forEach((button) => {
+                    button.classList.toggle('is-active', button === event.currentTarget);
+                    button.setAttribute('aria-pressed', String(button === event.currentTarget));
+                  });
+                } }, el('img', { src: image.url, alt: '', loading: 'lazy' })))
+              ) : null)
+          : productImageUrl(product)
+            ? el('img', { src: productImageUrl(product), alt: product.name, fetchpriority: 'high', decoding: 'async', onerror: (event) => { event.currentTarget.replaceWith(icon(categoryGlyph(product.category.id))); } })
+            : icon(categoryGlyph(product.category.id)),
       ),
       el(
         'div',
@@ -232,6 +251,13 @@ function productView(product) {
           }),
         ),
         product.description ? el('p', { text: product.description }) : null,
+        product.brand ? el('p', { class: 'product-detail__brand' }, el('strong', { text: 'Brand: ' }), product.brand) : null,
+        product.specifications && Object.keys(product.specifications).length
+          ? el('section', { class: 'product-specifications', 'aria-label': 'Product specifications' },
+              el('h2', { text: 'Specifications' }),
+              el('dl', {}, Object.entries(product.specifications).map(([label, value]) =>
+                el('div', { class: 'product-specifications__row' }, el('dt', { text: label }), el('dd', { text: String(value) })))))
+          : null,
         deliveryLine,
         variantGroups.length ? variantGroups : null,
         el(
