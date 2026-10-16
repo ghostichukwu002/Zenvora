@@ -200,3 +200,236 @@ html:not([data-theme="dark"]) #app textarea::placeholder,
 html:not([data-theme="dark"]) #app .input::placeholder { color: #596579; opacity: 1; }
 html:not([data-theme="dark"]) #app .stepper,
 html:not([data-theme="dark"]) #app .stepper * { color: #1b2430; }
+
+
+/* Theme contrast pass v2: explicit foreground/surface pairs for every portal area. */
+:root {
+  color-scheme: light;
+  --zen-page: #f6f7fb;
+  --zen-surface: #ffffff;
+  --zen-surface-raised: #ffffff;
+  --zen-ink: #182230;
+  --zen-muted: #586579;
+  --zen-border: #dce2eb;
+  --zen-field: #ffffff;
+  --zen-field-ink: #182230;
+  --zen-link: #175dcc;
+}
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --zen-page: #10141b;
+  --zen-surface: #1a202a;
+  --zen-surface-raised: #222a36;
+  --zen-ink: #f4f7fc;
+  --zen-muted: #c0cad8;
+  --zen-border: #3a4656;
+  --zen-field: #111720;
+  --zen-field-ink: #f4f7fc;
+  --zen-link: #9bc6ff;
+}
+
+/* Shared portal, utility pages, empty states, dialogs and common copy. */
+html:not([data-theme="dark"]) body { color: var(--zen-ink); }
+html:not([data-theme="dark"]) #app h1,
+html:not([data-theme="dark"]) #app h2,
+html:not([data-theme="dark"]) #app h3,
+html:not([data-theme="dark"]) #app h4,
+html:not([data-theme="dark"]) #app p,
+html:not([data-theme="dark"]) #app li,
+html:not([data-theme="dark"]) #app label,
+html:not([data-theme="dark"]) #app legend,
+html:not([data-theme="dark"]) #app .muted,
+html:not([data-theme="dark"]) #app .breadcrumb,
+html:not([data-theme="dark"]) #app .state,
+html:not([data-theme="dark"]) #app .empty-state { color: var(--zen-ink); }
+html:not([data-theme="dark"]) #app .muted,
+html:not([data-theme="dark"]) #app .help-text,
+html:not([data-theme="dark"]) #app .field-hint,
+html:not([data-theme="dark"]) #app .dash-kpi__label,
+html:not([data-theme="dark"]) #app .dash-kpi__hint { color: var(--zen-muted); }
+html:not([data-theme="dark"]) #app a:not(.btn):not(.product-card__name):not(.account-link) { color: var(--zen-link); }
+html:not([data-theme="dark"]) .dialog,
+html:not([data-theme="dark"]) .dialog__body { color: var(--zen-ink); background: #fff; }
+html:not([data-theme="dark"]) .dialog .muted { color: var(--zen-muted); }
+html:not([data-theme="dark"]) #app .summary,
+html:not([data-theme="dark"]) #app .cart-line,
+html:not([data-theme="dark"]) #app .checkout-area,
+html:not([data-theme="dark"]) #app .payment,
+html:not([data-theme="dark"]) #app .order-block,
+html:not([data-theme="dark"]) #app .account-hero,
+html:not([data-theme="dark"]) #app .account-link,
+html:not([data-theme="dark"]) #app .account-panel,
+html:not([data-theme="dark"]) #app .account-panel .state,
+html:not([data-theme="dark"]) #app .account-panel .order-row,
+html:not([data-theme="dark"]) #app .auth__card {
+  color: var(--zen-ink);
+  background-color: var(--zen-surface);
+  border-color: var(--zen-border);
+}
+html:not([data-theme="dark"]) #app input,
+html:not([data-theme="dark"]) #app select,
+html:not([data-theme="dark"]) #app textarea,
+html:not([data-theme="dark"]) #app .input,
+html:not([data-theme="dark"]) #app .select,
+html:not([data-theme="dark"]) .dialog input,
+html:not([data-theme="dark"]) .dialog select,
+html:not([data-theme="dark"]) .dialog textarea {
+  color: var(--zen-field-ink) !important;
+  -webkit-text-fill-color: var(--zen-field-ink);
+  background-color: var(--zen-field) !important;
+  border-color: var(--zen-border);
+  caret-color: var(--zen-field-ink);
+}
+html:not([data-theme="dark"]) #app input::placeholder,
+html:not([data-theme="dark"]) #app textarea::placeholder,
+html:not([data-theme="dark"]) #app .input::placeholder,
+html:not([data-theme="dark"]) .dialog input::placeholder,
+html:not([data-theme="dark"]) .dialog textarea::placeholder { color: #657184 !important; opacity: 1; }
+html:not([data-theme="dark"]) #app input:disabled,
+html:not([data-theme="dark"]) #app select:disabled,
+html:not([data-theme="dark"]) #app textarea:disabled { color: #667085 !important; background: #edf0f5 !important; }
+
+/* Storefront branding keeps white copy on its orange/blue brand surfaces only. */
+html:not([data-theme="dark"])[data-section] .product-card,
+html:not([data-theme="dark"])[data-section] .category-tile { color: #fff; }
+html:not([data-theme="dark"])[data-section] .product-card__name,
+html:not([data-theme="dark"])[data-section] .product-card__merchant,
+html:not([data-theme="dark"])[data-section] .product-card__price-row,
+html:not([data-theme="dark"])[data-section] .product-card__footer,
+html:not([data-theme="dark"])[data-section] .product-card .muted,
+html:not([data-theme="dark"])[data-section] .product-card__meta { color: #fff; }
+html:not([data-theme="dark"])[data-section] .product-card__media,
+html:not([data-theme="dark"])[data-section] .product-detail__media,
+html:not([data-theme="dark"])[data-section] .cart-line__thumb { background: #fff; }
+html:not([data-theme="dark"])[data-section] .product-detail__info,
+html:not([data-theme="dark"])[data-section] .product-detail__info h1,
+html:not([data-theme="dark"])[data-section] .product-detail__info p,
+html:not([data-theme="dark"])[data-section] .product-detail__info .muted { color: var(--zen-ink); }
+
+/* Dark mode: all text and components in cart, checkout, account and admin. */
+html[data-theme="dark"] body,
+html[data-theme="dark"] #app { color: var(--zen-ink); background-color: var(--zen-page); }
+html[data-theme="dark"] #app h1,
+html[data-theme="dark"] #app h2,
+html[data-theme="dark"] #app h3,
+html[data-theme="dark"] #app h4,
+html[data-theme="dark"] #app p,
+html[data-theme="dark"] #app li,
+html[data-theme="dark"] #app label,
+html[data-theme="dark"] #app legend,
+html[data-theme="dark"] #app strong,
+html[data-theme="dark"] #app small,
+html[data-theme="dark"] #app .muted,
+html[data-theme="dark"] #app .breadcrumb,
+html[data-theme="dark"] #app .state,
+html[data-theme="dark"] #app .empty-state,
+html[data-theme="dark"] #app .account-email,
+html[data-theme="dark"] #app .account-kicker,
+html[data-theme="dark"] #app .account-link__copy,
+html[data-theme="dark"] #app .account-link__arrow,
+html[data-theme="dark"] #app .account-panel__link,
+html[data-theme="dark"] #app .dash-kpi__label,
+html[data-theme="dark"] #app .dash-kpi__value,
+html[data-theme="dark"] #app .dash-kpi__hint,
+html[data-theme="dark"] #app .dash-card__head h2 { color: var(--zen-ink) !important; }
+html[data-theme="dark"] #app .muted,
+html[data-theme="dark"] #app .help-text,
+html[data-theme="dark"] #app .field-hint,
+html[data-theme="dark"] #app .dash-kpi__label,
+html[data-theme="dark"] #app .dash-kpi__hint { color: var(--zen-muted) !important; }
+html[data-theme="dark"] #app a:not(.btn):not(.chip):not([role="tab"]),
+html[data-theme="dark"] .dialog a { color: var(--zen-link); }
+html[data-theme="dark"] #app .summary,
+html[data-theme="dark"] #app .cart-line,
+html[data-theme="dark"] #app .checkout-area,
+html[data-theme="dark"] #app .payment,
+html[data-theme="dark"] #app .order-block,
+html[data-theme="dark"] #app .account-hero,
+html[data-theme="dark"] #app .account-link,
+html[data-theme="dark"] #app .account-panel,
+html[data-theme="dark"] #app .account-panel .state,
+html[data-theme="dark"] #app .account-panel .order-row,
+html[data-theme="dark"] #app .auth__card,
+html[data-theme="dark"] #app .admin-tabs,
+html[data-theme="dark"] #app .admin-panel,
+html[data-theme="dark"] #app .admin-card,
+html[data-theme="dark"] #app .admin-table-wrap,
+html[data-theme="dark"] #app .dash-card,
+html[data-theme="dark"] #app .dash-kpi,
+html[data-theme="dark"] #app .admin-table,
+html[data-theme="dark"] #app table,
+html[data-theme="dark"] #app .state {
+  color: var(--zen-ink);
+  background-color: var(--zen-surface);
+  border-color: var(--zen-border);
+}
+html[data-theme="dark"] #app .admin-head,
+html[data-theme="dark"] #app .admin-head *,
+html[data-theme="dark"] #app .admin-head h1,
+html[data-theme="dark"] #app .admin-head p,
+html[data-theme="dark"] #app .admin-head .btn { color: #fff !important; }
+html[data-theme="dark"] #app .admin-tabs [role="tab"] { color: #d4dceb; }
+html[data-theme="dark"] #app .admin-tabs [role="tab"][aria-selected="true"] { color: #fff; background: #343b69; }
+html[data-theme="dark"] #app tr,
+html[data-theme="dark"] #app th,
+html[data-theme="dark"] #app td,
+html[data-theme="dark"] #app .admin-table th,
+html[data-theme="dark"] #app .admin-table td { color: var(--zen-ink) !important; border-color: var(--zen-border); }
+html[data-theme="dark"] #app input,
+html[data-theme="dark"] #app select,
+html[data-theme="dark"] #app textarea,
+html[data-theme="dark"] #app .input,
+html[data-theme="dark"] #app .select,
+html[data-theme="dark"] .dialog input,
+html[data-theme="dark"] .dialog select,
+html[data-theme="dark"] .dialog textarea {
+  color: var(--zen-field-ink) !important;
+  -webkit-text-fill-color: var(--zen-field-ink);
+  background-color: var(--zen-field) !important;
+  border-color: var(--zen-border);
+  caret-color: var(--zen-field-ink);
+}
+html[data-theme="dark"] #app input::placeholder,
+html[data-theme="dark"] #app textarea::placeholder,
+html[data-theme="dark"] #app .input::placeholder,
+html[data-theme="dark"] .dialog input::placeholder,
+html[data-theme="dark"] .dialog textarea::placeholder { color: #aeb9c9 !important; opacity: 1; }
+html[data-theme="dark"] #app input:disabled,
+html[data-theme="dark"] #app select:disabled,
+html[data-theme="dark"] #app textarea:disabled { color: #aeb9c9 !important; background: #202733 !important; }
+html[data-theme="dark"] #app .btn--primary,
+html[data-theme="dark"] #app .btn--primary *,
+html[data-theme="dark"] #app button[type="submit"] { color: #fff !important; }
+html[data-theme="dark"] #app .btn--secondary,
+html[data-theme="dark"] #app .btn--ghost,
+html[data-theme="dark"] #app .chip,
+html[data-theme="dark"] #app .stepper,
+html[data-theme="dark"] #app .stepper button { color: var(--zen-ink) !important; background: var(--zen-surface-raised); border-color: var(--zen-border); }
+html[data-theme="dark"] .dialog,
+html[data-theme="dark"] .dialog__body { color: var(--zen-ink); background: var(--zen-surface); border-color: var(--zen-border); }
+html[data-theme="dark"] .dialog .muted { color: var(--zen-muted) !important; }
+html[data-theme="dark"] .toast,
+html[data-theme="dark"] .toast-region { color: var(--zen-ink); }
+html[data-theme="dark"] ::selection { color: #10141b; background: #a9ccff; }
+
+/* Ensure the admin workspace remains neutral and readable in light mode too. */
+html:not([data-theme="dark"])[data-section] body:has(.admin) { color: #182230; background: #f6f7fb; }
+html:not([data-theme="dark"])[data-section] body:has(.admin) .admin,
+html:not([data-theme="dark"])[data-section] body:has(.admin) .admin h2,
+html:not([data-theme="dark"])[data-section] body:has(.admin) .admin h3,
+html:not([data-theme="dark"])[data-section] body:has(.admin) .admin p,
+html:not([data-theme="dark"])[data-section] body:has(.admin) .admin label,
+html:not([data-theme="dark"])[data-section] body:has(.admin) .admin .muted { color: #182230; }
+html:not([data-theme="dark"])[data-section] body:has(.admin) .admin-tabs,
+html:not([data-theme="dark"])[data-section] body:has(.admin) .admin-panel,
+html:not([data-theme="dark"])[data-section] body:has(.admin) .admin-card,
+html:not([data-theme="dark"])[data-section] body:has(.admin) .admin-table-wrap,
+html:not([data-theme="dark"])[data-section] body:has(.admin) .dash-card,
+html:not([data-theme="dark"])[data-section] body:has(.admin) .dash-kpi {
+  color: #182230; background: #fff; border-color: #dce2eb;
+}
+html:not([data-theme="dark"])[data-section] body:has(.admin) .admin input,
+html:not([data-theme="dark"])[data-section] body:has(.admin) .admin select,
+html:not([data-theme="dark"])[data-section] body:has(.admin) .admin textarea { color: #182230 !important; background: #fff !important; border-color: #cbd2dc; }
+html:not([data-theme="dark"])[data-section] body:has(.admin) .admin-head,
+html:not([data-theme="dark"])[data-section] body:has(.admin) .admin-head * { color: #fff; }
