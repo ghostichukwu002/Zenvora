@@ -47,6 +47,14 @@ export async function renderProduct({ params }) {
     });
   }
 
+  // Keep a small, private-on-this-device recent-view history. Product IDs only; no account data.
+  try {
+    const key = 'zenvora-recently-viewed';
+    const prior = JSON.parse(localStorage.getItem(key) || '[]');
+    const ids = [product.id, ...prior.filter((id) => id !== product.id)].slice(0, 8);
+    localStorage.setItem(key, JSON.stringify(ids));
+  } catch { /* Storage can be unavailable in private browsing. */ }
+
   document.title = `${product.name} · Shop n Delight`;
   return productView(product);
 }
