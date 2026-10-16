@@ -1,5 +1,5 @@
 import { randomUUID } from 'node:crypto';
-import { AUTH_COOKIE, createAuth, createRateLimiter, publicUser } from './auth.js';
+import { AUTH_COOKIE, createAuth, createRateLimiter, normalizeNigerianPhone, publicUser } from './auth.js';
 import {
   addItem,
   CartError,
@@ -352,7 +352,7 @@ export function createApp({
       id: randomUUID(),
       label: clean(body.label || 'Home', 1, 40, 'label'),
       recipientName: clean(body.recipientName, 2, 100, 'recipient name'),
-      phone: clean(body.phone, 7, 24, 'phone number'),
+      phone: normalizeNigerianPhone(clean(body.phone, 7, 24, 'phone number')) || (() => { throw new HttpError(422, 'phone_invalid', 'Enter a valid Nigerian mobile number.'); })(),
       address: clean(body.address, 5, 300, 'street address'),
       area: clean(body.area, 2, 100, 'delivery area'),
       city: clean(body.city, 2, 100, 'city'),
