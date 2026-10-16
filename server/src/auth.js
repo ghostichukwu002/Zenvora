@@ -142,7 +142,7 @@ export function createAuth(db, { now = () => new Date(), sendResetEmail, adminEm
       try {
         db.prepare(
           'INSERT INTO users (id, email, password_hash, full_name, phone, role, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)',
-        ).run(id, cleanEmail, hash, name, cleanPhone, admins.has(cleanEmail) ? 'admin' : 'customer', iso());
+        ).run(id, cleanEmail, hash, name, cleanPhone, admins.has(cleanEmail) ? 'admin' : moderators.has(cleanEmail) ? 'moderator' : 'customer', iso());
       } catch {
         // Two sign-ups for one email at the same moment: the UNIQUE constraint decides.
         throw new HttpError(409, 'email_taken', 'An account with this email already exists. Try logging in.');
