@@ -17,7 +17,6 @@ import { renderMerchantDashboard, renderMerchantHome } from './views/merchant.js
 import { renderRider } from './views/rider.js';
 import { renderProduct } from './views/product.js';
 import { renderShop } from './views/shop.js';
-import { renderPuffSip } from './views/puff-sip.js';
 
 initLoadingScreen();
 
@@ -36,7 +35,7 @@ route('/shop', {
 route('/puff-sip', {
   nav: 'puff-sip',
   title: 'Puff & Sip',
-  render: () => renderPuffSip(),
+  render: ({ query }) => renderShop({ query, section: 'puff' }),
 });
 
 route('/search', {
