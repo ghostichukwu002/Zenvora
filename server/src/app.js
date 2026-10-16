@@ -206,6 +206,15 @@ export function createApp({
       });
     }
   }
+  // Apply edits after loading created products too, so their moderator changes survive restarts.
+  const allSavedOverrides = db.prepare('SELECT product_id, name, description, stock, price_kobo, promo_price_kobo FROM product_overrides').all();
+  for (const saved of allSavedOverrides) {
+    const product = catalogue.products.find((item) => item.id === saved.product_id);
+    if (product) Object.assign(product, {
+      name: saved.name, description: saved.description, stock: saved.stock,
+      priceKobo: saved.price_kobo, promoPriceKobo: saved.promo_price_kobo,
+    });
+  }
 
   const orders = createOrders(db);
   const merchantAccess = createMerchantAccess(db, { claimCodes: merchantClaimCodes });
@@ -570,6 +579,9 @@ export function createApp({
 
   router.post('/api/moderator/products', (ctx) => {
     const user = requireModerator(ctx);
+    if (!cloudinary.cloudName || !cloudinary.apiKey || !cloudinary.apiSecret) {
+      throw new HttpError(503, 'image_storage_unavailable', 'Cloudinary is not configured on the server yet.');
+    }
     const body = ctx.body ?? {};
     const name = typeof body.name === 'string' ? body.name.trim() : '';
     const description = typeof body.description === 'string' ? body.description.trim() : '';
