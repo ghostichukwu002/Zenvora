@@ -130,3 +130,5 @@ html[data-theme="dark"] .bottom-nav a svg { color: #f4f6fb !important; }
 html[data-theme="dark"] .dialog { color: #edf0f5; background: #1b2029; border-color: #333b48; }
 html[data-theme="dark"] .dialog .muted { color: #c2c9d4; }
 @media (prefers-reduced-motion: reduce) { .theme-toggle, .theme-toggle__track, .theme-toggle__thumb { transition: none !important; }
+
+}
