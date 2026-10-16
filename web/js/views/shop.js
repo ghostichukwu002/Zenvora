@@ -307,7 +307,7 @@ export function renderShop({ query, section = 'shop' }) {
       : section === 'puff' ? 'Everything in Puff & Sip' : 'Shop everything';
 
   // Keep page-level state in the title so back and forward stay understandable.
-  document.title = `${heading} · Shop n Delight`;
+  document.title = `${heading} · ${section === 'puff' ? 'Puff & Sip' : 'Shop n Delight'}`;
 
   const page = el(
     'div',
