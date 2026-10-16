@@ -26,12 +26,10 @@ test('moderator can edit catalogue values and edits survive app restart', async 
 
     const dbRow = app.db.prepare('SELECT name, stock, price_kobo, promo_price_kobo FROM product_overrides WHERE product_id = ?')
       .get('p-chicken-wrap');
-    assert.deepEqual(dbRow, {
-      name: 'Updated Chicken Wrap',
-      stock: 24,
-      price_kobo: 450000,
-      promo_price_kobo: 400000,
-    });
+    assert.equal(dbRow.name, 'Updated Chicken Wrap');
+    assert.equal(dbRow.stock, 24);
+    assert.equal(dbRow.price_kobo, 450000);
+    assert.equal(dbRow.promo_price_kobo, 400000);
 
     const restartedCatalogue = structuredClone({ categories, merchants, products });
     const restartedServer = createServer(createApp({ catalogue: restartedCatalogue, db: app.db }));
