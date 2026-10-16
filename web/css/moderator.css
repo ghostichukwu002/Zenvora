@@ -43,6 +43,24 @@
 .moderator-count { white-space:nowrap; color:var(--ink-600); font-size:.85rem; font-variant-numeric:tabular-nums; }
 .moderator-notice { min-height:1.3em; color:#167044; font-size:.88rem; font-weight:600; }
 .moderator-list { display:grid; gap:16px; }
+
+.moderator-create { min-width:0; border:1px solid var(--border); border-radius:22px; overflow:hidden; background:#fff; box-shadow:var(--shadow-sm); }
+.moderator-create__heading { display:flex; justify-content:space-between; align-items:flex-start; gap:18px; padding:22px; background:linear-gradient(110deg,var(--mod-soft),#fff 76%); border-bottom:1px solid var(--border); }
+.moderator-create__heading h2 { margin:0 0 7px; font-size:1.4rem; letter-spacing:-.035em; }
+.moderator-create__heading .moderator-lead { font-size:.9rem; }
+.moderator-create__badge { flex:none; padding:7px 11px; border-radius:999px; background:var(--mod-soft); color:var(--mod-accent-strong); font-size:.75rem; font-weight:800; }
+.moderator-create-form { min-width:0; }
+.moderator-photo-picker { padding:12px; }
+.moderator-photo-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; margin-top:12px; }
+.moderator-photo { min-width:0; overflow:hidden; border:1px solid var(--border); border-radius:15px; background:#fff; }
+.moderator-photo > img { display:block; width:100%; aspect-ratio:1; object-fit:cover; background:var(--mod-soft); }
+.moderator-photo__body { display:grid; gap:7px; padding:10px; }
+.moderator-photo__body strong { overflow-wrap:anywhere; font-size:.8rem; }
+.moderator-photo__body small { color:var(--ink-500); font-size:.72rem; }
+.moderator-photo__body .moderator-input { font-size:.8rem; padding:9px; }
+.moderator-photo-cover { display:flex; align-items:center; gap:7px; color:var(--ink-600); font-size:.78rem; font-weight:700; }
+.moderator-photo-cover input { accent-color:var(--mod-accent); }
+.moderator-photo__body .btn { width:100%; }
 .moderator-product { min-width:0; padding:0; border:1px solid var(--border); border-radius:20px; overflow:hidden; background:#fff; box-shadow:var(--shadow-sm); transition:border-color var(--dur-fast),box-shadow var(--dur-fast); }
 .moderator-product.is-dirty { border-color:#edb37f; box-shadow:0 0 0 3px #fff0e4; }
 .moderator-product.is-saved { border-color:#74c69d; }
