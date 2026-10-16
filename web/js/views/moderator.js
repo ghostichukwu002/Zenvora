@@ -49,7 +49,7 @@ export async function renderModerator() {
     return el('section', { class: 'container section moderator-denied' },
       stateBox({
         title: 'Staff access only',
-        body: 'This workspace is reserved for approved Zenvora moderators. Your account does not have catalogue-editing access.',
+        body: 'This workspace is reserved for approved store moderators. Your account does not have catalogue-editing access.',
         iconName: 'shield',
         actions: [linkButton({ href: '#/account', text: 'Back to your account', variant: 'secondary' })],
       }));
@@ -68,9 +68,9 @@ export async function renderModerator() {
   const refreshButton = el('button', { type: 'button', class: 'btn btn--secondary btn--small', text: 'Refresh', onclick: () => loadProducts() });
   const heading = el('div', { class: 'moderator-heading' },
     el('div', { class: 'moderator-heading__copy' },
-      el('p', { class: 'moderator-eyebrow', text: 'ZENVORA / CATALOGUE CONTROL' }),
-      el('h1', { text: 'Moderator workspace' }),
-      el('p', { class: 'moderator-lead', text: 'Keep both storefronts accurate. Edit product details, prices and stock, then save each item.' })),
+      el('p', { class: 'moderator-eyebrow', text: 'STORE OPERATIONS / CATALOGUE CONTROL' }),
+      el('h1', { text: 'Store operations' }),
+      el('p', { class: 'moderator-lead', text: 'Manage both storefronts from one place. Switch stores, update product details, adjust prices and keep stock accurate.' })),
     el('div', { class: 'moderator-user' },
       el('span', { class: 'moderator-user__avatar', text: (user.fullName || user.email || 'M').trim().charAt(0).toUpperCase() }),
       el('span', {}, el('strong', { text: user.fullName || 'Moderator' }), el('small', { text: user.role === 'admin' ? 'Administrator access' : 'Catalogue moderator' }))));
@@ -95,7 +95,7 @@ export async function renderModerator() {
       list.append(el('div', { class: 'moderator-empty moderator-empty--loading', role: 'status' },
         el('span', { class: 'moderator-spinner', 'aria-hidden': 'true' }),
         el('strong', { text: 'Loading products' }),
-        el('p', { text: 'Getting the latest catalogue from Zenvora.' })));
+        el('p', { text: 'Getting the latest catalogue from your stores.' })));
       return;
     }
     if (!items.length) {
@@ -229,7 +229,7 @@ export async function renderModerator() {
         body: err.status === 401
           ? 'Your session may have expired. Sign in again, then reopen the moderator workspace.'
           : err.status === 403
-            ? 'This account is not allowed to edit the catalogue. Ask the owner to check your moderator role in Render.'
+            ? 'This account is not allowed to edit the catalogue. Ask the store owner to confirm your moderator access.'
             : err.message || 'Check the backend connection and try again.',
         actions: [linkButton({ text: 'Try again', onClick: () => loadProducts(), variant: 'secondary' })],
         iconName: 'shield',
