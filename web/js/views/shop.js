@@ -135,7 +135,9 @@ export function renderShop({ query, section = 'shop' }) {
   );
 
   const areaName = filters.area || storedArea;
-  const areaChip = areaName
+  // Shop n Delight keeps the quick-filter row uncluttered; delivery area
+  // remains applied in the product query when a saved area is present.
+  const areaChip = section === 'shop' ? null : areaName
     ? addChip(
         `Deliver to ${areaName}`,
         () => Boolean(filters.area),
