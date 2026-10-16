@@ -137,3 +137,23 @@
 .product-detail__media { min-width: 0; max-width: 100%; }
 .product-detail__media svg { max-width: 100%; }
 .product-detail > *, .product-detail__info { min-width: 0; }
+
+
+/* Moderator-created product photography and structured specs. */
+.product-gallery { display:grid; gap:12px; width:100%; padding:clamp(10px,2vw,18px); }
+.product-gallery__main { display:block; width:100%; aspect-ratio:1 / 1; max-height:620px; object-fit:contain!important; border-radius:18px; }
+.product-gallery__thumbs { display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:8px; }
+.product-gallery__thumb { min-width:0; padding:3px; border:1px solid transparent; border-radius:12px; background:rgba(255,255,255,.72); cursor:pointer; overflow:hidden; }
+.product-gallery__thumb.is-active { border-color:#c94f0b; box-shadow:0 0 0 2px rgba(201,79,11,.12); }
+.product-gallery__thumb img { display:block; width:100%; aspect-ratio:1; object-fit:cover; border-radius:8px; }
+.product-specifications { margin:18px 0; padding:16px; border:1px solid #f2e5dc; border-radius:16px; background:#fffdfa; }
+.product-specifications h2 { margin:0 0 10px; font-size:1rem; }
+.product-specifications dl { margin:0; display:grid; }
+.product-specifications__row { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.3fr); gap:12px; padding:9px 0; border-bottom:1px solid #f2e9e3; }
+.product-specifications__row:last-child { border-bottom:0; }
+.product-specifications dt { color:#75655b; font-size:.86rem; }
+.product-specifications dd { margin:0; font-size:.86rem; font-weight:650; overflow-wrap:anywhere; }
+@media (max-width:600px) {
+  .product-gallery__thumbs { grid-template-columns:repeat(4,minmax(0,1fr)); }
+  .product-specifications__row { grid-template-columns:1fr; gap:3px; }
+}
