@@ -1,3 +1,4 @@
+import { createHash, randomUUID } from 'node:crypto';
 import { AUTH_COOKIE, createAuth, createRateLimiter, publicUser } from './auth.js';
 import {
   addItem,
@@ -37,6 +38,9 @@ function serializeProduct(product, catalogue) {
     id: product.id,
     name: product.name,
     description: product.description,
+    brand: product.brand ?? '',
+    specifications: product.specifications ?? {},
+    images: Array.isArray(product.images) ? product.images : [],
     category: { id: category.id, name: category.name },
     merchant: {
       id: merchant.id,
@@ -148,6 +152,11 @@ export function createApp({
   // Emails that become administrators: at registration, and for existing accounts at startup.
   adminEmails = [],
   moderatorEmails = [],
+  cloudinary = {
+    cloudName: process.env.CLOUDINARY_CLOUD_NAME || '',
+    apiKey: process.env.CLOUDINARY_API_KEY || '',
+    apiSecret: process.env.CLOUDINARY_API_SECRET || '',
+  },
 }) {
   const allowed = new Set(allowedOrigins);
   const router = createRouter();
@@ -180,6 +189,22 @@ export function createApp({
       name: saved.name, description: saved.description, stock: saved.stock,
       priceKobo: saved.price_kobo, promoPriceKobo: saved.promo_price_kobo,
     });
+  }
+
+  // Products created by moderators live in SQLite, not in the static demo catalogue.
+  // Load them before building cart/order services so they are available after restarts.
+  const savedProducts = db.prepare('SELECT * FROM moderator_products ORDER BY added_at DESC').all();
+  for (const row of savedProducts) {
+    if (!catalogue.products.some((item) => item.id === row.id)) {
+      catalogue.products.unshift({
+        id: row.id, merchantId: row.merchant_id, category: row.category, name: row.name,
+        description: row.description, brand: row.brand || '', priceKobo: row.price_kobo,
+        promoPriceKobo: row.promo_price_kobo, stock: row.stock,
+        specifications: JSON.parse(row.specifications_json || '{}'),
+        images: JSON.parse(row.images_json || '[]'), variants: JSON.parse(row.variants_json || '[]'),
+        rating: null, addedAt: row.added_at,
+      });
+    }
   }
 
   const orders = createOrders(db);
@@ -507,7 +532,20 @@ export function createApp({
     return user;
   };
 
-  // Moderators can edit catalogue values across both storefronts only.
+  // Moderators can manage product details and media across both storefronts.
+  router.post('/api/moderator/uploads/sign', (ctx) => {
+    requireModerator(ctx);
+    if (!cloudinary.cloudName || !cloudinary.apiKey || !cloudinary.apiSecret) {
+      throw new HttpError(503, 'image_storage_unavailable', 'Cloudinary is not configured on the server yet.');
+    }
+    const timestamp = Math.floor(Date.now() / 1000);
+    const folder = 'store-catalogue/products';
+    const publicId = randomUUID();
+    const toSign = `folder=${folder}&public_id=${publicId}&timestamp=${timestamp}`;
+    const signature = createHash('sha1').update(toSign + cloudinary.apiSecret).digest('hex');
+    return { status: 200, body: { cloudName: cloudinary.cloudName, apiKey: cloudinary.apiKey, timestamp, folder, publicId, signature } };
+  });
+
   router.get('/api/moderator/products', (ctx) => {
     requireModerator(ctx);
     const section = ctx.query.section === 'puff' ? 'puff' : ctx.query.section === 'shop' ? 'shop' : null;
@@ -517,12 +555,91 @@ export function createApp({
         const merchant = catalogue.merchants.find((m) => m.id === product.merchantId);
         return {
           id: product.id, name: product.name, description: product.description,
-          merchantId: product.merchantId, merchantName: merchant?.name ?? product.merchantId,
+          brand: product.brand ?? '', specifications: product.specifications ?? {}, images: product.images ?? [],
+          category: product.category, merchantId: product.merchantId, merchantName: merchant?.name ?? product.merchantId,
           section: merchant?.section ?? 'shop', priceKobo: product.priceKobo,
           promoPriceKobo: product.promoPriceKobo, stock: product.stock,
         };
       });
-    return { status: 200, body: { items } };
+    return { status: 200, body: {
+      items,
+      merchants: catalogue.merchants.filter((merchant) => !section || merchant.section === section).map(({ id, name, section: storeSection, category }) => ({ id, name, section: storeSection, category })),
+      categories: catalogue.categories.filter((category) => !section || category.section === section).map(({ id, name, section: storeSection }) => ({ id, name, section: storeSection })),
+    } };
+  });
+
+  router.post('/api/moderator/products', (ctx) => {
+    const user = requireModerator(ctx);
+    const body = ctx.body ?? {};
+    const name = typeof body.name === 'string' ? body.name.trim() : '';
+    const description = typeof body.description === 'string' ? body.description.trim() : '';
+    const brand = typeof body.brand === 'string' ? body.brand.trim().slice(0, 100) : '';
+    if (name.length < 2 || name.length > 140) throw new HttpError(422, 'product_name_invalid', 'Product name must be between 2 and 140 characters.');
+    if (description.length > 2000) throw new HttpError(422, 'product_description_invalid', 'Description must be 2,000 characters or fewer.');
+    const merchant = catalogue.merchants.find((item) => item.id === body.merchantId);
+    const category = catalogue.categories.find((item) => item.id === body.category);
+    if (!merchant || !category || merchant.section !== category.section || (body.section && body.section !== merchant.section)) {
+      throw new HttpError(422, 'product_store_invalid', 'Choose a valid store and a category belonging to that storefront.');
+    }
+    if (!Number.isInteger(body.priceKobo) || body.priceKobo < 100 || body.priceKobo > 100000000) {
+      throw new HttpError(422, 'price_invalid', 'Price must be between ₦1 and ₦1,000,000, in kobo.');
+    }
+    const promoPriceKobo = body.promoPriceKobo === undefined ? null : body.promoPriceKobo;
+    if (promoPriceKobo !== null && (!Number.isInteger(promoPriceKobo) || promoPriceKobo < 100 || promoPriceKobo >= body.priceKobo)) {
+      throw new HttpError(422, 'promo_invalid', 'Offer price must be lower than the regular price.');
+    }
+    const stock = body.stock === undefined ? null : body.stock;
+    if (stock !== null && (!Number.isInteger(stock) || stock < 0 || stock > 100000)) {
+      throw new HttpError(422, 'stock_invalid', 'Stock must be a whole number from 0 to 100,000, or null for made-to-order.');
+    }
+    const specifications = body.specifications ?? {};
+    if (!specifications || typeof specifications !== 'object' || Array.isArray(specifications) || Object.keys(specifications).length > 20) {
+      throw new HttpError(422, 'specifications_invalid', 'Provide up to 20 product specification fields.');
+    }
+    const cleanSpecifications = {};
+    for (const [key, value] of Object.entries(specifications)) {
+      const cleanKey = key.trim().slice(0, 40);
+      if (!cleanKey || typeof value !== 'string' || value.trim().length > 200) {
+        throw new HttpError(422, 'specifications_invalid', 'Each specification needs a label and a text value of 200 characters or fewer.');
+      }
+      if (value.trim()) cleanSpecifications[cleanKey] = value.trim();
+    }
+    if (!Array.isArray(body.images) || body.images.length < 1 || body.images.length > 6) {
+      throw new HttpError(422, 'images_invalid', 'Add between 1 and 6 product images.');
+    }
+    const cloudHost = 'res.cloudinary.com';
+    const images = body.images.map((image) => {
+      if (!image || typeof image.url !== 'string' || typeof image.publicId !== 'string' ||
+          image.publicId.length > 250 || typeof image.alt !== 'string' || image.alt.trim().length > 160) {
+        throw new HttpError(422, 'images_invalid', 'Each image needs a Cloudinary URL, public ID, and alt text (160 characters max).');
+      }
+      let parsed;
+      try { parsed = new URL(image.url); } catch { throw new HttpError(422, 'images_invalid', 'One of the image URLs is invalid.'); }
+      if (parsed.protocol !== 'https:' || parsed.hostname !== cloudHost || !parsed.pathname.includes('/image/upload/')) {
+        throw new HttpError(422, 'images_invalid', 'Product images must be hosted on Cloudinary.');
+      }
+      if (cloudinary.cloudName && !parsed.pathname.startsWith(`/${cloudinary.cloudName}/image/upload/`)) {
+        throw new HttpError(422, 'images_invalid', 'An image belongs to a different Cloudinary account.');
+      }
+      return { url: parsed.toString(), publicId: image.publicId, alt: image.alt.trim() };
+    });
+    const id = `p-${randomUUID()}`;
+    const addedAt = new Date().toISOString();
+    const product = { id, merchantId: merchant.id, category: category.id, name, description, brand,
+      priceKobo: body.priceKobo, promoPriceKobo, stock, specifications: cleanSpecifications,
+      images, variants: [], rating: null, addedAt };
+    db.prepare(`INSERT INTO moderator_products
+      (id, merchant_id, category, name, description, brand, price_kobo, promo_price_kobo, stock, specifications_json, images_json, variants_json, added_at, created_by)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`).run(
+      id, merchant.id, category.id, name, description, brand, product.priceKobo, promoPriceKobo, stock,
+      JSON.stringify(cleanSpecifications), JSON.stringify(images), '[]', addedAt, user.id,
+    );
+    catalogue.products.unshift(product);
+    db.prepare('INSERT INTO audit_log (actor_user_id, action, target, detail_json, created_at) VALUES (?, ?, ?, ?, ?)')
+      .run(user.id, 'catalogue.product_created', id, JSON.stringify({ merchantId: merchant.id, category: category.id, imageCount: images.length }), addedAt);
+    return { status: 201, body: { product: { id, name, description, brand, category: category.id, merchantId: merchant.id,
+      merchantName: merchant.name, section: merchant.section, priceKobo: product.priceKobo, promoPriceKobo, stock,
+      specifications: cleanSpecifications, images } } };
   });
 
   router.patch('/api/moderator/products/:productId', (ctx) => {
