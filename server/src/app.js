@@ -147,10 +147,11 @@ export function createApp({
   allowedOrigins = [],
   // Emails that become administrators: at registration, and for existing accounts at startup.
   adminEmails = [],
+  moderatorEmails = [],
 }) {
   const allowed = new Set(allowedOrigins);
   const router = createRouter();
-  const auth = createAuth(db, { sendResetEmail, adminEmails });
+  const auth = createAuth(db, { sendResetEmail, adminEmails, moderatorEmails });
   // Accounts named in ZENVORA_ADMIN_EMAILS are made administrators at startup, for accounts that
   // already exist. This only grants access. Removing an email from the list does not demote anyone;
   // use scripts/grant-role.js for that.
@@ -161,6 +162,26 @@ export function createApp({
         .run('system', 'account.role_changed', email, JSON.stringify({ role: 'admin', via: 'ZENVORA_ADMIN_EMAILS' }), new Date().toISOString());
     }
   }
+  // Existing accounts listed in ZENVORA_MODERATOR_EMAILS receive catalogue-only access.
+  // Admins stay admins; removing an email from this list never silently demotes an account.
+  for (const email of moderatorEmails) {
+    const changed = db.prepare("UPDATE users SET role = 'moderator' WHERE email = ? AND role = 'customer'").run(email).changes;
+    if (changed) {
+      db.prepare('INSERT INTO audit_log (actor_user_id, action, target, detail_json, created_at) VALUES (?, ?, ?, ?, ?)')
+        .run('system', 'account.role_changed', email, JSON.stringify({ role: 'moderator', via: 'ZENVORA_MODERATOR_EMAILS' }), new Date().toISOString());
+    }
+  }
+
+  // Persist catalogue edits across server restarts.
+  const savedOverrides = db.prepare('SELECT product_id, name, description, stock, price_kobo, promo_price_kobo FROM product_overrides').all();
+  for (const saved of savedOverrides) {
+    const product = catalogue.products.find((item) => item.id === saved.product_id);
+    if (product) Object.assign(product, {
+      name: saved.name, description: saved.description, stock: saved.stock,
+      priceKobo: saved.price_kobo, promoPriceKobo: saved.promo_price_kobo,
+    });
+  }
+
   const orders = createOrders(db);
   const merchantAccess = createMerchantAccess(db, { claimCodes: merchantClaimCodes });
   const dispatch = createDispatch(db, { catalogue });
@@ -477,6 +498,93 @@ export function createApp({
     if (user.role !== 'admin') throw new HttpError(403, 'forbidden', 'Only administrators can do that.');
     return user;
   };
+
+  const requireModerator = (ctx) => {
+    const user = requireUser(ctx);
+    if (!['admin', 'moderator'].includes(user.role)) {
+      throw new HttpError(403, 'forbidden', 'Moderator access is required.');
+    }
+    return user;
+  };
+
+  // Moderators can edit catalogue values across both storefronts only.
+  router.get('/api/moderator/products', (ctx) => {
+    requireModerator(ctx);
+    const section = ctx.query.section === 'puff' ? 'puff' : ctx.query.section === 'shop' ? 'shop' : null;
+    const items = catalogue.products
+      .filter((product) => !section || catalogue.merchants.find((m) => m.id === product.merchantId)?.section === section)
+      .map((product) => {
+        const merchant = catalogue.merchants.find((m) => m.id === product.merchantId);
+        return {
+          id: product.id, name: product.name, description: product.description,
+          merchantId: product.merchantId, merchantName: merchant?.name ?? product.merchantId,
+          section: merchant?.section ?? 'shop', priceKobo: product.priceKobo,
+          promoPriceKobo: product.promoPriceKobo, stock: product.stock,
+        };
+      });
+    return { status: 200, body: { items } };
+  });
+
+  router.patch('/api/moderator/products/:productId', (ctx) => {
+    const user = requireModerator(ctx);
+    const product = catalogue.products.find((item) => item.id === ctx.params.productId);
+    if (!product) throw new HttpError(404, 'product_not_found', 'Product not found.');
+    const body = ctx.body ?? {};
+    const next = {
+      name: product.name, description: product.description, stock: product.stock,
+      priceKobo: product.priceKobo, promoPriceKobo: product.promoPriceKobo,
+    };
+    if (body.name !== undefined) {
+      if (typeof body.name !== 'string' || body.name.trim().length < 2 || body.name.trim().length > 140) {
+        throw new HttpError(422, 'product_name_invalid', 'Product name must be between 2 and 140 characters.');
+      }
+      next.name = body.name.trim();
+    }
+    if (body.description !== undefined) {
+      if (typeof body.description !== 'string' || body.description.trim().length > 2000) {
+        throw new HttpError(422, 'product_description_invalid', 'Description must be 2,000 characters or fewer.');
+      }
+      next.description = body.description.trim();
+    }
+    if (body.stock !== undefined) {
+      if (body.stock !== null && (!Number.isInteger(body.stock) || body.stock < 0 || body.stock > 100000)) {
+        throw new HttpError(422, 'stock_invalid', 'Stock must be a whole number between 0 and 100,000, or null for made-to-order.');
+      }
+      next.stock = body.stock;
+    }
+    if (body.priceKobo !== undefined) {
+      if (!Number.isInteger(body.priceKobo) || body.priceKobo < 100 || body.priceKobo > 100000000) {
+        throw new HttpError(422, 'price_invalid', 'Price must be between ₦1 and ₦1,000,000, in kobo.');
+      }
+      next.priceKobo = body.priceKobo;
+    }
+    if (body.promoPriceKobo !== undefined) {
+      if (body.promoPriceKobo !== null && (!Number.isInteger(body.promoPriceKobo) || body.promoPriceKobo < 100 || body.promoPriceKobo > 100000000)) {
+        throw new HttpError(422, 'promo_invalid', 'Offer price must be valid or null to clear it.');
+      }
+      next.promoPriceKobo = body.promoPriceKobo;
+    }
+    if (next.promoPriceKobo !== null && next.promoPriceKobo >= next.priceKobo) {
+      throw new HttpError(422, 'promo_invalid', 'Offer price must be lower than the regular price.');
+    }
+
+    const updatedAt = new Date().toISOString();
+    db.prepare(`INSERT INTO product_overrides
+      (product_id, name, description, stock, price_kobo, promo_price_kobo, updated_by, updated_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+      ON CONFLICT(product_id) DO UPDATE SET
+      name = excluded.name, description = excluded.description, stock = excluded.stock,
+      price_kobo = excluded.price_kobo, promo_price_kobo = excluded.promo_price_kobo,
+      updated_by = excluded.updated_by, updated_at = excluded.updated_at`)
+      .run(product.id, next.name, next.description, next.stock, next.priceKobo, next.promoPriceKobo, user.id, updatedAt);
+    Object.assign(product, next);
+    db.prepare('INSERT INTO audit_log (actor_user_id, action, target, detail_json, created_at) VALUES (?, ?, ?, ?, ?)')
+      .run(user.id, 'catalogue.product_updated', product.id, JSON.stringify({ fields: Object.keys(body) }), updatedAt);
+    return { status: 200, body: { product: {
+      id: product.id, name: product.name, description: product.description, stock: product.stock,
+      priceKobo: product.priceKobo, promoPriceKobo: product.promoPriceKobo,
+    } } };
+  });
 
   router.get('/api/admin/overview', (ctx) => {
     requireAdmin(ctx);
