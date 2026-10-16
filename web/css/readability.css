@@ -1,0 +1,30 @@
+/* Readability fixes that remain after the white and black page themes.
+   The product page sits on the orange gradient, so its text is white; the quantity pill stays
+   light with dark numbers in the light theme. Loaded last so it wins ties. */
+
+html[data-section="shop-n-delight"] .product-detail__info p,
+html[data-section="shop-n-delight"] .product-detail__info a,
+html[data-section="shop-n-delight"] .product-detail__info .muted,
+html[data-section="shop-n-delight"] .product-detail__info .availability,
+html[data-section="shop-n-delight"] .product-detail__merchant,
+html[data-section="shop-n-delight"] .product-detail__merchant strong { color: #fff; }
+
+html[data-section="shop-n-delight"] .product-detail__info .btn--ghost {
+  color: #fff;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .stepper,
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .stepper * { color: #1b1d2a; }
+
+/* The first Puff collection card had no icon background, so its white icon vanished. */
+html[data-section="puff-sip"] .puff-collection-card--orange .puff-collection-card__icon { background: #2a6fe0; }
+
+/* Product cards are coloured in both storefronts, so their titles and the struck-through old
+   price are light. */
+html[data-section] .product-card h2,
+html[data-section] .product-card h2 a,
+html[data-section] .product-card h3,
+html[data-section] .product-card h3 a { color: #fff; }
+html[data-section] .product-card .price--was { color: rgba(255, 255, 255, .82); }

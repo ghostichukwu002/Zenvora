@@ -47,7 +47,7 @@ export function renderShop({ query, section = 'shop' }) {
     enterkeyhint: 'search',
     name: 'q',
     value: filters.q,
-    placeholder: 'Search products or stores',
+    placeholder: 'Search products',
     'aria-label': 'Search products',
     autocomplete: 'off',
     maxlength: '100',

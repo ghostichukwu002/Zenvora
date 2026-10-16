@@ -7,9 +7,9 @@
 }
 html { scroll-behavior: smooth; }
 .site-header { transition: box-shadow 240ms ease, background-color 240ms ease, border-color 240ms ease; }
-.site-header.is-scrolled { box-shadow: 0 10px 30px rgba(36,16,68,.09); background: rgba(251,250,255,.95); }
+.site-header.is-scrolled { box-shadow: 0 10px 30px rgba(68,37,16,.09); background: rgba(251,250,255,.95); }
 .brand__mark { transform-origin: 50% 50%; transition: transform 500ms var(--motion-ease), filter 500ms var(--motion-ease); }
-.brand:hover .brand__mark { transform: rotate(-8deg) scale(1.08); filter: drop-shadow(0 5px 12px rgba(109,40,217,.28)); }
+.brand:hover .brand__mark { transform: rotate(-8deg) scale(1.08); filter: drop-shadow(0 5px 12px rgba(201,79,11,.28)); }
 .hero__eyebrow::before { animation: violet-pulse 2.4s ease-in-out infinite; }
 .hero > * { animation: hero-arrive 720ms var(--motion-ease) both; }
 .hero > *:nth-child(2) { animation-delay: 90ms; }
@@ -48,7 +48,7 @@ html { scroll-behavior: smooth; }
 .icon-button:active { transform: scale(.92); }
 .cart-count.is-bumping { animation: cart-pop 430ms var(--motion-ease); }
 .category-tile__icon { transition: transform 320ms var(--motion-ease), box-shadow 320ms ease; }
-.category-tile:hover .category-tile__icon { transform: translateY(-3px) rotate(-4deg) scale(1.06); box-shadow: 0 7px 16px rgba(109,40,217,.13); }
+.category-tile:hover .category-tile__icon { transform: translateY(-3px) rotate(-4deg) scale(1.06); box-shadow: 0 7px 16px rgba(201,79,11,.13); }
 .product-card { transform-origin: center bottom; will-change: transform; }
 .product-card__media img { will-change: transform; }
 .product-card:hover .product-card__badge { animation: badge-pop 360ms var(--motion-ease); }
@@ -64,7 +64,7 @@ html { scroll-behavior: smooth; }
 [data-motion-reveal].motion-visible.product-card,
 [data-motion-reveal].motion-visible.category-tile { transition-duration: 520ms; }
 @keyframes hero-arrive { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes violet-pulse { 0%,100% { box-shadow: 0 0 0 4px rgba(139,92,246,.1); } 50% { box-shadow: 0 0 0 8px rgba(139,92,246,.035); } }
+@keyframes violet-pulse { 0%,100% { box-shadow: 0 0 0 4px rgba(244,119,33,.1); } 50% { box-shadow: 0 0 0 8px rgba(244,119,33,.035); } }
 @keyframes orbit-drift { from { transform: translate(0,0) rotate(-7deg); } to { transform: translate(-12px,12px) rotate(8deg); } }
 @keyframes sparkle-pulse { 0%,100% { opacity: .8; box-shadow: 0 0 18px 6px rgba(196,181,253,.2); } 50% { opacity: 1; box-shadow: 0 0 30px 12px rgba(196,181,253,.35); } }
 @keyframes mark-float { 0%,100% { transform: translateY(0) rotate(-3deg); } 50% { transform: translateY(-9px) rotate(3deg); } }
@@ -77,7 +77,7 @@ html { scroll-behavior: smooth; }
 @keyframes toast-arrive { from { opacity: 0; transform: translate3d(0,10px,0) scale(.98); } to { opacity: 1; transform: translate3d(0,0,0) scale(1); } }
 @media (hover: hover) and (pointer: fine) {
   .hero__panel { transition: transform 300ms ease, box-shadow 300ms ease; }
-  .hero__panel:hover { box-shadow: 0 30px 65px rgba(36,16,68,.22), inset 0 1px 0 rgba(255,255,255,.14); }
+  .hero__panel:hover { box-shadow: 0 30px 65px rgba(68,37,16,.22), inset 0 1px 0 rgba(255,255,255,.14); }
 }
 @media (max-width: 600px) {
   .hero > * { animation-duration: 560ms; }

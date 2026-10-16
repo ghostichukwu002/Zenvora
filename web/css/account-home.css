@@ -11,10 +11,10 @@
   margin-left: auto;
   min-height: 40px;
   padding-inline: 14px;
-  border: 1px solid #e8def6;
+  border: 1px solid #f6e8de;
   border-radius: 12px;
   background: rgba(255,255,255,.76);
-  box-shadow: 0 5px 16px rgba(40,20,71,.035);
+  box-shadow: 0 5px 16px rgba(71,40,20,.035);
 }
 .hero .purchase__row {
   display: grid;
@@ -28,23 +28,23 @@
 .account-hero {
   align-items: center;
   padding: clamp(20px,3.6vw,34px);
-  border: 1px solid #e7ddf4;
+  border: 1px solid #f4e6dd;
   border-radius: 26px;
   background:
-    radial-gradient(circle at 95% 0%,rgba(215,197,255,.6),transparent 38%),
-    linear-gradient(130deg,rgba(255,255,255,.98),rgba(247,242,255,.92));
-  box-shadow: 0 12px 36px rgba(40,20,71,.055),inset 0 1px 0 #fff;
+    radial-gradient(circle at 95% 0%,rgba(255,220,197,.6),transparent 38%),
+    linear-gradient(130deg,rgba(255,255,255,.98),rgba(255,247,242,.92));
+  box-shadow: 0 12px 36px rgba(71,40,20,.055),inset 0 1px 0 #fff;
 }
 .account-hero__identity { display: flex; align-items: center; gap: 16px; min-width: 0; }
 .account-avatar {
   display: grid; place-items: center; flex: 0 0 auto;
   width: clamp(54px,8vw,76px); aspect-ratio: 1;
   border-radius: 23px; color: #fff; font-size: 1.75rem; font-weight: 850;
-  background: radial-gradient(circle at 28% 15%,#bda4ff,transparent 42%),linear-gradient(145deg,#8b5cf6,#4c1d95);
-  box-shadow: 0 12px 25px rgba(109,40,217,.24),inset 0 1px 0 rgba(255,255,255,.35);
+  background: radial-gradient(circle at 28% 15%,#ffc8a4,transparent 42%),linear-gradient(145deg,#f47721,#2a1c16);
+  box-shadow: 0 12px 25px rgba(201,79,11,.24),inset 0 1px 0 rgba(255,255,255,.35);
 }
 .account-hero__copy { min-width: 0; }
-.account-kicker { margin: 0 0 6px; color: #8a71aa; font-size: .68rem; line-height: 1.35; letter-spacing: .13em; font-weight: 850; }
+.account-kicker { margin: 0 0 6px; color: #aa8871; font-size: .68rem; line-height: 1.35; letter-spacing: .13em; font-weight: 850; }
 .account-hero h1 { display: flex; align-items: center; flex-wrap: wrap; gap: 9px; margin: 0; font-size: clamp(1.6rem,1.3rem + 1.3vw,2.25rem); line-height: 1.08; letter-spacing: -.055em; }
 .account-hero h1 .badge, .account-hero h1 .trust-badge { font-size: .72rem; letter-spacing: 0; }
 .account-email { margin-top: 9px; color: #756782; font-size: .9rem; overflow-wrap: anywhere; }
@@ -56,25 +56,25 @@
 }
 .account-link {
   display: flex; align-items: center; gap: 12px; min-width: 0; min-height: 84px;
-  padding: 14px; border: 1px solid #e9e1f4; border-radius: 18px;
-  background: rgba(255,255,255,.88); color: #2b1943; text-decoration: none;
-  box-shadow: 0 5px 18px rgba(40,20,71,.03);
+  padding: 14px; border: 1px solid #f4e9e1; border-radius: 18px;
+  background: rgba(255,255,255,.88); color: #432a19; text-decoration: none;
+  box-shadow: 0 5px 18px rgba(71,40,20,.03);
   transition: transform 180ms ease,border-color 180ms ease,box-shadow 180ms ease;
 }
-.account-link:hover { transform: translateY(-2px); border-color: #cbb6f1; box-shadow: 0 10px 25px rgba(70,36,118,.08); text-decoration: none; }
-.account-link__icon { display: grid; place-items: center; flex: 0 0 42px; height: 42px; border-radius: 14px; background: #f0e8ff; color: #6d28d9; font-size: 1.25rem; font-weight: 800; }
+.account-link:hover { transform: translateY(-2px); border-color: #f1ceb6; box-shadow: 0 10px 25px rgba(118,69,36,.08); text-decoration: none; }
+.account-link__icon { display: grid; place-items: center; flex: 0 0 42px; height: 42px; border-radius: 14px; background: #fff1e8; color: #c94f0b; font-size: 1.25rem; font-weight: 800; }
 .account-link__copy { display: grid; gap: 4px; min-width: 0; }
 .account-link__copy strong { font-size: .9rem; line-height: 1.25; }
 .account-link__copy small { color: #80738e; font-size: .74rem; line-height: 1.35; }
-.account-link__arrow { margin-left: auto; align-self: flex-start; color: #8b5cf6; font-size: 1rem; }
-.account-link--admin { border-color: #d9c8f7; background: linear-gradient(130deg,#fff,#f4edff); }
+.account-link__arrow { margin-left: auto; align-self: flex-start; color: #f47721; font-size: 1rem; }
+.account-link--admin { border-color: #f7dbc8; background: linear-gradient(130deg,#fff,#fff4ed); }
 .account-grid { display: grid; grid-template-columns: minmax(0,1.05fr) minmax(0,.95fr); align-items: start; gap: 18px; }
 .account-grid > section { min-width: 0; }
 .account-panel {
   min-width: 0; padding: clamp(18px,2.7vw,28px);
-  border: 1px solid #e8e0f3; border-radius: 23px;
+  border: 1px solid #f3e8e0; border-radius: 23px;
   background: rgba(255,255,255,.91);
-  box-shadow: 0 8px 28px rgba(40,20,71,.04);
+  box-shadow: 0 8px 28px rgba(71,40,20,.04);
 }
 .account-panel__head { display: flex; align-items: end; justify-content: space-between; gap: 12px; margin-bottom: 18px; }
 .account-panel__head h2 { margin: 0; font-size: 1.35rem; letter-spacing: -.045em; }
