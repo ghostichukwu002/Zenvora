@@ -304,3 +304,10 @@ html[data-theme="dark"] body .bottom-nav a {
 html[data-section="puff-sip"]:not([data-theme="dark"]) .site-footer :is(.footnote, p) {
   color: #e6f0ff;
 }
+
+/* Header icons on the light Puff & Sip header were white on white. */
+html[data-section="puff-sip"]:not([data-theme="dark"]) .site-header .icon-button,
+html[data-section="puff-sip"]:not([data-theme="dark"]) .site-header .icon-button svg {
+  color: #1f4f9e;
+}
+html[data-section] .bottom-nav a.bottom-nav__swap svg { color: #fff; stroke: #fff; }

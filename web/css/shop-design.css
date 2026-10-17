@@ -321,3 +321,16 @@ html[data-section] .bottom-nav a[aria-current="page"]::before {
   border-radius: 50%;
 }
 .bottom-nav a.bottom-nav__swap svg { color: #fff; }
+
+/* Storefront logo at the top of every page. The router swaps the image per storefront. */
+.site-brand { display: inline-flex; align-items: center; flex: 0 0 auto; margin-right: 12px; }
+.site-brand__logo {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+  border-radius: 10px;
+  background: #fff;
+}
+
+/* Bottom bar: five columns in both storefronts (spacing-polish sets three). */
+html[data-section] .bottom-nav { grid-template-columns: repeat(5, minmax(0, 1fr)); }
