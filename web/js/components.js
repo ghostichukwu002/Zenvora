@@ -4,6 +4,7 @@ import { el, icon } from './dom.js';
 import { AVAILABILITY_LABEL, formatNaira } from './format.js';
 import { setCart } from './state.js';
 import { toast } from './ui.js';
+import { merchantLogo } from './merchant-logos.js';
 
 // Icon per category. The server does not send glyphs on product payloads, so the mapping lives here.
 export const CATEGORY_GLYPH = {
@@ -121,7 +122,7 @@ export function productCard(product, { reveal = true } = {}) {
     el(
       'div',
       { class: 'product-card__body' },
-      el('span', { class: 'product-card__merchant', text: product.merchant.name }),
+      el('span', { class: 'product-card__merchant' }, merchantLogo(product.merchant, 18), product.merchant.name),
       el(
         'h3',
         { class: 'product-card__name' },

@@ -280,3 +280,44 @@ html[data-section="shop-n-delight"][data-theme="dark"] .sn-hero__art { backgroun
 
 /* Icon and label spacing for category tiles in both themes. */
 .chip-row .chip:has(.chip__icon) { display: inline-flex; align-items: center; gap: 8px; }
+
+/* Store logos sit beside the store name. */
+.merchant-logo {
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 6px;
+  border-radius: 6px;
+  flex: 0 0 auto;
+}
+
+/* Bottom bar: five equal columns, one-line labels, centred active indicator. */
+.bottom-nav a {
+  min-width: 0;
+  padding: 8px 2px 10px;
+  font-size: 0.66rem;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+}
+.bottom-nav a svg { margin-bottom: 2px; }
+.bottom-nav a[aria-current='page']::before,
+html[data-section] .bottom-nav a[aria-current="page"]::before {
+  left: 50%;
+  right: auto;
+  width: 28px;
+  transform: translateX(-50%);
+}
+.bottom-nav__swap { min-width: 0; }
+.bottom-nav a.bottom-nav__swap {
+  width: 58px;
+  height: 58px;
+  min-height: 0;
+  padding: 0;
+  justify-self: center;
+  align-self: start;
+  margin-top: -26px;
+  border-radius: 50%;
+}
+.bottom-nav a.bottom-nav__swap svg { color: #fff; }

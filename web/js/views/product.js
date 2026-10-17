@@ -1,3 +1,4 @@
+import { merchantLogo } from '../merchant-logos.js';
 import { checkoutHref, sectionOf, shopHref } from '../sections.js';
 import * as api from '../api.js';
 import { addToCart, categoryGlyph, productImageUrl, trustBadge } from '../components.js';
@@ -213,7 +214,7 @@ function productView(product) {
           'p',
           { class: 'product-detail__merchant' },
           'Sold by ',
-          el('strong', { text: product.merchant.name }),
+          el('strong', {}, merchantLogo(product.merchant, 22), product.merchant.name),
           ` · ${product.merchant.city}, ${product.merchant.state}`,
           prep,
           product.merchant.verified ? ' ' : null,

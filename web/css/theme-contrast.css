@@ -1,0 +1,306 @@
+/* Theme contrast pass. Loaded late so it corrects the surfaces and text colours
+   that earlier stylesheets set for one theme and left wrong in the other.
+
+   Light Puff & Sip: a pale blue page with white cards and navy text, so blue
+   accents stay readable. Dark mode: dark surfaces for admin, checkout, cart,
+   account, sign-in and help pages instead of hard-coded white. */
+
+/* ---------- Light Puff & Sip ---------- */
+html[data-section="puff-sip"]:not([data-theme="dark"]) body {
+  color: #15273b;
+  background: linear-gradient(180deg, #eaf3ff 0%, #f7faff 55%);
+}
+html[data-section="puff-sip"]:not([data-theme="dark"]) :is(
+  .product-card, .category-tile, .summary, .cart-line, .state, .payment,
+  .checkout-area, .product-detail__info, .product-detail__info .purchase,
+  .product-detail__media, .order-block, .job-card, .auth__card, .puff-collection-card,
+  .puff-promise
+) {
+  color: #15273b;
+  background: #fff;
+  border-color: #cfe0f7;
+}
+html[data-section="puff-sip"]:not([data-theme="dark"]) :is(
+  .product-card__name, .product-card__merchant, .product-card__price-row,
+  .product-card__footer, .product-card__meta, .summary h2, .summary__row,
+  .summary__note, .cart-line__name, .cart-line__total, .state h2, .state p,
+  .checkout-area, .payment legend, .payment__option, .form label, .field label
+) {
+  color: #15273b;
+}
+html[data-section="puff-sip"]:not([data-theme="dark"]) .product-card__name a,
+html[data-section="puff-sip"]:not([data-theme="dark"]) .product-card__name {
+  color: #1f4f9e;
+}
+html[data-section="puff-sip"]:not([data-theme="dark"]) :is(.muted, .product-card__merchant, .product-card .muted, .product-card__meta) {
+  color: #4a5d78;
+  opacity: 1;
+}
+html[data-section="puff-sip"]:not([data-theme="dark"]) .product-card__media {
+  background: linear-gradient(145deg, #fff, #eaf3ff);
+}
+html[data-section="puff-sip"]:not([data-theme="dark"]) .btn--primary {
+  color: #fff;
+  background: #2457a6;
+  border-color: #2457a6;
+}
+html[data-section="puff-sip"]:not([data-theme="dark"]) .btn--secondary {
+  color: #1f4f9e;
+  background: #fff;
+  border-color: #9fbde8;
+}
+html[data-section="puff-sip"]:not([data-theme="dark"]) .product-card .btn:disabled {
+  color: #5b6b82;
+  background: #eef3fa;
+  border-color: #cfdcee;
+}
+
+/* ---------- Light Shop n Delight: badges and active nav need 4.5:1 ---------- */
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .product-card__badge,
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .cart-count {
+  background: #b84408;
+  color: #fff;
+}
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .bottom-nav a[aria-current="page"] {
+  color: #b84408;
+}
+
+/* ---------- Dark mode: admin, checkout, cart, account, sign-in, help ---------- */
+html[data-theme="dark"][data-section] body:has(.admin, .checkout, .cart-page, .account-page, .auth, .help) {
+  color: #f4f7fc;
+  background: #11141a;
+}
+html[data-theme="dark"][data-section] body:has(.admin, .checkout, .cart-page, .account-page, .auth, .help) :is(.site-header, .site-footer, .bottom-nav) {
+  background: #191d25;
+  border-color: #353d49;
+}
+html[data-theme="dark"][data-section] body:has(.admin, .checkout, .cart-page, .account-page, .auth, .help) :is(.site-header, .site-footer, .bottom-nav) * {
+  color: #f4f7fc;
+}
+html[data-theme="dark"][data-section] body:has(.admin, .checkout, .cart-page, .account-page, .auth, .help) :is(.site-header, .site-footer) :is(.muted, .footnote) {
+  color: #aab3c2;
+}
+html[data-theme="dark"] :is(.admin-head) {
+  background: #1d2430;
+  border-color: #3a4351;
+}
+html[data-theme="dark"] :is(.admin-tabs, .dash-kpi, .dash-card, .dash-card--attention, .admin-panel, .admin-card, .admin-table-wrap, .admin-group, .summary, .payment, .checkout-area, .cart-line, .state, .account-hero, .account-link, .account-panel, .product-card, .auth__card, .order-block, .order-card, .order-hero, .rider-section, .merchant-block, .merchant-stat, .moderator-user, .moderator-store, .moderator-product, .moderator-search-wrap, .moderator-empty, .search-form, .merchant-banner, .checkout-area, .payment__option, .payment__option--selected) {
+  color: #f4f7fc;
+  background: #1b2029;
+  border-color: #3a4351;
+}
+html[data-theme="dark"] :is(.payment__option--selected, .admin-tabs [role="tab"][aria-selected="true"]) {
+  background: #2a3442;
+}
+html[data-theme="dark"] :is(.admin, .checkout, .cart-page, .account-page, .auth, .help) :is(table, tr, td) {
+  background: transparent;
+  color: #f4f7fc;
+}
+html[data-theme="dark"] :is(.admin, .checkout, .cart-page, .account-page, .auth, .help) :is(th, thead td) {
+  color: #f4f7fc;
+  background: #222a36;
+}
+html[data-theme="dark"] :is(.admin, .checkout, .cart-page, .account-page, .auth, .help) :is(input, select, textarea, .input, .select) {
+  color: #f4f7fc;
+  background: #232a36;
+  border-color: #465161;
+}
+html[data-theme="dark"] :is(.admin, .checkout, .cart-page, .account-page, .auth, .help) :is(.muted, .field__hint, .help__count) {
+  color: #aab3c2;
+}
+html[data-theme="dark"] .dash-status__label {
+  color: #f4f7fc;
+}
+html[data-theme="dark"] .admin-head :is(h1, p, .trust-badge) {
+  color: #f4f7fc;
+}
+html[data-theme="dark"] .admin-status {
+  color: #f4f7fc;
+}
+
+/* Help page surfaces in dark mode */
+html[data-theme="dark"] body:has(.help) :is(.help, .card, .panel, .form, fieldset, .field, textarea, input, select) {
+  color: #f4f7fc;
+  background: #1b2029;
+  border-color: #3a4351;
+}
+html[data-theme="dark"] body:has(.help) :is(.field__hint, .help__count, .muted) {
+  color: #aab3c2;
+}
+/* Puff & Sip light: availability and struck-through prices on white cards */
+html[data-section="puff-sip"]:not([data-theme="dark"]) :is(.availability, .price--was, .product-card .price--was) {
+  color: #3d5170;
+}
+html[data-section="puff-sip"]:not([data-theme="dark"]) .availability--in_stock { color: #17603a; }
+html[data-section="puff-sip"]:not([data-theme="dark"]) .availability--low_stock,
+html[data-section="puff-sip"]:not([data-theme="dark"]) .availability--few { color: #8a4a00; }
+
+/* ---------- Remaining contrast fixes (second audit pass) ---------- */
+/* Shop n Delight primary buttons: white text needs a deeper orange (5:1+). */
+html[data-section="shop-n-delight"] .btn--primary,
+html[data-section="shop-n-delight"] .product-card .btn--primary {
+  background: #b84408;
+  border-color: #b84408;
+  color: #fff;
+}
+html[data-section="shop-n-delight"] .btn--primary:hover:not(:disabled) {
+  background: #9c3805;
+  border-color: #9c3805;
+}
+
+/* Puff & Sip light: navy prices, readable chips, header and bottom bar */
+html[data-section="puff-sip"]:not([data-theme="dark"]) .price,
+html[data-section="puff-sip"]:not([data-theme="dark"]) .product-card .price {
+  color: #15273b;
+}
+html[data-section="puff-sip"]:not([data-theme="dark"]) .chip:not([aria-pressed="true"]) {
+  color: #15273b;
+  background: #fff;
+  border-color: #9fbde8;
+}
+html[data-section="puff-sip"]:not([data-theme="dark"]) .chip[aria-pressed="true"] {
+  color: #fff;
+  background: #2457a6;
+  border-color: #2457a6;
+}
+html[data-section="puff-sip"]:not([data-theme="dark"]) :is(.product-detail__info, .purchase) :is(span, p, strong, label, small, em, div):not(.btn):not(.btn *) {
+  color: #15273b;
+}
+html[data-section="puff-sip"]:not([data-theme="dark"]) .site-header {
+  background: #1f4f9e;
+}
+html[data-section="puff-sip"]:not([data-theme="dark"]) .site-header :is(a, .brand) {
+  color: #fff;
+}
+html[data-section="puff-sip"]:not([data-theme="dark"]) .bottom-nav,
+html[data-section="puff-sip"]:not([data-theme="dark"]) .bottom-nav a {
+  color: #15273b;
+}
+html[data-section="puff-sip"]:not([data-theme="dark"]) .bottom-nav {
+  background: #fff;
+  border-color: #cfe0f7;
+}
+html[data-section="puff-sip"]:not([data-theme="dark"]) .bottom-nav a[aria-current="page"] {
+  color: #2457a6;
+}
+
+/* Order summary in light mode */
+html:not([data-theme="dark"]) .order-block :is(span, p, strong, dt, dd, div, li, h2, h3) {
+  color: #251d18;
+}
+
+/* Admin status labels in dark mode (outranks the light admin text rule) */
+html[data-theme="dark"] body:has(.admin) .admin .dash-status__label {
+  color: #f4f7fc;
+}
+html[data-theme="dark"] body:has(.admin) .admin-head,
+html[data-theme="dark"] body .admin-head {
+  background: #1d2430 !important;
+  border-color: #3a4351;
+}
+html[data-theme="dark"] .admin-head .trust-badge {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+
+/* Help page panels in dark mode */
+html[data-theme="dark"] body:has(.help) :is(.help__panel, .help__item, .help__form, .help__reply, .help__list, .help__item-head, .help__count) {
+  color: #f4f7fc;
+  background: #1b2029;
+  border-color: #3a4351;
+}
+
+/* ---------- Third pass: buttons, light text, admin badge, dark links ---------- */
+/* Orange primary buttons in the shop: a deeper orange so white text passes 4.5:1. */
+html[data-section="shop-n-delight"] .btn:not(.btn--secondary):not(.btn--ghost):not(:disabled):not(.admin-head .btn) {
+  background: #b84408;
+  border-color: #b84408;
+  color: #fff;
+}
+/* Light shop: prices, summaries, labels and product text use ink, not white */
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) :is(.price, .product-card .price) {
+  color: #251d18;
+}
+html:not([data-theme="dark"]) :is(
+  .summary, .summary__row, .summary h2, .summary__note, .order-block,
+  .cart-line__name, .cart-line__total, .state h2, .state p, .payment legend,
+  .payment__option, .form label, .field label, .product-card__name,
+  .product-card__merchant, .product-card__price-row, .product-card__footer,
+  .product-card__meta
+) {
+  color: #251d18;
+}
+html:not([data-theme="dark"]) :is(.purchase, .product-detail__info) :is(span, p, strong, small, label, div):not(.btn):not(.btn *) {
+  color: #251d18;
+}
+html:not([data-theme="dark"]) :is(.muted, .product-card .muted, .cart-line__meta) {
+  color: #5f554d;
+}
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) button.chip:not([aria-pressed="true"]) {
+  color: #251d18;
+  background: #fff;
+  border-color: #f2e2d5;
+}
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .site-nav a[aria-current="page"],
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .site-nav a:hover {
+  color: #b84408;
+}
+/* Puff & Sip light: results count and footnote */
+html[data-section="puff-sip"]:not([data-theme="dark"]) :is(.results-meta, .footnote) {
+  color: #4a5d78;
+}
+/* Admin trust badge in light mode */
+html:not([data-theme="dark"]) body:has(.admin) .admin-head .trust-badge {
+  color: #251d18;
+  background: #fff3e8;
+  border-color: #f5d2b4;
+  margin-left: 12px;
+  vertical-align: middle;
+}
+/* Admin text in dark mode: light, with muted captions kept soft */
+html[data-theme="dark"] body:has(.admin) .admin :is(span, strong, p, td, th, div, h2, h3, label, b, small, dt, dd) {
+  color: #f4f7fc;
+}
+html[data-theme="dark"] body:has(.admin) .admin :is(.muted, .dash-kpi__hint, .field__hint, .admin-id) {
+  color: #aab3c2;
+}
+/* Dark header and footer links on every page */
+html[data-theme="dark"][data-section] body :is(.site-header, .site-footer, .bottom-nav) :is(a, .brand, .wordmark) {
+  color: #f4f7fc;
+}
+html[data-theme="dark"][data-section] body :is(.site-footer, .bottom-nav) .muted {
+  color: #aab3c2;
+}
+
+/* ---------- Fourth pass ---------- */
+html[data-section="shop-n-delight"] :is(.sn-hero__cta, .chip[aria-pressed="true"], .chip[aria-current="true"]) {
+  background: #b84408 !important;
+  border-color: #b84408 !important;
+  color: #fff !important;
+}
+html[data-theme="dark"][data-section] body:has(.admin) .admin-head .trust-badge {
+  background: rgba(255, 255, 255, 0.14) !important;
+  color: #fff !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+}
+html:not([data-theme="dark"]) body:has(.admin) .admin-head .trust-badge {
+  background: #fff3e8 !important;
+  color: #251d18 !important;
+}
+html[data-theme="dark"] body:has(.admin) .badge {
+  background: #2a3442;
+  color: #f4f7fc;
+  border-color: #465161;
+}
+html[data-theme="dark"] .cart-line__meta,
+html[data-theme="dark"] .price--was {
+  color: #aab3c2;
+}
+html[data-theme="dark"] body .site-header a,
+html[data-theme="dark"] body .site-footer a,
+html[data-theme="dark"] body .bottom-nav a {
+  color: #f4f7fc !important;
+}
+html[data-section="puff-sip"]:not([data-theme="dark"]) .site-footer :is(.footnote, p) {
+  color: #e6f0ff;
+}
