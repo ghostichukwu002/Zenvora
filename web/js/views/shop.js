@@ -1,6 +1,6 @@
 import * as api from '../api.js';
-import { productCard } from '../components.js';
-import { el, linkButton } from '../dom.js';
+import { categoryGlyph, productCard } from '../components.js';
+import { el, icon, linkButton } from '../dom.js';
 import { replaceQuery } from '../router.js';
 import { getArea } from '../state.js';
 import { observeReveals, skeletonGrid, stateBox } from '../ui.js';
@@ -15,7 +15,7 @@ const SEARCH_DEBOUNCE_MS = 300;
 
 // Builds the shop and search page. The URL holds the filters, so a filtered view
 // can be bookmarked, shared, and restored on reload.
-export function renderShop({ query, section = 'shop' }) {
+export function renderShop({ query, section = 'shop', home = false }) {
   const storedArea = getArea();
   const filters = {
     q: (query.get('q') ?? '').slice(0, 100),
@@ -34,7 +34,7 @@ export function renderShop({ query, section = 'shop' }) {
 
   const chips = []; // { node, isActive } so aria-pressed can be refreshed in one place
 
-  const grid = el('div', { class: 'product-grid' });
+  const grid = el('div', { class: 'product-grid', id: 'shop-grid' });
   const meta = el('p', { class: 'results-meta', role: 'status', 'aria-live': 'polite' });
   const more = el('div', { class: 'load-more' });
 
@@ -151,7 +151,7 @@ export function renderShop({ query, section = 'shop' }) {
     .then(({ items }) => {
       for (const c of items) {
         const c2 = addChip(
-          c.name,
+          [icon(categoryGlyph(c.id), 'chip__icon'), c.name],
           () => filters.category === c.id,
           () => {
             filters.category = c.id;
@@ -165,7 +165,7 @@ export function renderShop({ query, section = 'shop' }) {
     .catch(() => {});
 
   function addChip(label, isActive, onActivate) {
-    const node = el('button', { type: 'button', class: 'chip', text: label });
+    const node = el('button', { type: 'button', class: 'chip' }, label);
     node.addEventListener('click', onActivate);
     const entry = { node, isActive };
     chips.push(entry);
@@ -301,9 +301,29 @@ export function renderShop({ query, section = 'shop' }) {
   // Keep page-level state in the title so back and forward stay understandable.
   document.title = `${heading} · ${section === 'puff' ? 'Puff & Sip' : 'Shop n Delight'}`;
 
+  // The home page opens with a warm hero, shown only when nothing is filtered yet.
+  const showHero = home && section === 'shop' && !filters.q && !filters.category && !filters.promo && !filters.area;
+  const hero = showHero
+    ? el('section', { class: 'sn-hero', 'aria-labelledby': 'sn-hero-title' },
+        el('div', {},
+          el('p', { class: 'sn-hero__kicker', text: 'Everyday shopping' }),
+          el('h2', { id: 'sn-hero-title', class: 'sn-hero__title', text: 'Shop n Delight' }),
+          el('p', { class: 'sn-hero__lede', text: 'Fresh groceries, quality products and everyday essentials, all in one place.' }),
+          el('button', {
+            type: 'button',
+            class: 'sn-hero__cta',
+            text: 'Shop now',
+            onclick: () => document.getElementById('shop-grid')?.scrollIntoView({ behavior: 'smooth', block: 'start' }),
+          }),
+        ),
+        el('div', { class: 'sn-hero__art', 'aria-hidden': 'true' }, icon('basket', 'icon')),
+      )
+    : null;
+
   const page = el(
     'div',
     { class: 'container section--tight' },
+    hero,
     el('div', { class: 'section__head' }, el('div', {}, el('h1', { text: heading }))),
     el(
       'div',

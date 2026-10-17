@@ -1,0 +1,282 @@
+:root {
+  --sn-orange: #f26a1b;
+  --sn-orange-deep: #d4500a;
+  --sn-orange-text: #b84408;
+  --sn-ink: #1d1d22;
+  --sn-muted: #6f6f79;
+  --sn-line: #f2e2d5;
+}
+
+/* Shop n Delight storefront, light theme. A cream page with orange accents, white product cards,
+   pill buttons and a warm hero. Scoped to the Shop n Delight section and light theme only, so dark
+   mode and the Puff & Sip section keep their own styling. Loaded after readability.css. */
+
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) {
+  --sn-cream: #fff8f2;
+  --sn-peach: #ffe9da;
+  --sn-orange: #f26a1b;
+  --sn-orange-deep: #d4500a;
+  --sn-orange-text: #b84408;
+  --sn-ink: #1d1d22;
+  --sn-muted: #6f6f79;
+  --sn-line: #f2e2d5;
+  --sn-card: #ffffff;
+  color-scheme: light;
+}
+
+/* Page and type */
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) body {
+  background: var(--sn-cream);
+  color: var(--sn-ink);
+}
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) body h1,
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) body h2,
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) body h3,
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) #app h1,
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) #app h2,
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) #app h3 { color: var(--sn-ink); letter-spacing: -0.02em; }
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) #app p,
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) #app li,
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) #app label,
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) #app dt,
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) #app dd,
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) #app strong,
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) #app .product-detail__info,
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) #app .product-detail__info p,
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) #app .product-detail__merchant,
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) #app .product-detail__merchant strong,
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) #app .option-group__label,
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) #app .results-meta { color: var(--sn-ink); }
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) #app .muted,
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) #app .section__head p,
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) #app .product-detail__info .muted { color: var(--sn-muted); }
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) #app a:not(.btn):not(.icon-button):not(.chip) { color: var(--sn-orange-text); }
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .breadcrumb,
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .breadcrumb a { color: var(--sn-muted); }
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .breadcrumb [aria-current="page"] { color: var(--sn-ink); }
+
+/* Header: white bar, orange wordmark, soft orange-tinted icon buttons */
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .site-header {
+  background: #fff;
+  border-bottom: 1px solid var(--sn-line);
+}
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .site-header .wordmark { color: var(--sn-orange); font-weight: 800; }
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .site-nav a { color: var(--sn-ink); }
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .site-nav a[aria-current="page"] { color: var(--sn-orange); border-bottom-color: var(--sn-orange); }
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .site-header .icon-button,
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .site-header .location-button,
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .site-header .theme-toggle {
+  background: var(--sn-cream);
+  color: var(--sn-orange-text);
+  border: 1px solid var(--sn-line);
+}
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .site-header .location-button__text { color: var(--sn-ink); }
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .cart-count { background: var(--sn-orange); color: #fff; }
+
+/* Hero */
+.sn-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+  margin: 10px 0 26px;
+  padding: 36px 40px;
+  border-radius: 26px;
+  background: linear-gradient(120deg, #fff1e6 0%, #ffe2cc 100%);
+  border: 1px solid #ffd9bd;
+}
+.sn-hero__kicker { margin: 0 0 6px; font-size: .8rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--sn-orange-text); }
+.sn-hero__title { margin: 0 0 10px; font-size: clamp(2.1rem, 1.5rem + 2.4vw, 3.4rem); line-height: 1.02; letter-spacing: -0.035em; color: var(--sn-orange); }
+.sn-hero__lede { margin: 0 0 22px; max-width: 46ch; font-size: 1.05rem; color: var(--sn-ink); }
+.sn-hero__cta { border-radius: 999px; padding: 13px 24px; background: var(--sn-orange); color: #fff; border: 0; font-weight: 700; cursor: pointer; }
+.sn-hero__cta:hover { background: var(--sn-orange-deep); }
+.sn-hero__art {
+  flex: 0 0 auto;
+  width: 132px;
+  height: 132px;
+  border-radius: 50%;
+  background: #fff;
+  display: grid;
+  place-items: center;
+  color: var(--sn-orange);
+  border: 1px solid #ffd9bd;
+}
+.sn-hero__art .icon { width: 58px; height: 58px; }
+
+/* Category tiles: the chip row becomes a set of white rounded tiles with orange icons */
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .chip-row .chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff;
+  color: var(--sn-ink);
+  border: 1px solid var(--sn-line);
+  border-radius: 999px;
+  padding: 9px 16px;
+  font-weight: 600;
+}
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .chip-row .chip:hover { border-color: var(--sn-orange); }
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .chip-row .chip[aria-pressed="true"] {
+  background: var(--sn-orange);
+  color: #fff;
+  border-color: var(--sn-orange);
+}
+.chip-row .chip__icon { width: 18px; height: 18px; flex: 0 0 auto; }
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .chip-row .chip__icon { color: var(--sn-orange); }
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .chip-row .chip[aria-pressed="true"] .chip__icon { color: #fff; }
+
+/* Search and sort */
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .toolbar input,
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .toolbar select,
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .input,
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .select,
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .field input,
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .field textarea,
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .field select {
+  background: #fff;
+  color: var(--sn-ink);
+  border: 1px solid var(--sn-line);
+  border-radius: 14px;
+}
+
+/* Product cards: white, rounded, thin border, orange discount pill and full-width add button */
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .product-card {
+  background: var(--sn-card);
+  border: 1px solid var(--sn-line);
+  border-radius: 20px;
+  color: var(--sn-ink);
+}
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .product-card__media {
+  background: #fff8f2;
+  border-radius: 16px;
+  margin: 10px;
+}
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .product-card__badge {
+  background: var(--sn-orange);
+  color: #fff;
+  border-radius: 999px;
+  font-weight: 700;
+  padding: 4px 10px;
+}
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .product-card__merchant { color: var(--sn-muted); }
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .product-card__name a { color: var(--sn-orange-text); font-weight: 700; }
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .product-card .price { color: var(--sn-orange-text); }
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .product-card .price--was { color: var(--sn-muted); }
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .product-card .availability { color: var(--sn-muted); }
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .product-card__footer { display: grid; gap: 10px; }
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .product-card__footer .btn,
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .product-card__footer button { width: 100%; justify-content: center; }
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .product-card .btn--primary {
+  background: var(--sn-orange);
+  color: #fff;
+  border: 0;
+  border-radius: 999px;
+  font-weight: 700;
+  min-height: 44px;
+}
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .product-card .btn--primary:hover { background: var(--sn-orange-deep); }
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .product-card .btn--secondary {
+  background: #fff;
+  color: var(--sn-ink);
+  border: 1px solid var(--sn-line);
+  border-radius: 999px;
+}
+
+/* Product page, cart, account and other panels: white surfaces with dark text */
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .product-detail__media,
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .purchase,
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .summary,
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .cart-line,
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .merchant-banner,
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .order-block,
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .job-card,
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .account-hero,
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .account-panel,
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .account-link,
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .order-row {
+  background: #fff;
+  color: var(--sn-ink);
+  border: 1px solid var(--sn-line);
+  border-radius: 20px;
+}
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .purchase .btn--primary,
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .summary .btn--primary,
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .btn--primary {
+  background: var(--sn-orange);
+  color: #fff;
+  border: 0;
+  border-radius: 999px;
+}
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .btn--primary:hover { background: var(--sn-orange-deep); }
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .btn--secondary {
+  background: #fff;
+  color: var(--sn-ink);
+  border: 1px solid var(--sn-line);
+  border-radius: 999px;
+}
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .stepper { background: #fff; border: 1px solid var(--sn-line); color: var(--sn-ink); }
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .stepper button { color: var(--sn-ink); }
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .product-detail__info .btn--ghost { color: var(--sn-orange-text); text-decoration: underline; text-underline-offset: 3px; }
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .availability--in_stock,
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .availability--low_stock { color: #1e7a3c; }
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .availability--out_of_stock { color: #b3261e; }
+
+/* Checkout, login and the admin area keep their own light surfaces */
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) body:has(.checkout),
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) body:has(.auth) { background: #fff; color: #1b1d2a; }
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) body:has(.admin) { background: #f4f5fb; color: #1b1d2a; }
+
+/* Footer */
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .site-footer {
+  background: #fff;
+  color: var(--sn-ink);
+  border-top: 1px solid var(--sn-line);
+}
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .site-footer * { color: var(--sn-ink); }
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .site-footer a:hover { color: var(--sn-orange-text); }
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .site-footer .muted { color: var(--sn-muted); }
+
+/* Bottom bar on phones: Home, Shop, a raised orange switch button, Puff & Sip, Account */
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .bottom-nav {
+  background: #fff;
+  border-top: 1px solid var(--sn-line);
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  align-items: end;
+}
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .bottom-nav a { color: var(--sn-muted); }
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .bottom-nav a[aria-current="page"] { color: var(--sn-orange); }
+html[data-section="shop-n-delight"]:not([data-theme="dark"]) .bottom-nav a[aria-current="page"]::before { background: var(--sn-orange); }
+.bottom-nav__swap {
+  justify-self: center;
+  align-self: center;
+  width: 58px;
+  height: 58px;
+  margin-top: -26px;
+  border-radius: 50%;
+  display: grid !important;
+  place-items: center;
+  background: var(--sn-orange) !important;
+  color: #fff !important;
+  border: 6px solid #fff;
+  box-sizing: content-box;
+}
+.bottom-nav__swap svg { width: 24px; height: 24px; color: #fff; }
+.bottom-nav__swap span { display: none; }
+
+@media (max-width: 720px) {
+  .sn-hero { flex-direction: column; align-items: flex-start; padding: 26px 22px; }
+  .sn-hero__art { display: none; }
+}
+
+/* Dark theme: the hero and category tiles keep their warm shape but take dark surfaces. */
+html[data-section="shop-n-delight"][data-theme="dark"] .sn-hero {
+  background: linear-gradient(120deg, #3a2415 0%, #2a1a10 100%);
+  border-color: #5a3520;
+}
+html[data-section="shop-n-delight"][data-theme="dark"] .sn-hero__title { color: #ff9a57; }
+html[data-section="shop-n-delight"][data-theme="dark"] .sn-hero__lede { color: #f4f7fc; }
+html[data-section="shop-n-delight"][data-theme="dark"] .sn-hero__kicker { color: #ffb37a; }
+html[data-section="shop-n-delight"][data-theme="dark"] .sn-hero__art { background: #2a1a10; border-color: #5a3520; }
+
+/* Icon and label spacing for category tiles in both themes. */
+.chip-row .chip:has(.chip__icon) { display: inline-flex; align-items: center; gap: 8px; }

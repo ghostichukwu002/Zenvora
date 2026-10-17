@@ -47,7 +47,7 @@ function quickAddButton(product) {
       class: 'btn btn--primary btn--small',
       'aria-label': `Add ${product.name} to cart`,
     },
-    'Add',
+    sectionOf(product) === 'shop' ? [icon('cart', 'icon'), 'Add to cart'] : 'Add',
   );
 
   button.addEventListener('click', async () => {
@@ -79,6 +79,13 @@ function quickAddButton(product) {
   return button;
 }
 
+// Shop n Delight shows the percentage saved; Puff & Sip keeps the plain "Offer" label.
+function badgeText(product) {
+  if (sectionOf(product) !== 'shop' || product.promoPriceKobo === null || product.priceKobo <= 0) return 'Offer';
+  const pct = Math.round((1 - product.promoPriceKobo / product.priceKobo) * 100);
+  return pct > 0 ? `-${pct}%` : 'Offer';
+}
+
 export function productCard(product, { reveal = true } = {}) {
   const onOffer = product.promoPriceKobo !== null;
   const unavailable = product.availability === 'out_of_stock';
@@ -104,7 +111,7 @@ export function productCard(product, { reveal = true } = {}) {
     imageUrl
       ? el('img', { src: imageUrl, alt: product.name, loading: 'lazy', decoding: 'async', onerror: (event) => { event.currentTarget.replaceWith(icon(categoryGlyph(product.category.id), 'icon')); } })
       : icon(categoryGlyph(product.category.id), 'icon'),
-    onOffer ? el('span', { class: 'product-card__badge', text: 'Offer' }) : null,
+    onOffer ? el('span', { class: 'product-card__badge', text: badgeText(product) }) : null,
   );
 
   return el(

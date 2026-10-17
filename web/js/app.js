@@ -24,9 +24,9 @@ initThemeToggle();
 initLoadingScreen();
 
 route('/', {
-  nav: 'shop',
+  nav: 'home',
   title: 'Shop n Delight',
-  render: ({ query }) => renderShop({ query }),
+  render: ({ query }) => renderShop({ query, home: true }),
 });
 
 route('/shop', {

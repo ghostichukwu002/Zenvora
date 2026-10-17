@@ -75,6 +75,10 @@ function updateBrand(path, query) {
   const tagline = isPuffSip ? 'Little treats. Big mood.' : 'Everyday shopping, with a little extra delight.';
   document.documentElement.dataset.section = section;
   document.documentElement.dataset.brand = isPuffSip ? 'puff-sip' : 'shop-n-delight';
+  document.querySelectorAll('[data-swap]').forEach((link) => {
+    link.setAttribute('href', isPuffSip ? '#/' : '#/puff-sip');
+    link.setAttribute('aria-label', isPuffSip ? 'Switch to Shop n Delight' : 'Switch to Puff & Sip');
+  });
   document.querySelectorAll('[data-brand-logo]').forEach((logo) => {
     logo.src = brandLogo;
     logo.alt = brandName;
