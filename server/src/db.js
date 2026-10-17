@@ -42,6 +42,15 @@ const SCHEMA = `
     updated_at TEXT NOT NULL
   );
 
+  CREATE TABLE IF NOT EXISTS product_placements (
+    product_id      TEXT PRIMARY KEY,
+    department_id  TEXT NOT NULL,
+    category_id    TEXT NOT NULL,
+    subcategory_id TEXT,
+    updated_by     TEXT NOT NULL,
+    updated_at     TEXT NOT NULL
+  );
+
   CREATE TABLE IF NOT EXISTS orders (
     id                 TEXT PRIMARY KEY,
     user_id            TEXT NOT NULL REFERENCES users(id),

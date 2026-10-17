@@ -23,6 +23,20 @@ const input = (label, value, options = {}) => {
   return { field, control };
 };
 
+// Department > category > subcategory picker. Options are filled from the catalogue tree,
+// so the moderator can only choose valid combinations.
+function selectField(label, placeholder, options, value, { disabled = false } = {}) {
+  const id = `mod-${Math.random().toString(36).slice(2, 10)}`;
+  const field = el('div', { class: 'field moderator-field' });
+  field.append(el('label', { for: id, text: label }));
+  const control = el('select', { id, class: 'input moderator-input', disabled: disabled ? true : undefined });
+  control.append(el('option', { value: '', text: placeholder }));
+  for (const option of options) control.append(el('option', { value: option.id, text: option.name }));
+  control.value = value ?? '';
+  field.append(control);
+  return { field, control };
+}
+
 function storePill(store, selected, onClick) {
   return el('button', {
     type: 'button',
@@ -55,6 +69,12 @@ export async function renderModerator() {
       }));
   }
 
+  let departmentTree = [];
+  try {
+    departmentTree = (await api.get('/api/catalogue/departments')).departments ?? [];
+  } catch {
+    departmentTree = [];
+  }
   let section = 'shop';
   let products = [];
   let loading = false;
@@ -123,20 +143,44 @@ export async function renderModerator() {
     const price = input('Regular price (₦)', original.price, { type: 'number', min: '1', max: '1000000', step: '0.01', required: true, inputmode: 'decimal' });
     const promo = input('Offer price (₦)', original.promo, { type: 'number', min: '1', max: '1000000', step: '0.01', placeholder: 'No offer', inputmode: 'decimal' });
     const stockField = input('Stock quantity', original.stock, { type: 'number', min: '0', max: '100000', step: '1', placeholder: 'Made to order' });
+    let initial = product.placement ?? {};
+    const deptSelect = selectField('Department', 'Choose a department', departmentTree, initial.departmentId);
+    const catSelect = selectField('Category', 'Choose a category', [], initial.categoryId);
+    const subSelect = selectField('Subcategory', 'Choose a subcategory', [], initial.subcategoryId);
+    const fillCategories = (deptId, keep) => {
+      const dept = departmentTree.find((d) => d.id === deptId);
+      catSelect.control.replaceChildren(el('option', { value: '', text: 'Choose a category' }));
+      for (const c of dept?.categories ?? []) catSelect.control.append(el('option', { value: c.id, text: c.name }));
+      catSelect.control.value = keep ?? '';
+      catSelect.control.disabled = !dept;
+      fillSubcategories(keep ?? '', null);
+    };
+    const fillSubcategories = (catId, keep) => {
+      const cat = departmentTree.flatMap((d) => d.categories).find((c) => c.id === catId);
+      subSelect.control.replaceChildren(el('option', { value: '', text: cat?.subcategories.length ? 'Choose a subcategory' : 'No subcategories' }));
+      for (const sub of cat?.subcategories ?? []) subSelect.control.append(el('option', { value: sub.id, text: sub.name }));
+      subSelect.control.value = keep ?? '';
+      subSelect.control.disabled = !cat || cat.subcategories.length === 0;
+    };
+    fillCategories(deptSelect.control.value, initial.categoryId);
+    fillSubcategories(catSelect.control.value, initial.subcategoryId);
+    deptSelect.control.addEventListener('change', () => fillCategories(deptSelect.control.value, null));
+    catSelect.control.addEventListener('change', () => fillSubcategories(catSelect.control.value, null));
+    const placementGroup = el('div', { class: 'moderator-product__placement' }, deptSelect.field, catSelect.field, subSelect.field);
     const form = el('form', { class: 'moderator-product', novalidate: true });
     const head = el('div', { class: 'moderator-product__head' },
       el('div', { class: 'moderator-product__identity' },
         el('span', { class: 'moderator-product__dot' }),
         el('div', {}, el('h2', { text: product.name || 'Untitled product' }), el('p', { text: `ID · ${product.id}` }))),
       el('span', { class: 'moderator-product__status', text: product.stock === 0 ? 'Out of stock' : product.stock !== null && product.stock <= 5 ? 'Low stock' : product.stock === null ? 'Made to order' : 'Available' }));
-    const fields = el('div', { class: 'moderator-product__fields' }, name.field, description.field, price.field, promo.field, stockField.field);
+    const fields = el('div', { class: 'moderator-product__fields' }, name.field, description.field, price.field, promo.field, stockField.field, placementGroup);
     const footer = el('div', { class: 'moderator-product__footer' },
       el('span', { class: 'moderator-product__saved', text: 'Changes save to the backend.' }),
       el('button', { type: 'submit', class: 'btn btn--primary moderator-save', text: 'Save changes' }));
     const error = el('p', { class: 'moderator-product__error', role: 'alert', hidden: true });
     form.append(head, fields, error, footer);
     form.addEventListener('input', () => {
-      form.classList.toggle('is-dirty', name.control.value !== original.name || description.control.value !== original.description || price.control.value !== original.price || promo.control.value !== original.promo || stockField.control.value !== original.stock);
+      form.classList.toggle('is-dirty', name.control.value !== original.name || description.control.value !== original.description || price.control.value !== original.price || promo.control.value !== original.promo || stockField.control.value !== original.stock || deptSelect.control.value !== (initial.departmentId ?? '') || catSelect.control.value !== (initial.categoryId ?? '') || subSelect.control.value !== (initial.subcategoryId ?? ''));
     });
     form.addEventListener('submit', async (event) => {
       event.preventDefault();
@@ -157,12 +201,27 @@ export async function renderModerator() {
       if (stock !== null && (!Number.isInteger(stock) || stock < 0 || stock > 100000)) {
         error.textContent = 'Stock must be a whole number from 0 to 100,000, or leave blank for made-to-order.'; error.hidden = false; stockField.control.focus(); return;
       }
+      let placement = null;
+      if (deptSelect.control.value) {
+        if (!catSelect.control.value) {
+          error.textContent = 'Choose a category for this department.'; error.hidden = false; catSelect.control.focus(); return;
+        }
+        if (!subSelect.control.disabled && !subSelect.control.value) {
+          error.textContent = 'Choose a subcategory for this category.'; error.hidden = false; subSelect.control.focus(); return;
+        }
+        placement = {
+          departmentId: deptSelect.control.value,
+          categoryId: catSelect.control.value,
+          subcategoryId: subSelect.control.value || null,
+        };
+      }
       const payload = {
         name: name.control.value.trim(),
         description: description.control.value.trim(),
         priceKobo: regular,
         promoPriceKobo: offer,
         stock,
+        placement,
       };
       const save = footer.querySelector('button');
       save.disabled = true;
@@ -172,6 +231,11 @@ export async function renderModerator() {
       try {
         const result = await api.patch(`/api/moderator/products/${encodeURIComponent(product.id)}`, payload);
         Object.assign(product, result.product);
+        initial = {
+          departmentId: product.placement?.departmentId,
+          categoryId: product.placement?.categoryId,
+          subcategoryId: product.placement?.subcategoryId,
+        };
         original.name = product.name;
         original.description = product.description;
         original.price = moneyInput(product.priceKobo);

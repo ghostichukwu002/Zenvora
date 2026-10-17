@@ -10,6 +10,7 @@ import {
 } from './cart.js';
 import { createCartStore, readCookie, SESSION_COOKIE } from './cart-store.js';
 import { openDatabase } from './db.js';
+import { departments, placementIssue, placementLabel } from './category-tree.js';
 import { createOrders } from './orders.js';
 import { createMerchantAccess, serializeMerchantProduct, updateMerchantProduct } from './merchant.js';
 import { createDispatch } from './dispatch.js';
@@ -180,6 +181,13 @@ export function createApp({
       name: saved.name, description: saved.description, stock: saved.stock,
       priceKobo: saved.price_kobo, promoPriceKobo: saved.promo_price_kobo,
     });
+  }
+
+  // Department / category / subcategory placement set by moderators.
+  const savedPlacements = db.prepare('SELECT product_id, department_id, category_id, subcategory_id FROM product_placements').all();
+  for (const saved of savedPlacements) {
+    const product = catalogue.products.find((item) => item.id === saved.product_id);
+    if (product) product.placement = { departmentId: saved.department_id, categoryId: saved.category_id, subcategoryId: saved.subcategory_id ?? null };
   }
 
   const orders = createOrders(db);
@@ -508,6 +516,8 @@ export function createApp({
   };
 
   // Moderators can edit catalogue values across both storefronts only.
+  router.get('/api/catalogue/departments', () => ({ status: 200, body: { departments } }));
+
   router.get('/api/moderator/products', (ctx) => {
     requireModerator(ctx);
     const section = ctx.query.section === 'puff' ? 'puff' : ctx.query.section === 'shop' ? 'shop' : null;
@@ -520,6 +530,7 @@ export function createApp({
           merchantId: product.merchantId, merchantName: merchant?.name ?? product.merchantId,
           section: merchant?.section ?? 'shop', priceKobo: product.priceKobo,
           promoPriceKobo: product.promoPriceKobo, stock: product.stock,
+          placement: product.placement ?? null, placementLabel: placementLabel(product.placement),
         };
       });
     return { status: 200, body: { items } };
@@ -533,6 +544,7 @@ export function createApp({
     const next = {
       name: product.name, description: product.description, stock: product.stock,
       priceKobo: product.priceKobo, promoPriceKobo: product.promoPriceKobo,
+      placement: product.placement ?? null,
     };
     if (body.name !== undefined) {
       if (typeof body.name !== 'string' || body.name.trim().length < 2 || body.name.trim().length > 140) {
@@ -568,6 +580,22 @@ export function createApp({
       throw new HttpError(422, 'promo_invalid', 'Offer price must be lower than the regular price.');
     }
 
+    if (body.placement !== undefined) {
+      if (body.placement === null) {
+        next.placement = null;
+      } else {
+        const raw = body.placement && typeof body.placement === 'object' ? body.placement : {};
+        const normalised = {
+          departmentId: typeof raw.departmentId === 'string' ? raw.departmentId : '',
+          categoryId: typeof raw.categoryId === 'string' ? raw.categoryId : '',
+          subcategoryId: typeof raw.subcategoryId === 'string' && raw.subcategoryId ? raw.subcategoryId : null,
+        };
+        const issue = placementIssue(normalised);
+        if (issue) throw new HttpError(422, issue.code, issue.message);
+        next.placement = normalised;
+      }
+    }
+
     const updatedAt = new Date().toISOString();
     db.prepare(`INSERT INTO product_overrides
       (product_id, name, description, stock, price_kobo, promo_price_kobo, updated_by, updated_at)
@@ -577,12 +605,22 @@ export function createApp({
       price_kobo = excluded.price_kobo, promo_price_kobo = excluded.promo_price_kobo,
       updated_by = excluded.updated_by, updated_at = excluded.updated_at`)
       .run(product.id, next.name, next.description, next.stock, next.priceKobo, next.promoPriceKobo, user.id, updatedAt);
+    if (next.placement === null) {
+      db.prepare('DELETE FROM product_placements WHERE product_id = ?').run(product.id);
+    } else if (next.placement) {
+      db.prepare(`INSERT INTO product_placements (product_id, department_id, category_id, subcategory_id, updated_by, updated_at)
+        VALUES (?, ?, ?, ?, ?, ?)
+        ON CONFLICT(product_id) DO UPDATE SET department_id = excluded.department_id, category_id = excluded.category_id,
+        subcategory_id = excluded.subcategory_id, updated_by = excluded.updated_by, updated_at = excluded.updated_at`)
+        .run(product.id, next.placement.departmentId, next.placement.categoryId, next.placement.subcategoryId, user.id, updatedAt);
+    }
     Object.assign(product, next);
     db.prepare('INSERT INTO audit_log (actor_user_id, action, target, detail_json, created_at) VALUES (?, ?, ?, ?, ?)')
       .run(user.id, 'catalogue.product_updated', product.id, JSON.stringify({ fields: Object.keys(body) }), updatedAt);
     return { status: 200, body: { product: {
       id: product.id, name: product.name, description: product.description, stock: product.stock,
       priceKobo: product.priceKobo, promoPriceKobo: product.promoPriceKobo,
+      placement: product.placement ?? null, placementLabel: placementLabel(product.placement),
     } } };
   });
 
