@@ -6,6 +6,7 @@ import { formatNaira } from '../format.js';
 import { setCart } from '../state.js';
 import { stateBox, toast } from '../ui.js';
 import { emptyView, requireLogin } from './guard.js';
+import { whatsappOrderUrl } from '../whatsapp.js';
 
 // Server error codes that belong to a specific form field.
 const FIELD_FOR_CODE = { name_invalid: 'name', phone_invalid: 'phone', address_invalid: 'address', notes_invalid: 'notes' };
@@ -112,6 +113,12 @@ export async function renderCheckout({ section = 'shop' } = {}) {
       // The server emptied the cart. Mirror that so the badge is right.
       setCart({ ...cart, lines: [], itemCount: 0, subtotalKobo: 0, deliveryFeeKobo: 0, totalKobo: 0, merchantId: null });
       toast('Order placed');
+      // Once the order is saved, hand the customer to WhatsApp with the order details filled in.
+      const whatsapp = whatsappOrderUrl(res.order);
+      if (whatsapp) {
+        window.location.href = whatsapp;
+        return;
+      }
       window.location.hash = `#/order/${encodeURIComponent(res.order.id)}`;
     } catch (err) {
       busy = false;
