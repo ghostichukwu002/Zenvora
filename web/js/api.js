@@ -10,7 +10,8 @@ export class ApiError extends Error {
   }
 }
 
-const DEFAULT_TIMEOUT_MS = 12000;
+// Render services may need extra time to wake after inactivity; avoid failing the first request too early.
+const DEFAULT_TIMEOUT_MS = 30000;
 
 async function send(method, path, body, timeoutMs) {
   const controller = new AbortController();
@@ -61,7 +62,7 @@ export async function get(path, { timeoutMs = DEFAULT_TIMEOUT_MS } = {}) {
     return await send('GET', path, undefined, timeoutMs);
   } catch (err) {
     if (err.code !== 'network' && err.code !== 'timeout') throw err;
-    await new Promise((r) => setTimeout(r, 700));
+    await new Promise((r) => setTimeout(r, 1000));
     return send('GET', path, undefined, timeoutMs);
   }
 }
