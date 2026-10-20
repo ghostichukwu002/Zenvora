@@ -1,6 +1,6 @@
 // WhatsApp number that receives orders, in international format without "+" (for example 2348012345678).
 // Set this to the store's number. While it is empty, checkout falls back to the order page.
-export const WHATSAPP_ORDER_NUMBER = '';
+export const WHATSAPP_ORDER_NUMBER = '2348166505543';
 
 const naira = (kobo) => `₦${(kobo / 100).toLocaleString('en-NG', { minimumFractionDigits: 0, maximumFractionDigits: 2 })}`;
 
